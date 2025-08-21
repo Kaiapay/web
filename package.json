@@ -6,13 +6,18 @@
 		"build": "react-router build",
 		"cf-typegen": "wrangler types",
 		"deploy": "npm run build && wrangler deploy",
-		"dev": "react-router dev",
+		"dev": "npm run generate-orval && react-router dev",
 		"postinstall": "npm run cf-typegen",
 		"preview": "npm run build && vite preview",
-		"typecheck": "npm run cf-typegen && react-router typegen && tsc -b"
+		"typecheck": "npm run cf-typegen && react-router typegen && tsc -b",
+		"generate-orval": "orval",
+		"generate-orval:watch": "orval --watch"
 	},
 	"dependencies": {
+		"@tanstack/react-query": "^5.85.5",
+		"@tanstack/react-query-devtools": "^5.85.5",
 		"isbot": "^5.1.27",
+		"openapi-typescript-codegen": "^0.29.0",
 		"react": "^19.1.0",
 		"react-dom": "^19.1.0",
 		"react-router": "^7.7.1"
@@ -24,6 +29,7 @@
 		"@types/node": "^20",
 		"@types/react": "^19.1.2",
 		"@types/react-dom": "^19.1.2",
+		"orval": "^7.11.2",
 		"tailwindcss": "^4.1.4",
 		"typescript": "^5.8.3",
 		"vite": "^6.3.3",

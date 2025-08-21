@@ -4,7 +4,7 @@
  */
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "kaiapay-web",
+	"name": "web",
 	"account_id": "6377196122dd8a0ce3a9b3ef18fdfdd7",
 	"compatibility_date": "2025-04-04",
 	"main": "./workers/app.ts",
