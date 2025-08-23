@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router";
+import HeaderWithBackButton from "~/components/HeaderWithBackButton";
 import ArrowLeftIcon from "~/components/icons/ArrowLeftIcon";
 import ChevronRightIcon from "~/components/icons/chevron-right";
 import LinkIcon from "~/components/icons/LinkIcon";
@@ -38,16 +39,7 @@ export default function Send() {
 
   return (
     <div className="flex flex-col h-screen gap-2">
-      <div className="flex items-center h-9 px-4 pt-3">
-        <button className="hover:opacity-90 active:opacity-75 cursor-pointer" onClick={() => navigate('/')}>
-            <ArrowLeftIcon />   
-        </button>
-      </div>
-      <div className="px-4">
-        <span className="font-semibold text-[32px] leading-none tracking-[0.5px] text-center">
-          돈 보내기
-        </span>
-      </div>
+      <HeaderWithBackButton heading="돈 보내기" />
       <div className="flex flex-col gap-4 px-4 py-6">
         {items.map(i => (
           <div 
