@@ -6,5 +6,6 @@ export default [
   route("playground", "routes/playground.tsx"),
   route("send", "routes/send/index.tsx"),
   route("send/via-phone", "routes/send/via-phone/index.tsx"),
-  route("splash", "routes/splash/index.tsx")
+  route("splash", "routes/splash/index.tsx"),
+  route("onboarding", "routes/onboarding/index.tsx")
 ] satisfies RouteConfig;
