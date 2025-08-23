@@ -5,6 +5,7 @@ interface AttachedSheetProps {
   onClose: () => void;
   children?: React.ReactNode;
   className?: string;
+  height?: string;
 }
 
 const AttachedSheet: React.FC<AttachedSheetProps> = ({
@@ -12,6 +13,7 @@ const AttachedSheet: React.FC<AttachedSheetProps> = ({
   onClose,
   children,
   className = "",
+  height,
 }) => {
   const [isDragging, setIsDragging] = useState(false);
   const [dragOffset, setDragOffset] = useState(0);
@@ -133,6 +135,7 @@ const AttachedSheet: React.FC<AttachedSheetProps> = ({
         ref={sheetRef}
         className={`absolute bottom-0 left-0 right-0 w-full bg-[#1C1C1E] rounded-t-[32px] px-[16px] pb-[19px] transform ${className}`}
         style={{
+          ...(height && { height }),
           transform: isOpen 
             ? `translateY(${dragOffset}px)` 
             : "translateY(100%)",
