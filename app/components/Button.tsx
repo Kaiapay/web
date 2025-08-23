@@ -7,6 +7,7 @@ interface ButtonProps {
   disabled?: boolean;
   onClick?: () => void;
   className?: string;
+  isLoading?: boolean;
 }
 
 const Button: React.FC<ButtonProps> = ({
@@ -16,6 +17,7 @@ const Button: React.FC<ButtonProps> = ({
   disabled = false,
   onClick,
   className = '',
+  isLoading = false,
 }) => {
   const baseClasses = 'w-full inline-flex items-center justify-center font-medium transition-all duration-200 focus:outline-none';
   
@@ -41,7 +43,8 @@ const Button: React.FC<ButtonProps> = ({
       disabled={disabled}
       onClick={disabled ? undefined : onClick}
     >
-      {children}
+      {isLoading ? 
+        <div className="w-5 h-5 border-t-transparent border-b-transparent border-r-transparent border-l-red-500 border-2 border-black rounded-full animate-spin" /> : children}
     </button>
   );
 };
