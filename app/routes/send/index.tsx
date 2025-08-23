@@ -33,7 +33,7 @@ export default function Send() {
       icon: WalletIcon,
       title: '지갑으로 보내기',
       description: '상대방의 지갑 주소를 직접 입력하여 보낼 수 있어요.',
-      via: 'wallet'
+      via: 'wallet-address'
     },
   ];
 
