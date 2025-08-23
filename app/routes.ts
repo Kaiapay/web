@@ -9,6 +9,8 @@ export default [
   route("send/via-kaiapay-id", "routes/send/via-kaiapay-id/index.tsx"),
   route("send/via-wallet-address", "routes/send/via-wallet-address/index.tsx"),
   route("send/amount", "routes/send/amount/index.tsx"),
+  route("fill", "routes/fill/index.tsx"),
+  route("wallet-connect", "routes/wallet-connect/index.tsx"),
   route("splash", "routes/splash/index.tsx"),
   route("onboarding", "routes/onboarding/index.tsx"),
   route("home", "routes/home/index.tsx"),
