@@ -100,14 +100,14 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen bg-[#040404] relative">
+    <div className="min-h-screen bg-[#040404] relative pb-[24px]">
       <img
         src={background}
         alt="background"
         className="fixed top-0 left-0 w-full h-auto max-h-screen object-cover z-0 pointer-events-none select-none"
         draggable={false}
       />
-      <div className="relative z-10 flex flex-col h-screen overflow-y-auto">
+      <div className="relative z-10 flex flex-col">
         <HomeHeader 
           searchQuery={searchQuery} 
           onSearchChange={handleSearchChange} 
