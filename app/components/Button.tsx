@@ -43,8 +43,14 @@ const Button: React.FC<ButtonProps> = ({
       disabled={disabled}
       onClick={disabled ? undefined : onClick}
     >
-      {isLoading ? 
-        <div className="w-5 h-5 border-t-transparent border-b-transparent border-r-transparent border-l-red-500 border-2 border-black rounded-full animate-spin" /> : children}
+      {isLoading ? (
+        <div
+          className="w-5 h-5 border-t-transparent border-b-transparent border-r-transparent border-2 rounded-full animate-spin"
+          style={{ borderLeftColor: '#BFF009' }}
+        />
+      ) : (
+        children
+      )}
     </button>
   );
 };

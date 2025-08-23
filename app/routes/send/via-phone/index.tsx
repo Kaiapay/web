@@ -9,10 +9,20 @@ interface IFormInput {
 }
 
 export default function SendViaPhone() {
-  const { register, handleSubmit, reset, setValue, setFocus } = useForm<IFormInput>();
+  const { register, handleSubmit, reset, setValue, setFocus, setError, formState: { errors } } = useForm<IFormInput>();
   const [isLoading, setIsLoading] = useState(false);
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
+    const phoneNumberRegex = /^01([0|1|6|7|8|9])([0-9]{7,8})$/;
+    if (!phoneNumberRegex.test(data.phoneNumber)) {
+      setError('phoneNumber', { type: 'manual', message: '올바른 핸드폰 번호가 아닙니다.' });
+      setIsLoading(false);
+      return;
+    }
     setIsLoading(true);
+    const message = `[KaiaPay] @김카이아님이 10 USDT를 보냈어요. 아래 링크에서 ‘받기’를 눌러야 송금이 완료돼요. https://www.kaiapay.com/2HEFKKHCGIRCgWrO+fc6lYel7D4Vb3Ajjp3tMwr11T4=44톤`;
+    const smsUrl = `sms:${data.phoneNumber}&body=${encodeURIComponent(message)}`;
+    window.location.href = smsUrl;
+    
     setTimeout(() => {
       console.log(data)
       setIsLoading(false);
@@ -55,8 +65,8 @@ export default function SendViaPhone() {
           <InputResetIcon />
         </div>
       </div>
-      <div className="font-normal text-[12px] leading-[14px] tracking-[-0.1px] text-white/50 pb-1 mx-8">
-        - 없이 입력하세요
+      <div className="font-normal text-[12px] leading-[14px] tracking-[-0.1px] text-white/50 pb-1 mx-8" style={{ color: errors.phoneNumber ? '#FF443D' : 'inherit' }}>
+        {errors.phoneNumber ? errors.phoneNumber.message : '- 없이 입력하세요'}
       </div>
       <div className="flex flex-col gap-4 px-4 py-7">
         <Button isLoading={isLoading} onClick={handleSubmit(onSubmit)}>완료</Button>
