@@ -12,5 +12,6 @@ export default [
   route("splash", "routes/splash/index.tsx"),
   route("onboarding", "routes/onboarding/index.tsx"),
   route("home", "routes/home/index.tsx"),
-  route("receive-link", "routes/receive-link/index.tsx")
+  route("receive-link", "routes/receive-link/index.tsx"),
+  route("kaiapay-card", "routes/kaiapay-card/index.tsx")
 ] satisfies RouteConfig;
