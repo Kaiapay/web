@@ -15,25 +15,25 @@ export default function Send() {
       icon: LinkIcon,
       title: '링크 공유로 보내기',
       description: '상대방에게 링크를 공유할 수 있어요. 받는 사람이 링크를 열면 돈이 송금돼요.',
-      path: 'via-link'
+      via: 'link'
     },
     {
       icon: PhoneIcon,
       title: '핸드폰 번호로 보내기',
       description: '상대방의 휴대폰 번호만 입력하면 보낼 수 있어요.',
-      path: 'via-phone'
+      via: 'phone'
     },
     {
       icon: UserIcon,
       title: 'KaiaPay 아이디',
       description: '상대방의 KaiaPay 아이디를 통해 페이머니로 바로 보낼 수 있어요.',
-      path: 'via-kaiapay-id'
+      via: 'kaiapay-id'
     },
     {
       icon: WalletIcon,
       title: '지갑으로 보내기',
       description: '상대방의 지갑 주소를 직접 입력하여 보낼 수 있어요.',
-      path: 'to-wallet'
+      via: 'wallet'
     },
   ];
 
@@ -43,9 +43,9 @@ export default function Send() {
       <div className="flex flex-col gap-4 px-4 py-6">
         {items.map(i => (
           <div 
-            key={i.path}
+            key={i.via}
             className="flex flex-row gap-5 pt-[14px] pb-4 pr-6 pl-4 bg-white/10 backdrop-blur-[14px] rounded-[16px] cursor-pointer hover:opacity-90 active:opacity-50 transition-all duration-300"
-            onClick={() => navigate(`/send/${i.path}`)}
+            onClick={() => navigate(`/send/amount?via=${i.via}`)}
           >
             <div className="flex items-center justify-center w-10 h-10 rounded-full bg-white/20 backdrop-blur-[14px] flex-shrink-0">
               <i.icon size={24} color="white" />
