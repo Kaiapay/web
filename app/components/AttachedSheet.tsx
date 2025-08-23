@@ -131,7 +131,7 @@ const AttachedSheet: React.FC<AttachedSheetProps> = ({
       {/* 시트 컨테이너 */}
       <div
         ref={sheetRef}
-        className={`absolute bottom-0 left-0 right-0 w-full bg-[#1C1C1E] rounded-t-[32px] px-[16px] pb-[48px] transform ${className}`}
+        className={`absolute bottom-0 left-0 right-0 w-full bg-[#1C1C1E] rounded-t-[32px] px-[16px] pb-[19px] transform ${className}`}
         style={{
           transform: isOpen 
             ? `translateY(${dragOffset}px)` 
