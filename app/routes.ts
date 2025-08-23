@@ -10,5 +10,6 @@ export default [
   route("send/to-wallet", "routes/send/to-wallet/index.tsx"),
   route("send/amount", "routes/send/amount/index.tsx"),
   route("splash", "routes/splash/index.tsx"),
-  route("onboarding", "routes/onboarding/index.tsx")
+  route("onboarding", "routes/onboarding/index.tsx"),
+  route("home", "routes/home/index.tsx")
 ] satisfies RouteConfig;
