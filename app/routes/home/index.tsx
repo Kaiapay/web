@@ -12,8 +12,10 @@ import GiftYellowIcon from "../assets/icons/gift-yellow.svg";
 import CardIcon from "../assets/icons/card.svg";
 import GiftIcon from "../assets/icons/gift.svg";
 import ReceiptIcon from "../assets/icons/receipt.svg";
+import { useNavigate } from "react-router";
 
 export default function Home() {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
 
   // 검색 핸들러
@@ -27,7 +29,7 @@ export default function Home() {
   };
 
   // 액션 버튼 핸들러들
-  const handleFillClick = () => console.log("채우기 클릭");
+  const handleFillClick = () => navigate("/fill");
   const handleSendClick = () => console.log("보내기 클릭");
   const handleReceiveClick = () => console.log("돈 받기 클릭");
   const handleMoreClick = () => console.log("더보기 클릭");

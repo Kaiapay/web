@@ -72,7 +72,7 @@ export default function Onboarding() {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const handleSignup = () => {
-    navigate("/signup");
+    navigate("/home");
   };
 
   const handleScreenClick = (e: React.MouseEvent) => {

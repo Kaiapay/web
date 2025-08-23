@@ -54,7 +54,6 @@ export default function IconButton({
         className={`
           ${backgroundColor}
           ${borderRadius}
-          backdrop-blur-[10px]
           flex items-center justify-center
           transition-all duration-200
           hover:opacity-80
