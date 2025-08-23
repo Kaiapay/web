@@ -10,6 +10,7 @@ interface AlertProps {
   buttonText?: string;
   onButtonClick?: () => void;
   className?: string;
+  overlay?: React.ReactNode;
 }
 
 const Alert: React.FC<AlertProps> = ({
@@ -21,6 +22,7 @@ const Alert: React.FC<AlertProps> = ({
   buttonText = "확인",
   onButtonClick,
   className = "",
+  overlay
 }) => {
   if (!isOpen) return null;
 
@@ -34,7 +36,8 @@ const Alert: React.FC<AlertProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* 배경 오버레이 */}
-      <div
+      {
+        overlay ?? <div
         className={`absolute inset-0 transition-all duration-300 ${
           isOpen ? "opacity-100" : "opacity-0"
         }`}
@@ -44,6 +47,8 @@ const Alert: React.FC<AlertProps> = ({
           WebkitBackdropFilter: "blur(8px)",
         }}
       />
+      }
+      
 
       
       {/* Alert 컨테이너 */}

@@ -11,5 +11,6 @@ export default [
   route("send/amount", "routes/send/amount/index.tsx"),
   route("splash", "routes/splash/index.tsx"),
   route("onboarding", "routes/onboarding/index.tsx"),
-  route("home", "routes/home/index.tsx")
+  route("home", "routes/home/index.tsx"),
+  route("receive-link", "routes/receive-link/index.tsx")
 ] satisfies RouteConfig;
