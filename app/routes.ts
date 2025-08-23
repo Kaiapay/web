@@ -9,5 +9,6 @@ export default [
   route("send/via-link", "routes/send/via-link/index.tsx"),
   route("send/via-kaiapay-id", "routes/send/via-kaiapay-id/index.tsx"),
   route("send/to-wallet", "routes/send/to-wallet/index.tsx"),
-  route("splash", "routes/splash/index.tsx")
+  route("splash", "routes/splash/index.tsx"),
+  route("onboarding", "routes/onboarding/index.tsx")
 ] satisfies RouteConfig;
