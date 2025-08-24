@@ -10,6 +10,7 @@ export const allCurrencies: Currency[] = [
     code: "KAIA",
     name: "카이아",
     logo: "/kaia-wallet.png",
+    isComingSoon: true,
   },
   {
     code: "KRW",
@@ -22,16 +23,16 @@ export const allCurrencies: Currency[] = [
 // Get currency balance from real pot data
 export const getCurrencyBalance = (
   currencyCode: string,
-  balanceProvider?: { getFormattedBalance: (token: 'usdt' | 'kaia') => string }
+  balanceProvider?: { getFormattedBalance: (token: "usdt" | "kaia") => string }
 ) => {
   // Return real balance data if provider is available
   if (balanceProvider) {
     switch (currencyCode.toUpperCase()) {
-      case 'USDT':
-        return balanceProvider.getFormattedBalance('usdt');
-      case 'KAIA':
-        return balanceProvider.getFormattedBalance('kaia');
-      case 'KRW':
+      case "USDT":
+        return balanceProvider.getFormattedBalance("usdt");
+      case "KAIA":
+        return "0"; // KAIA not supported yet
+      case "KRW":
         return "0"; // KRW not supported yet
       default:
         return "0";

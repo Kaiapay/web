@@ -16,6 +16,9 @@ import Button from "~/components/Button";
 import { postDeposit } from "~/generated/api";
 import { KAIA_RPC_URL } from "../../lib/constants";
 import { usePrivy } from "@privy-io/react-auth";
+import { useNavigate } from "react-router-dom";
+import BottomSheet from "~/components/BottomSheet";
+import CheckIcon from "~/components/icons/CheckIcon";
 
 const viemClient = createPublicClient({
   chain: kaia,
@@ -70,15 +73,36 @@ export default function Fill() {
   const [amount, setAmount] = useState("0");
   const [selectedCurrencyCode, setSelectedCurrencyCode] = useState("USDT");
   const [isSheetOpen, setIsSheetOpen] = useState(false);
-  const [wallets, setWallets] = useState<string[]>([]);
-  const [usdtBalance, setUsdtBalance] = useState("0");
-  const [kaiaBalance, setKaiaBalance] = useState("0");
+
+  const [selectedWallet, setSelectedWallet] = useState<string | null>(null);
+  const [usdtBalance, setUsdtBalance] = useState<string | null>(null);
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const [, forceRerender] = useState(0);
 
   useEffect(() => {
-    if (wallets.length === 0) return;
-    const selectedWallet = wallets[0];
+    // Register Kaia/Klaytn provider event listeners to trigger re-render on changes
+    // @ts-ignore
+    const provider = typeof window !== "undefined" ? window.klaytn : undefined;
+    if (!provider || !provider.on) return;
 
+    const handleAccountsChanged = (accounts: string[]) => {
+      // @ts-ignore
+      setSelectedWallet(window.klaytn.selectedAddress);
+    };
+
+    provider.on("accountsChanged", handleAccountsChanged);
+
+    return () => {
+      // Clean up listeners on unmount
+      if (provider.removeListener) {
+        provider.removeListener("accountsChanged", handleAccountsChanged);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    // @ts-ignore
+    setSelectedWallet(window.klaytn.selectedAddress);
     const getBalance = async () => {
       const balance = await viemClient.readContract({
         address: USDT_ADDRESS,
@@ -91,57 +115,22 @@ export default function Fill() {
         abi: erc20Abi,
         functionName: "decimals",
       });
-      const wei = await viemClient.getBalance({
-        address: selectedWallet as `0x${string}`,
-      });
-
       setUsdtBalance(formatUnits(balance, decimals));
-      setKaiaBalance(formatUnits(wei, 18));
     };
     getBalance();
-  }, [wallets[0]]);
+  }, [selectedWallet]);
+
+  useEffect(() => {
+    if (!selectedWallet) return;
+  }, [selectedWallet]);
 
   useEffect(() => {
     const getWallets = async () => {
       // @ts-ignore
-      const accounts = await window.klaytn.enable();
+      // const accounts = await window.klaytn.enable();
       setWallets(accounts);
     };
     getWallets();
-  }, []);
-
-  useEffect(() => {
-    // Register Kaia/Klaytn provider event listeners to trigger re-render on changes
-    // @ts-ignore
-    const provider = typeof window !== "undefined" ? window.klaytn : undefined;
-    if (!provider || !provider.on) return;
-
-    const handleAccountsChanged = (accounts: string[]) => {
-      setWallets(accounts || []);
-    };
-
-    const handleNetworkChanged = (_networkId: unknown) => {
-      // Incrementing a version forces a re-render even if accounts didn't change
-      forceRerender((v) => v + 1);
-    };
-
-    const handleDisconnected = () => {
-      setWallets([]);
-      forceRerender((v) => v + 1);
-    };
-
-    provider.on("accountsChanged", handleAccountsChanged);
-    provider.on("networkChanged", handleNetworkChanged);
-    provider.on("disconnected", handleDisconnected);
-
-    return () => {
-      // Clean up listeners on unmount
-      if (provider.removeListener) {
-        provider.removeListener("accountsChanged", handleAccountsChanged);
-        provider.removeListener("networkChanged", handleNetworkChanged);
-        provider.removeListener("disconnected", handleDisconnected);
-      }
-    };
   }, []);
 
   const handleAmountChange = (amount: string) => {
@@ -152,18 +141,20 @@ export default function Fill() {
     setSelectedCurrencyCode(currencyCode);
   };
 
-  const handleOpenSheet = () => {
-    setIsSheetOpen(true);
+  const handleErrorSheetClose = () => {
+    setIsBottomSheetOpen(false);
+    navigate("/home", { replace: true });
+  };
+
+  const handleErrorSheetButtonClick = () => {
+    setIsBottomSheetOpen(false);
+    navigate("/home", { replace: true });
   };
 
   const { user } = usePrivy();
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
-    if (selectedCurrencyCode !== "USDT") {
-      console.error("Only USDT deposits are supported");
-      return;
-    }
-
     try {
       const walletClient = createWalletClient({
         chain: kaia,
@@ -181,14 +172,12 @@ export default function Fill() {
 
       // First approve USDT spending
       const approveHash = await walletClient.writeContract({
-        account: wallets[0] as `0x${string}`,
+        account: selectedWallet as `0x${string}`,
         address: USDT_ADDRESS,
         abi: erc20Abi,
         functionName: "approve",
         args: [CONTRACT_ADDRESS as `0x${string}`, parsedAmount],
       });
-
-      console.log("Approve hash:", approveHash);
 
       // Wait for approve transaction to be mined
       await viemClient.waitForTransactionReceipt({ hash: approveHash });
@@ -199,7 +188,7 @@ export default function Fill() {
 
       // Then deposit tokens
       const hash = await walletClient.writeContract({
-        account: wallets[0] as `0x${string}`,
+        account: selectedWallet as `0x${string}`,
         address: CONTRACT_ADDRESS,
         abi: depositTokenAbi,
         functionName: "depositToken",
@@ -210,10 +199,9 @@ export default function Fill() {
         ],
       });
 
-      console.log("Transaction hash:", hash);
       await postDeposit({ txHash: hash });
+      setIsBottomSheetOpen(true);
     } catch (error) {
-      console.error("Transaction failed:", error);
       // TODO: 에러 처리
     }
   };
@@ -233,15 +221,19 @@ export default function Fill() {
                 alt="Kaia Wallet"
                 className="w-[32px] h-[32px]"
               />
-              {wallets.length > 0 ? (
-                <p>{wallets[0].slice(0, 6) + "..." + wallets[0].slice(-6)}</p>
+              {selectedWallet ? (
+                <p>
+                  {selectedWallet.slice(0, 6) +
+                    "..." +
+                    selectedWallet.slice(-6)}
+                </p>
               ) : (
                 <p>Kaia Wallet</p>
               )}
             </div>
-            {wallets.length === 0 && (
+            {!selectedWallet && (
               <button
-                onClick={handleOpenSheet}
+                onClick={() => navigate("/wallet-connect")}
                 className="h-[40px] bg-white/20 rounded-[32px] px-[16px] text-white/90 text-[15px] font-medium hover:opacity-80 transition-opacity"
               >
                 연동하기
@@ -275,16 +267,16 @@ export default function Fill() {
           supportedCurrencies={["KRW", "USDT", "KAIA"]}
           selectedCurrencyCode={selectedCurrencyCode}
           amount={amount}
-          balance={selectedCurrencyCode === "USDT" ? usdtBalance : kaiaBalance}
+          balance={usdtBalance ?? "-"}
           onCurrencyChange={handleCurrencyChange}
           onAmountChange={handleAmountChange}
         />
         <Button
           onClick={handleSubmit}
           disabled={
-            selectedCurrencyCode === "USDT"
-              ? Number(amount) > Number(usdtBalance)
-              : Number(amount) > Number(kaiaBalance) || Number(amount) === 0
+            !selectedWallet ||
+            Number(amount) > Number(usdtBalance ?? 0) ||
+            Number(amount) <= 0
           }
           className="mt-2"
         >
@@ -297,6 +289,17 @@ export default function Fill() {
         isOpen={isSheetOpen}
         onClose={() => setIsSheetOpen(false)}
       />
+
+      <BottomSheet
+        isOpen={isBottomSheetOpen}
+        onClose={handleErrorSheetClose}
+        icon={<CheckIcon />}
+        title="돈 채우기 완료!"
+        buttonText="확인"
+        onButtonClick={handleErrorSheetButtonClick}
+      >
+        {amount} {selectedCurrencyCode} 채우기 완료!
+      </BottomSheet>
     </div>
   );
 }

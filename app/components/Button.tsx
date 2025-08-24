@@ -25,7 +25,7 @@ const Button: React.FC<ButtonProps> = ({
   const sizeClasses = "h-[52px] text-[16px] px-6 text-base rounded-full";
 
   const stateClasses = disabled
-    ? "opacity-80 cursor-not-allowed"
+    ? "opacity-30 cursor-not-allowed"
     : "hover:opacity-90 active:opacity-75 cursor-pointer";
 
   const classes = [
@@ -49,7 +49,10 @@ const Button: React.FC<ButtonProps> = ({
       {isLoading ? (
         <div
           className="w-5 h-5 border-t-transparent border-b-transparent border-r-transparent border-2 rounded-full animate-spin"
-          style={{ borderLeftColor: backgroundColor === "bg-primary" ? "#000000" : "#BFF009" }}
+          style={{
+            borderLeftColor:
+              backgroundColor === "bg-primary" ? "#000000" : "#BFF009",
+          }}
         />
       ) : (
         children
