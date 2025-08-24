@@ -34,11 +34,15 @@ export default function CurrencyInput({
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    if (value.includes(".")) {
-      onAmountChange(value);
-    } else {
-      const cleanValue = value.replace(/^0+/, "") || "0";
+    
+    // 마이너스 기호 제거
+    const cleanValue = value.replace(/-/g, '');
+    
+    if (cleanValue.includes(".")) {
       onAmountChange(cleanValue);
+    } else {
+      const finalValue = cleanValue.replace(/^0+/, "") || "0";
+      onAmountChange(finalValue);
     }
   };
 
