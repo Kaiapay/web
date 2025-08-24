@@ -18,5 +18,6 @@ export default [
   route("receive-link", "routes/receive-link/index.tsx"),
   route("kaiapay-card", "routes/kaiapay-card/index.tsx"),
   route("luckybox", "routes/luckybox/index.tsx"),
-  route("account", "routes/account/index.tsx")
+  route("account", "routes/account/index.tsx"),
+  route("account/change-id", "routes/account/change-id/index.tsx")
 ] satisfies RouteConfig;

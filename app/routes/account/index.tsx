@@ -6,6 +6,7 @@ import EmailIcon from "~/components/icons/EmailIcon";
 import LineIcon from "~/components/icons/LineIcon";
 import GoogleIcon from "~/components/icons/GoogleIcon";
 import UserIcon from "~/components/icons/UserIcon";
+import ChevronRightIcon from "~/components/icons/chevron-right";
 
 type AccountType = "kakao" | "email" | "line" | "google";
 
@@ -121,7 +122,14 @@ export default function AccountPage() {
           <div className="bg-white/10 backdrop-blur-[14px] rounded-2xl p-4">
             <div className="space-y-3">
               {/* KaiaPay 아이디 */}
-              <div className="flex items-center gap-4">
+              <div
+                className="flex items-center gap-4 cursor-pointer"
+                onClick={() =>
+                  navigate("/account/change-id", {
+                    viewTransition: true,
+                  })
+                }
+              >
                 <div className="w-5 h-10 flex items-center justify-center">
                   <UserIcon size={24} className="text-white" />
                 </div>
@@ -130,6 +138,9 @@ export default function AccountPage() {
                     KaiaPay 아이디
                   </p>
                   <p className="text-white/50 text-[14px]">@KaiaPay공식계정</p>
+                </div>
+                <div className="w-5 h-10 flex items-center justify-center">
+                  <ChevronRightIcon />
                 </div>
               </div>
             </div>
