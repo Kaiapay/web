@@ -21,15 +21,29 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Deploy to Cloudflare
-        env:
-          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      - name: Build Web
         run: |
           if [ "${{ github.event_name }}" = "release" ]; then
-            npm run deploy:production
+            VITE_API_BASE_URL=https://api.kaiapay.app npm run build
           else
-            npm run deploy:development
+            VITE_API_BASE_URL=https://dev-api.kaiapay.app npm run build
           fi
+
+      - name: Deploy Cloudflare
+        if: ${{ github.event_name != 'release' }}
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: 6377196122dd8a0ce3a9b3ef18fdfdd7
+          command: pages deploy dist --project-name=kaiapay-web-dev --branch=main
+
+      - name: Deploy Cloudflare
+        if: ${{ github.event_name == 'release' }}
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: 6377196122dd8a0ce3a9b3ef18fdfdd7
+          command: pages deploy dist --project-name=kaiapay-web --branch=main
 
   create-release:
     name: Create Production Release Draft
