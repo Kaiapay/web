@@ -33,7 +33,10 @@ export default function WalletConnect() {
             <div className="flex flex-col gap-[20px]">
               {/* 앱 다운로드 */}
               <div className="flex gap-[12px]">
-                <IconButton iconSrc="/icons/arrow-circle-broken-down.svg" size={40} />
+                <IconButton
+                  iconSrc="/icons/arrow-circle-broken-down.svg"
+                  size={40}
+                />
                 <div className="flex flex-col gap-[16px] flex-1 items-start">
                   <div className="flex flex-col gap-[4px]">
                     <h4 className="text-white text-[16px] font-normal font-pretendard leading-[1.375em] tracking-[-0.625%]">
@@ -55,7 +58,7 @@ export default function WalletConnect() {
 
               {/* 지갑 생성 */}
               <div className="flex gap-[12px]">
-                <IconButton iconSrc={WalletIcon} size={40} />
+                <IconButton iconSrc="/icons/wallet2.svg" size={40} />
                 <div className="flex flex-col gap-[16px] flex-1 items-start">
                   <div className="flex flex-col gap-[4px]">
                     <h4 className="text-white text-[16px] font-normal font-pretendard leading-[1.375em] tracking-[-0.625%]">
