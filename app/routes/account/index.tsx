@@ -125,9 +125,7 @@ export default function AccountPage() {
               <div
                 className="flex items-center gap-4 cursor-pointer"
                 onClick={() =>
-                  navigate("/account/change-id", {
-                    viewTransition: true,
-                  })
+                  navigate("/account/change-id")
                 }
               >
                 <div className="w-5 h-10 flex items-center justify-center">

@@ -1,21 +1,31 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useCustomPrivy } from "~/hooks/use-custom-privy";
 
 export default function Splash() {
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(true);
+  const { authenticated, ready } = useCustomPrivy();
 
   useEffect(() => {
-    // 2초 후 메인 페이지로 이동
+    // 2초 후 로그인 상태에 따라 페이지 이동
     const timer = setTimeout(() => {
       setIsVisible(false);
       setTimeout(() => {
-        navigate("/onboarding");
+        if (ready) {
+          if (authenticated) {
+            navigate("/home");
+          } else {
+            navigate("/onboarding");
+          }
+        } else {
+          navigate("/onboarding");
+        }
       }, 500);
     }, 2000);
 
     return () => clearTimeout(timer);
-  }, [navigate]);
+  }, [navigate, authenticated, ready]);
 
   return (
     <div
@@ -24,7 +34,11 @@ export default function Splash() {
       }`}
     >
       <div className="flex-1 flex items-center justify-center">
-        <img src="/kaiapay-logo.svg" alt="Kaiapay" className="w-[142px] h-auto" />
+        <img
+          src="/kaiapay-logo.svg"
+          alt="Kaiapay"
+          className="w-[142px] h-auto"
+        />
       </div>
 
       <div className="absolute bottom-[52px] left-0 right-0 flex flex-col items-center space-y-[8px]">

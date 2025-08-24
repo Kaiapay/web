@@ -24,6 +24,7 @@ export default function Providers({ children }: ProvidersProps) {
             walletChainType: "ethereum-only",
             walletList: [],
           },
+          loginMethods: ["email", "google", "twitter"],
         }}
       >
         <SmartWalletsProvider>{children}</SmartWalletsProvider>
