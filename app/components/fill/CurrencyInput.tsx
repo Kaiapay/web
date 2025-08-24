@@ -1,17 +1,9 @@
 import { useState } from "react";
 import ContentCard from "../ContentCard";
-import AttachedSheet from "../AttachedSheet";
 import ChevronDownIcon from "~/components/icons/chevron-down";
-import KRWLogo from "~/routes/assets/krw-logo.png";
-import USDTLogo from "~/routes/assets/usdt-logo.png";
-import KaiaLogo from "~/routes/assets/kaia-wallet.png";
-
-interface Currency {
-  code: string;
-  name: string;
-  logo: string;
-  isComingSoon?: boolean;
-}
+import CurrencySelector from "../CurrencySelector";
+import type { Currency } from "~/types/currency";
+import { allCurrencies, getCurrencyBalance } from "~/lib/currency";
 
 interface CurrencyInputProps {
   supportedCurrencies: string[]; // ["KRW", "USDT", "KAIA"]
@@ -34,25 +26,6 @@ export default function CurrencyInput({
 }: CurrencyInputProps) {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
-  const allCurrencies: Currency[] = [
-    {
-      code: "USDT",
-      name: "테더",
-      logo: USDTLogo,
-    },
-    {
-      code: "KAIA",
-      name: "카이아",
-      logo: KaiaLogo,
-    },
-    {
-      code: "KRW",
-      name: "원화",
-      logo: KRWLogo,
-      isComingSoon: true,
-    },
-  ];
-
   const currencies = allCurrencies.filter((c) =>
     supportedCurrencies.includes(c.code)
   );
@@ -72,17 +45,6 @@ export default function CurrencyInput({
   const handleCurrencySelect = (currency: Currency) => {
     onCurrencyChange(currency.code);
     onAmountChange("0");
-    setIsSheetOpen(false);
-  };
-
-  // TODO: 각 통화별 잔액 매핑 (실제로는 주스탠다드 등 API에서 가져와야 함)
-  const getCurrencyBalance = (currencyCode: string) => {
-    const balances: Record<string, string> = {
-      USDT: "10.43",
-      KAIA: "5.00",
-      KRW: "0",
-    };
-    return balances[currencyCode] || "0";
   };
 
   return (
@@ -136,40 +98,12 @@ export default function CurrencyInput({
       </ContentCard>
 
       {/* 통화 선택 시트 */}
-      <AttachedSheet isOpen={isSheetOpen} onClose={() => setIsSheetOpen(false)}>
-        <div className="flex flex-col items-center gap-[24px]">
-          <div className="flex flex-col gap-[12px] w-full pt-[12px]">
-            {currencies.map((currency) => (
-              <button
-                key={currency.code}
-                onClick={() => handleCurrencySelect(currency)}
-                className="flex items-center gap-[24px] w-full h-[44px] rounded-[8px] transition-colors"
-              >
-                <img
-                  src={currency.logo}
-                  alt={currency.code}
-                  className="w-[40px] h-[40px]"
-                />
-                <div className="flex flex-col items-start flex-1">
-                  <span className="text-white text-[16px] font-normal font-pretendard leading-[1.375em] tracking-[-0.625%]">
-                    {currency.name}
-                  </span>
-                  {currency.isComingSoon && (
-                    <span className="text-white/30 text-[14px] font-pretendard leading-[1.571em] tracking-[-0.714%]">
-                      출시예정
-                    </span>
-                  )}
-                  {!currency.isComingSoon && (
-                    <span className="text-white/30 text-[14px] font-pretendard leading-[1.571em] tracking-[-0.714%]">
-                      {getCurrencyBalance(currency.code)} {currency.code}
-                    </span>
-                  )}
-                </div>
-              </button>
-            ))}
-          </div>
-        </div>
-      </AttachedSheet>
+      <CurrencySelector
+        isOpen={isSheetOpen}
+        onClose={() => setIsSheetOpen(false)}
+        onCurrencySelect={handleCurrencySelect}
+        supportedCurrencies={supportedCurrencies}
+      />
     </>
   );
 }

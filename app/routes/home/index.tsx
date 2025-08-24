@@ -16,12 +16,15 @@ import GiftIcon from "../assets/icons/gift.svg";
 import ReceiptIcon from "../assets/icons/receipt.svg";
 import { useNavigate } from "react-router";
 import type { Transaction } from "../transactions/types/transaction";
+import type { Currency } from "~/types/currency";
 
 export default function Home() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
+  const [selectedTransaction, setSelectedTransaction] =
+    useState<Transaction | null>(null);
   const [isDetailSheetOpen, setIsDetailSheetOpen] = useState(false);
+  const [selectedCurrency, setSelectedCurrency] = useState("USDT");
 
   // 검색 핸들러
   const handleSearchChange = (query: string) => {
@@ -33,10 +36,16 @@ export default function Home() {
     console.log("이자 받기 클릭");
   };
 
+  // 통화 변경 핸들러
+  const handleCurrencyChange = (currency: Currency) => {
+    setSelectedCurrency(currency.code);
+  };
+
   // 액션 버튼 핸들러들
   const handleFillClick = () => navigate("/fill", { viewTransition: true });
   const handleSendClick = () => navigate("/send", { viewTransition: true });
-  const handleReceiveClick = () => navigate("/receive-link", { viewTransition: true });
+  const handleReceiveClick = () =>
+    navigate("/receive-link", { viewTransition: true });
   const handleMoreClick = () => console.log("더보기 클릭");
 
   // 거래 클릭 핸들러
@@ -68,7 +77,7 @@ export default function Home() {
     {
       id: "2",
       date: new Date(2025, 7, 20, 15, 54),
-      amount: 20.00,
+      amount: 20.0,
       currency: "USDT",
       type: "send",
       description: "15:54 · 링크 공유",
@@ -145,17 +154,19 @@ export default function Home() {
         }}
       />
       <div className="relative z-10 flex flex-col">
-        <HomeHeader 
-          searchQuery={searchQuery} 
-          onSearchChange={handleSearchChange} 
+        <HomeHeader
+          searchQuery={searchQuery}
+          onSearchChange={handleSearchChange}
         />
-        <BalanceSection 
+        <BalanceSection
           balance="10.43"
           interest="1.02 USDT"
           onInterestClick={handleInterestClick}
+          selectedCurrency={selectedCurrency}
+          onCurrencyChange={handleCurrencyChange}
         />
         <ActionButtons actions={actions} />
-        <HomeContent 
+        <HomeContent
           transactions={transactions}
           services={services}
           onViewAll={handleViewAll}
