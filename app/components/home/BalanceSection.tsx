@@ -54,9 +54,20 @@ export default function BalanceSection({
       <div className="flex items-center justify-center gap-2 mb-2">
         <h1 className="text-white font-semibold leading-[1.4] tracking-[-0.019em] h-[72px]">
           <span className="text-[48px]">{currentBalance.split(".")[0]}</span>
-          <span className="text-[24px]">
-            .{currentBalance.split(".")[1]} {selectedCurrency}
-          </span>
+          {(() => {
+            const decimal = currentBalance.split(".")[1];
+            if (decimal && Number(decimal) !== 0) {
+              const trimmed = decimal.replace(/0+$/, "");
+              return (
+                <span className="text-[24px]">
+                  .{trimmed} {selectedCurrency}
+                </span>
+              );
+            }
+            return (
+              <span className="text-[24px] ml-2">{selectedCurrency}</span>
+            );
+          })()}
         </h1>
         {onCurrencyChange && (
           <button
