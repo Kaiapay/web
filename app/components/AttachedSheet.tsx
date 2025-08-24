@@ -20,6 +20,12 @@ const AttachedSheet: React.FC<AttachedSheetProps> = ({
   const sheetRef = useRef<HTMLDivElement>(null);
   const startYRef = useRef(0);
   const currentYRef = useRef(0);
+  const [hasMounted, setHasMounted] = useState(false);
+  useEffect(() => {
+    // Defer to next tick to allow initial paint with translateY(100%)
+    const id = requestAnimationFrame(() => setHasMounted(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
 
   const safeClose = () => {
     setIsDragging(false);
@@ -136,10 +142,11 @@ const AttachedSheet: React.FC<AttachedSheetProps> = ({
         className={`absolute bottom-0 left-0 right-0 w-full bg-[#1C1C1E] rounded-t-[32px] px-[16px] pb-[19px] transform ${className}`}
         style={{
           ...(height && { height }),
-          transform: isOpen 
-            ? `translateY(${dragOffset}px)` 
+          transform: isOpen
+            ? (hasMounted ? `translateY(${dragOffset}px)` : "translateY(100%)")
             : "translateY(100%)",
           transition: isDragging ? "none" : "all 400ms cubic-bezier(0.25,0.46,0.45,0.94)",
+          willChange: "transform",
         }}
         onClick={(e) => e.stopPropagation()}
         onTouchEnd={(e) => e.stopPropagation()}
