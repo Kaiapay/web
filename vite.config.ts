@@ -4,11 +4,7 @@ import react from "@vitejs/plugin-react";
 import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
-  plugins: [
-    react(),
-    tailwindcss(),
-    tsconfigPaths(),
-  ],
+  plugins: [react(), tailwindcss(), tsconfigPaths()],
   define: {
     global: "globalThis",
     "process.env": {},
@@ -23,12 +19,12 @@ export default defineConfig({
     host: true,
   },
   optimizeDeps: {
-    include: ['buffer', 'process'],
+    include: ["buffer", "process"],
   },
   resolve: {
     alias: {
-      buffer: 'buffer',
-      process: 'process/browser',
+      buffer: "buffer",
+      process: "process/browser",
     },
   },
 });

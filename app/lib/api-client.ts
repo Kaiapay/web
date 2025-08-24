@@ -15,7 +15,6 @@ export const customInstance = async <T>({
   params,
   data,
   headers,
-  responseType,
   signal,
 }: {
   url: string;
@@ -23,11 +22,10 @@ export const customInstance = async <T>({
   params?: any;
   data?: any;
   headers?: Record<string, string>;
-  responseType?: string;
   signal?: AbortSignal;
 }): Promise<T> => {
   // 기본 URL 설정
-  const baseURL = "https://dev-api.kaiapay.app";
+  const baseURL = import.meta.env.VITE_API_BASE_URL ??  "https://dev-api.kaiapay.app";
 
   // URL 구성
   const fullUrl = url.startsWith("http") ? url : `${baseURL}${url}`;
