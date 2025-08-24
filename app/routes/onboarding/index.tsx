@@ -23,21 +23,21 @@ const onboardingSlides: OnboardingSlide[] = [
     title: "지갑 없는 사람에게도\n보내기",
     description: "링크 하나로 주고받는\nUSDT와 KRW",
     feature: "크립토 모르는 친구도\n그냥 링크 열면 USDT, KRW 받아요",
-    imageUrl: onboarding1
+    imageUrl: onboarding1,
   },
   {
     id: 2,
     title: "간편 보내기",
     description: "어디로든, 누구에게나\n몇 초면 끝나는 보내기",
     feature: "계좌번호를 몰라도\n핸드폰 번호, 카카오톡, 텔레그램 어디든 보내기",
-    imageUrl: onboarding2
+    imageUrl: onboarding2,
   },
   {
     id: 3,
     title: "이자 받기",
     description: "하루만 넣어놔도\n쌓이는 이자",
     feature: "가만히 둬도 불어나는 페이머니\nKRW·USDT, 자동으로 매일 이자 적립",
-    imageUrl: onboarding3
+    imageUrl: onboarding3,
   },
   {
     id: 4,
@@ -45,7 +45,7 @@ const onboardingSlides: OnboardingSlide[] = [
     description: "구글 · 애플페이로\n바로 꺼내 쓰기",
     feature:
       "RedotPay로 손쉽게 출금하고\n곧 출시될 KaiaPay 카드로 어디서나 결제",
-    imageUrl: onboarding4
+    imageUrl: onboarding4,
   },
   {
     id: 5,
@@ -53,7 +53,7 @@ const onboardingSlides: OnboardingSlide[] = [
     description: "제3자 없는\n탈중앙 페이머니",
     feature:
       "소셜 로그인으로 바로 가입해도 보안은 그대로 유지\n가입은 빠르게, 보안은 확실하게.",
-    imageUrl: onboarding5
+    imageUrl: onboarding5,
   },
   {
     id: 6,
@@ -61,7 +61,7 @@ const onboardingSlides: OnboardingSlide[] = [
     description: "결제받기, 돈 모으기도\n링크 하나로 끝",
     feature:
       "기본 페이머니 링크부터 맞춤 금액 링크까지.\n모임 회비든, 상품 결제든 원하는 대로 받아보세요.",
-    imageUrl: onboarding6
+    imageUrl: onboarding6,
   },
 ];
 
@@ -124,8 +124,8 @@ export default function Onboarding() {
   }, [currentSlide, navigate]);
 
   return (
-    <div 
-      ref={containerRef} 
+    <div
+      ref={containerRef}
       className="fixed inset-0 bg-black flex flex-col cursor-pointer"
       onClick={handleScreenClick}
     >
@@ -165,8 +165,8 @@ export default function Onboarding() {
 
           <div className="flex-1 flex items-center justify-center mb-[24px]">
             <div className="w-full h-full max-w-[320px] max-h-[320px] rounded-lg overflow-hidden">
-              <img 
-                src={onboardingSlides[currentSlide].imageUrl} 
+              <img
+                src={onboardingSlides[currentSlide].imageUrl}
                 alt={`Slide ${currentSlide + 1}`}
                 className="w-full h-full object-cover rounded-lg select-none pointer-events-none"
                 draggable={false}
@@ -174,7 +174,14 @@ export default function Onboarding() {
             </div>
           </div>
 
-          <Button onClick={handleSignup}>시작하기</Button>
+          <Button
+            onClick={(e) => {
+              e.stopPropagation();
+              handleSignup();
+            }}
+          >
+            시작하기
+          </Button>
         </div>
       </div>
     </div>

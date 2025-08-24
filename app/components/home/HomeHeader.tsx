@@ -17,7 +17,11 @@ export default function HomeHeader({
   const navigate = useNavigate();
   return (
     <div className="flex flex-row gap-[8px] pt-[12px] px-[16px]">
-      <IconButton iconSrc={UserIcon} iconAlt="User" />
+      <IconButton
+        iconSrc={UserIcon}
+        iconAlt="User"
+        onClick={() => navigate("/account", { viewTransition: true })}
+      />
 
       {/* 검색 영역 */}
       <div className="flex-1 bg-white/20 backdrop-blur-[10px] rounded-full px-3 py-1.5 flex items-center gap-1.5">
