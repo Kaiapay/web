@@ -13,13 +13,13 @@ const KAIAPAY_VAULT_ABI = [
       { name: "token", type: "address" },
       { name: "amount", type: "uint256" },
       { name: "deadline", type: "uint256" },
-      { name: "owner", type: "address" }
+      { name: "owner", type: "address" },
     ],
     name: "transferToken",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function"
-  }
+    type: "function",
+  },
 ] as const;
 
 export interface TransferParams {
@@ -49,7 +49,7 @@ export function useKaiaPayTransfer() {
     toAddress,
     amount,
     isTemporaryWallet = true,
-    onSuccess
+    onSuccess,
   }: TransferParams): Promise<TransferResult> => {
     if (!ready || !authenticated || !user) {
       throw new Error("User not authenticated");
@@ -78,7 +78,7 @@ export function useKaiaPayTransfer() {
 
       // Calculate deadline
       const deadline = isTemporaryWallet
-        ? BigInt(Math.floor(Date.now() / 1000) + (24 * 60 * 60)) // 24 hours from now
+        ? BigInt(Math.floor(Date.now() / 1000) + 24 * 60 * 60) // 24 hours from now
         : BigInt(0); // No deadline
 
       // Determine owner based on wallet type
@@ -96,20 +96,20 @@ export function useKaiaPayTransfer() {
           USDT_ADDRESS as `0x${string}`,
           amountWei,
           deadline,
-          owner as `0x${string}`
-        ]
+          owner as `0x${string}`,
+        ],
       });
 
       // Send the transaction using smart wallet
       const hash = await client.sendTransaction({
         to: KAIAPAY_VAULT_ADDRESS,
         data,
-        value: BigInt(0) // No ETH being sent
+        value: BigInt(0), // No ETH being sent
       });
 
       const result: TransferResult = {
         txHash: hash,
-        explorerUrl: `https://kaiachain.io/tx/${hash}`
+        explorerUrl: `https://kaiachain.io/tx/${hash}`,
       };
 
       // TODO: Send txHash to API here?
@@ -132,7 +132,7 @@ export function useKaiaPayTransfer() {
     isLoading,
     error,
     smartWallet,
-    isReady: ready && authenticated && !!smartWallet && !!client
+    isReady: ready && authenticated && !!smartWallet && !!client,
   };
 }
 

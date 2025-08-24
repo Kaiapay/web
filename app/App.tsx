@@ -120,7 +120,7 @@ export default function App() {
               }
             />
             <Route
-              path="/receive-link"
+              path="/i/:hash"
               element={
                 <ProtectedRoute requireAuth={true}>
                   <ReceiveLinkPage />
