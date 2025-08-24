@@ -1,40 +1,41 @@
 {
-	"name": "kaiapay-web",
-	"private": true,
-	"type": "module",
-	"scripts": {
-		"build": "react-router build",
-		"cf-typegen": "wrangler types",
-		"deploy": "npm run build && wrangler deploy",
-		"dev": "npm run generate-orval && react-router dev",
-		"postinstall": "npm run cf-typegen",
-		"preview": "npm run build && vite preview",
-		"typecheck": "npm run cf-typegen && react-router typegen && tsc -b",
-		"generate-orval": "orval",
-		"generate-orval:watch": "orval --watch"
-	},
-	"dependencies": {
-		"@tanstack/react-query": "^5.85.5",
-		"@tanstack/react-query-devtools": "^5.85.5",
-		"isbot": "^5.1.27",
-		"openapi-typescript-codegen": "^0.29.0",
-		"react": "^19.1.0",
-		"react-dom": "^19.1.0",
-		"react-hook-form": "^7.62.0",
-		"react-router": "^7.7.1"
-	},
-	"devDependencies": {
-		"@cloudflare/vite-plugin": "^1.0.12",
-		"@react-router/dev": "^7.7.1",
-		"@tailwindcss/vite": "^4.1.4",
-		"@types/node": "^20",
-		"@types/react": "^19.1.2",
-		"@types/react-dom": "^19.1.2",
-		"orval": "^7.11.2",
-		"tailwindcss": "^4.1.4",
-		"typescript": "^5.8.3",
-		"vite": "^6.3.3",
-		"vite-tsconfig-paths": "^5.1.4",
-		"wrangler": "^4.31.0"
-	}
+  "name": "kaiapay-web",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "react-router build",
+    "cf-typegen": "wrangler types",
+    "deploy:development": "npm run build && wrangler deploy --env development",
+    "deploy:production": "npm run build && wrangler deploy --env production",
+    "dev": "npm run generate-orval && react-router dev",
+    "postinstall": "npm run cf-typegen",
+    "preview": "npm run build && vite preview",
+    "typecheck": "npm run cf-typegen && react-router typegen && tsc -b",
+    "generate-orval": "orval",
+    "generate-orval:watch": "orval --watch"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.85.5",
+    "@tanstack/react-query-devtools": "^5.85.5",
+    "isbot": "^5.1.27",
+    "openapi-typescript-codegen": "^0.29.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-hook-form": "^7.62.0",
+    "react-router": "^7.7.1"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.0.12",
+    "@react-router/dev": "^7.7.1",
+    "@tailwindcss/vite": "^4.1.4",
+    "@types/node": "^20",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "orval": "^7.11.2",
+    "tailwindcss": "^4.1.4",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.3",
+    "vite-tsconfig-paths": "^5.1.4",
+    "wrangler": "^4.31.0"
+  }
 }
