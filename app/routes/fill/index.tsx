@@ -7,7 +7,7 @@ import KaiaWalletIcon from "../assets/kaia-wallet.png";
 
 export default function Fill() {
   const [amount, setAmount] = useState("0");
-  const [selectedCurrencyCode, setSelectedCurrencyCode] = useState("KRW");
+  const [selectedCurrencyCode, setSelectedCurrencyCode] = useState("USDT");
   const [isSheetOpen, setIsSheetOpen] = useState(false);
 
   const handleAmountChange = (amount: string) => {
@@ -39,7 +39,7 @@ export default function Fill() {
               />
               <p>Kaia Wallet</p>
             </div>
-            <button 
+            <button
               onClick={handleOpenSheet}
               className="h-[40px] bg-white/20 rounded-[32px] px-[16px] text-white/90 text-[15px] font-medium hover:opacity-80 transition-opacity"
             >
@@ -49,7 +49,7 @@ export default function Fill() {
         </ContentCard>
 
         <CurrencyInput
-          supportedCurrencies={["KRW", "USDT"]}
+          supportedCurrencies={["KRW", "USDT", "KAIA"]}
           selectedCurrencyCode={selectedCurrencyCode}
           amount={amount}
           balance="0"
@@ -59,8 +59,8 @@ export default function Fill() {
       </div>
 
       {/* 지갑 연동 시트 */}
-      <WalletConnectSheet 
-        isOpen={isSheetOpen} 
+      <WalletConnectSheet
+        isOpen={isSheetOpen}
         onClose={() => setIsSheetOpen(false)}
       />
     </div>

@@ -53,7 +53,9 @@ export default function CurrencyInput({
     },
   ];
 
-  const currencies = allCurrencies.filter(c => supportedCurrencies.includes(c.code));
+  const currencies = allCurrencies.filter((c) =>
+    supportedCurrencies.includes(c.code)
+  );
   const selectedCurrency =
     currencies.find((c) => c.code === selectedCurrencyCode) || currencies[0];
 
@@ -71,6 +73,16 @@ export default function CurrencyInput({
     onCurrencyChange(currency.code);
     onAmountChange("0");
     setIsSheetOpen(false);
+  };
+
+  // TODO: 각 통화별 잔액 매핑 (실제로는 주스탠다드 등 API에서 가져와야 함)
+  const getCurrencyBalance = (currencyCode: string) => {
+    const balances: Record<string, string> = {
+      USDT: "10.43",
+      KAIA: "5.00",
+      KRW: "0",
+    };
+    return balances[currencyCode] || "0";
   };
 
   return (
@@ -117,7 +129,8 @@ export default function CurrencyInput({
             </div>
           </div>
           <p className="text-[11px] text-white/50 font-pretendard font-normal leading-[22px] tracking-[-0.1px]">
-            잔액: {balance} {selectedCurrency.code}
+            잔액: {getCurrencyBalance(selectedCurrency.code)}{" "}
+            {selectedCurrency.code}
           </p>
         </div>
       </ContentCard>
@@ -137,13 +150,18 @@ export default function CurrencyInput({
                   alt={currency.code}
                   className="w-[40px] h-[40px]"
                 />
-                <div className="flex flex-col items-start">
+                <div className="flex flex-col items-start flex-1">
                   <span className="text-white text-[16px] font-normal font-pretendard leading-[1.375em] tracking-[-0.625%]">
                     {currency.name}
                   </span>
                   {currency.isComingSoon && (
                     <span className="text-white/30 text-[14px] font-pretendard leading-[1.571em] tracking-[-0.714%]">
                       출시예정
+                    </span>
+                  )}
+                  {!currency.isComingSoon && (
+                    <span className="text-white/30 text-[14px] font-pretendard leading-[1.571em] tracking-[-0.714%]">
+                      {getCurrencyBalance(currency.code)} {currency.code}
                     </span>
                   )}
                 </div>
