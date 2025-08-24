@@ -3,6 +3,7 @@ import UserIcon from "../../routes/assets/icons/user.svg";
 import GiftIcon from "../../routes/assets/icons/gift.svg";
 import CardIcon from "../../routes/assets/icons/card.svg";
 import SearchIcon from "../../routes/assets/icons/search.svg";
+import { useNavigate } from "react-router";
 
 interface HomeHeaderProps {
   searchQuery: string;
@@ -10,6 +11,7 @@ interface HomeHeaderProps {
 }
 
 export default function HomeHeader({ searchQuery, onSearchChange }: HomeHeaderProps) {
+  const navigate = useNavigate();
   return (
     <div className="flex flex-row gap-[8px] pt-[12px] px-[16px]">
       <IconButton iconSrc={UserIcon} iconAlt="User" />
@@ -26,7 +28,7 @@ export default function HomeHeader({ searchQuery, onSearchChange }: HomeHeaderPr
         />
       </div>
       
-      <IconButton iconSrc={GiftIcon} iconAlt="Gift" hasRedDot={true} />
+      <IconButton iconSrc={GiftIcon} iconAlt="Gift" hasRedDot={true} onClick={() => navigate("/luckybox")} />
       <IconButton iconSrc={CardIcon} iconAlt="Card" />
     </div>
   );

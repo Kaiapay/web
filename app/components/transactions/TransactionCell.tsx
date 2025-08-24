@@ -37,7 +37,7 @@ export default function TransactionCell({
             </div>
           )}
         </div>
-        <div className="flex flex-col gap-[6px] flex-1 min-w-0">
+        <div className="flex flex-col flex-1 min-w-0">
           <div className="flex items-center gap-[6px]">
             <span className={`text-white text-[16px] font-medium leading-[1.375em] tracking-[-0.625%] ${transaction.status === "cancelled" ? "line-through" : ""}`}>
               {TransactionUtils.getListAmountDisplay(transaction)}

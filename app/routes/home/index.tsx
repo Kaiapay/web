@@ -99,7 +99,7 @@ export default function Home() {
       description: "보내기하면 열리는 보너스 혜택",
       actionButton: "받기",
       iconSize: 24,
-      onActionClick: () => console.log("럭키박스 받기"),
+      onActionClick: () => navigate("/luckybox"),
     },
     {
       id: 3,
