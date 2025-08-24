@@ -2,9 +2,7 @@ import { useState } from "react";
 import { usePrivy } from "@privy-io/react-auth";
 import { useSmartWallets } from "@privy-io/react-auth/smart-wallets";
 import { encodeFunctionData } from "viem";
-
-const KAIAPAY_VAULT_ADDRESS = "0x60f76BAdA29a44143Ee50460284028880d4aB736";
-const USDT_ADDRESS = "0xd077A400968890Eacc75cdc901F0356c943e4fDb";
+import { KAIAPAY_VAULT_ADDRESS, USDT_ADDRESS } from "../lib/constants";
 
 // KaiaPayVault ABI for transferToken function
 const KAIAPAY_VAULT_ABI = [
@@ -28,6 +26,7 @@ export interface TransferParams {
   toAddress: string;
   amount: string; // In USDT (e.g., "1.5")
   isTemporaryWallet?: boolean; // If true, creates temporary wallet with 24h deadline
+  onSuccess?: () => void; // Optional callback to refresh balances or other actions
 }
 
 export interface TransferResult {
@@ -49,7 +48,8 @@ export function useKaiaPayTransfer() {
   const transferToken = async ({
     toAddress,
     amount,
-    isTemporaryWallet = true
+    isTemporaryWallet = true,
+    onSuccess
   }: TransferParams): Promise<TransferResult> => {
     if (!ready || !authenticated || !user) {
       throw new Error("User not authenticated");
@@ -113,6 +113,9 @@ export function useKaiaPayTransfer() {
       };
 
       // TODO: Send txHash to API here?
+
+      // Call success callback to refresh balances
+      onSuccess?.();
 
       return result;
     } catch (err: any) {

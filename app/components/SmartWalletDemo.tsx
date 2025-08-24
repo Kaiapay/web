@@ -3,8 +3,7 @@ import { usePrivy } from "@privy-io/react-auth";
 import { useSmartWallets } from "@privy-io/react-auth/smart-wallets";
 import { encodeFunctionData } from "viem";
 
-const KAIAPAY_VAULT_ADDRESS = "0x60f76BAdA29a44143Ee50460284028880d4aB736";
-const USDT_ADDRESS = "0xd077A400968890Eacc75cdc901F0356c943e4fDb";
+import { KAIAPAY_VAULT_ADDRESS, USDT_ADDRESS } from "../lib/constants";
 
 // KaiaPayVault ABI for transferToken function
 const KAIAPAY_VAULT_ABI = [

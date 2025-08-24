@@ -5,10 +5,11 @@ import WalletConnectSheet from "../../components/fill/WalletConnectSheet";
 import CurrencyInput from "../../components/fill/CurrencyInput";
 import { createPublicClient, formatUnits, http } from "viem";
 import { kaia } from "viem/chains";
+import { KAIA_RPC_URL } from "../../lib/constants";
 
 const viemClient = createPublicClient({
   chain: kaia,
-  transport: http(),
+  transport: http(KAIA_RPC_URL),
 });
 
 const erc20Abi = [

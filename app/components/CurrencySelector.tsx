@@ -1,7 +1,7 @@
-import React from "react";
 import AttachedSheet from "./AttachedSheet";
 import type { Currency } from "~/types/currency";
 import { allCurrencies, getCurrencyBalance } from "~/lib/currency";
+import { useBalance } from "~/contexts/BalanceContext";
 
 interface CurrencySelectorProps {
   isOpen: boolean;
@@ -16,6 +16,7 @@ export default function CurrencySelector({
   onCurrencySelect,
   supportedCurrencies = ["USDT", "KAIA", "KRW"],
 }: CurrencySelectorProps) {
+  const balanceProvider = useBalance();
   const currencies = allCurrencies.filter((c) =>
     supportedCurrencies.includes(c.code)
   );
@@ -56,7 +57,8 @@ export default function CurrencySelector({
                 )}
                 {!currency.isComingSoon && (
                   <span className="text-white/30 text-[14px] font-pretendard leading-[1.571em] tracking-[-0.714%]">
-                    {getCurrencyBalance(currency.code)} {currency.code}
+                    {getCurrencyBalance(currency.code, balanceProvider)}{" "}
+                    {currency.code}
                   </span>
                 )}
               </div>

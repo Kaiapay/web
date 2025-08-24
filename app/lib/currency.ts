@@ -19,12 +19,25 @@ export const allCurrencies: Currency[] = [
   },
 ];
 
-// TODO: 각 통화별 잔액 매핑 (실제로는 주스탠다드 등 API에서 가져와야 함)
-export const getCurrencyBalance = (currencyCode: string) => {
-  const balances: Record<string, string> = {
-    USDT: "10.43",
-    KAIA: "5.00",
-    KRW: "0",
-  };
-  return balances[currencyCode] || "0";
+// Get currency balance from real pot data
+export const getCurrencyBalance = (
+  currencyCode: string,
+  balanceProvider?: { getFormattedBalance: (token: 'usdt' | 'kaia') => string }
+) => {
+  // Return real balance data if provider is available
+  if (balanceProvider) {
+    switch (currencyCode.toUpperCase()) {
+      case 'USDT':
+        return balanceProvider.getFormattedBalance('usdt');
+      case 'KAIA':
+        return balanceProvider.getFormattedBalance('kaia');
+      case 'KRW':
+        return "0"; // KRW not supported yet
+      default:
+        return "0";
+    }
+  }
+
+  // Return "0" if no provider (loading state or not authenticated)
+  return "0";
 };
