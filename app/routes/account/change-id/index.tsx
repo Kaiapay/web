@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import HeaderWithBackButton from "~/components/HeaderWithBackButton";
 import InputResetIcon from "~/components/icons/InputResetIcon";
@@ -6,10 +6,12 @@ import CheckSmallIcon from "~/components/icons/CheckSmallIcon";
 import XCircleIcon from "~/components/icons/XCircleIcon";
 import Button from "~/components/Button";
 import { usePutUpdateKaiapayId } from "~/generated/api";
+import { useUser } from "~/stores/userStore";
 
 export default function ChangeIdPage() {
   const navigate = useNavigate();
-  const [id, setId] = useState("@김카이아");
+  const { user, refetchUser } = useUser();
+  const [id, setId] = useState(user?.kaiapayId ? `@${user.kaiapayId}` : "");
   const [isValid, setIsValid] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -19,7 +21,8 @@ export default function ChangeIdPage() {
         // FIXME: 실제 서버 응답이 PutUpdateKaiapayId200와 다르게 나오고 있어 임시 any 캐스팅
         const response = data as any;
         if (response.success && response.result) {
-          navigate("/account");
+          refetchUser();
+          navigate(-1);
         } else if (response.success === false && response.error) {
           setErrorMessage(response.error || "아이디 변경에 실패했습니다.");
         } else {

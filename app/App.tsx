@@ -24,6 +24,7 @@ import AccountPage from "./routes/account";
 import ChangeIdPage from "./routes/account/change-id";
 import PlaygroundPage from "./routes/playground";
 import PCPage from "./routes/pc";
+import SmartWalletDemoPage from "./routes/smart-wallet-demo";
 
 export default function App() {
   return (
@@ -157,6 +158,10 @@ export default function App() {
                   <ChangeIdPage />
                 </ProtectedRoute>
               }
+            />
+            <Route
+              path="/smart-wallet-demo"
+              element={<SmartWalletDemoPage />}
             />
           </Routes>
         </BrowserRouter>

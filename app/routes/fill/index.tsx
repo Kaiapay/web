@@ -14,12 +14,11 @@ import {
 import { kaia } from "viem/chains";
 import Button from "~/components/Button";
 import { postDeposit } from "~/generated/api";
+import { KAIA_RPC_URL } from "../../lib/constants";
 
 const viemClient = createPublicClient({
   chain: kaia,
-  transport: http(
-    "https://8217.rpc.thirdweb.com/f00f9bfe16df51cdf033331e0d62ca76"
-  ),
+  transport: http(KAIA_RPC_URL),
 });
 
 const erc20Abi = [

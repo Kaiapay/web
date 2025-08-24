@@ -6,6 +6,7 @@ import CurrencySelector from "../CurrencySelector";
 import ChevronDownIcon from "../icons/chevron-down";
 import type { Currency } from "~/types/currency";
 import { getCurrencyBalance } from "~/lib/currency";
+import { useBalance } from "~/contexts/BalanceContext";
 
 interface BalanceSectionProps {
   balance: string;
@@ -26,6 +27,9 @@ export default function BalanceSection({
   const [isCurrencySelectorOpen, setIsCurrencySelectorOpen] = useState(false);
   const [isError, setIsError] = useState(false);
 
+  // Get real balance data
+  const balanceProvider = useBalance();
+
   const handleInterestClick = () => {
     // TODO: API 연동 후 오류 상태 결정
     const hasError = parseFloat(interest) === 0;
@@ -40,7 +44,7 @@ export default function BalanceSection({
     }
   };
 
-  const currentBalance = getCurrencyBalance(selectedCurrency);
+  const currentBalance = getCurrencyBalance(selectedCurrency, balanceProvider);
 
   return (
     <div className="text-center pt-[72px] pb-[48px] px-2 font-pretendard">
