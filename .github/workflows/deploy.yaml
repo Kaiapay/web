@@ -24,9 +24,9 @@ jobs:
       - name: Build Web
         run: |
           if [ "${{ github.event_name }}" = "release" ]; then
-            VITE_API_BASE_URL=https://api.kaiapay.app npm run build
+            VITE_APP_ENV=production VITE_API_BASE_URL=https://api.kaiapay.app npm run build
           else
-            VITE_API_BASE_URL=https://dev-api.kaiapay.app npm run build
+            VITE_APP_ENV=development VITE_API_BASE_URL=https://dev-api.kaiapay.app npm run build
           fi
 
       - name: Deploy Cloudflare
