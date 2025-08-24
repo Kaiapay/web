@@ -3,7 +3,7 @@ import UserIcon from "../../routes/assets/icons/user.svg";
 import GiftIcon from "../../routes/assets/icons/gift.svg";
 import CardIcon from "../../routes/assets/icons/card.svg";
 import SearchIcon from "../../routes/assets/icons/search.svg";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 interface HomeHeaderProps {
   searchQuery: string;

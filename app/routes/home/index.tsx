@@ -14,7 +14,7 @@ import GiftYellowIcon from "../assets/icons/gift-yellow.svg";
 import CardIcon from "../assets/icons/card.svg";
 import GiftIcon from "../assets/icons/gift.svg";
 import ReceiptIcon from "../assets/icons/receipt.svg";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import type { Transaction } from "../transactions/types/transaction";
 import type { Currency } from "~/types/currency";
 

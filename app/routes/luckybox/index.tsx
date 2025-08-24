@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import HeaderWithBackButton from "~/components/HeaderWithBackButton";
 import GiftIcon from "~/components/icons/GiftIcon";
 import OpenGiftBoxIcon from "~/components/icons/OpenGiftBoxIcon";
@@ -113,7 +113,7 @@ export default function LuckyBox() {
             text: "안내",
             onClick: handleInfoClick,
             className:
-              "text-[#667CFF] text-center font-pretendard text-[14px] font-medium leading-[21px] font-feature-case"
+              "text-[#667CFF] text-center font-pretendard text-[14px] font-medium leading-[21px] font-feature-case",
           }}
         />
 

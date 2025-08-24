@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import Button from "../../components/Button";
 import kp from "../assets/kp.svg";
 import onboarding1 from "../assets/onboarding-img1.png";

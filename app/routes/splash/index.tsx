@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import kaiapayLogo from "../assets/kaiapay-logo.svg";
 import kaiaLogo from "../assets/kaia-logo.svg";
+import { usePrivy } from "@privy-io/react-auth";
 
 export default function Splash() {
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(true);
+  const usePrivyReturn = usePrivy();
+
+  console.log({ usePrivyReturn });
 
   useEffect(() => {
     // 2초 후 메인 페이지로 이동

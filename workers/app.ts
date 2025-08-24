@@ -1,4 +1,4 @@
-import { createRequestHandler } from "react-router";
+import { createRequestHandler } "react-router-dom";
 
 declare module "react-router" {
   export interface AppLoadContext {
