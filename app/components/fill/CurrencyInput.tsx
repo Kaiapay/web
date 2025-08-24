@@ -91,8 +91,7 @@ export default function CurrencyInput({
             </div>
           </div>
           <p className="text-[11px] text-white/50 font-pretendard font-normal leading-[22px] tracking-[-0.1px]">
-            잔액: {getCurrencyBalance(selectedCurrency.code)}{" "}
-            {selectedCurrency.code}
+            잔액: {balance} {selectedCurrency.code}
           </p>
         </div>
       </ContentCard>

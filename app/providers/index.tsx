@@ -1,4 +1,4 @@
-import { PrivyProvider } from "@privy-io/react-auth";
+import { PrivyProvider, addRpcUrlOverrideToChain } from "@privy-io/react-auth";
 import { SmartWalletsProvider } from "@privy-io/react-auth/smart-wallets";
 import { kaia } from "viem/chains";
 import React from "react";
@@ -15,8 +15,16 @@ export default function Providers({ children }: ProvidersProps) {
       <PrivyProvider
         appId={appId}
         config={{
-          defaultChain: kaia,
-          supportedChains: [kaia],
+          defaultChain: addRpcUrlOverrideToChain(
+            kaia,
+            import.meta.env.VITE_KAIA_RPC_URL || "https://rpc.ankr.com/klaytn"
+          ),
+          supportedChains: [
+            addRpcUrlOverrideToChain(
+              kaia,
+              import.meta.env.VITE_KAIA_RPC_URL || "https://rpc.ankr.com/klaytn"
+            ),
+          ],
           embeddedWallets: {
             createOnLogin: "all-users",
           },

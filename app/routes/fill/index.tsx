@@ -3,13 +3,65 @@ import HeaderWithBackButton from "../../components/HeaderWithBackButton";
 import ContentCard from "../../components/ContentCard";
 import WalletConnectSheet from "../../components/fill/WalletConnectSheet";
 import CurrencyInput from "../../components/fill/CurrencyInput";
+import { createPublicClient, formatUnits, http } from "viem";
+import { kaia } from "viem/chains";
+
+const viemClient = createPublicClient({
+  chain: kaia,
+  transport: http(),
+});
+
+const erc20Abi = [
+  {
+    type: "function",
+    name: "balanceOf",
+    stateMutability: "view",
+    inputs: [{ name: "account", type: "address" }],
+    outputs: [{ type: "uint256" }],
+  },
+  {
+    type: "function",
+    name: "decimals",
+    stateMutability: "view",
+    inputs: [],
+    outputs: [{ type: "uint8" }],
+  },
+] as const;
 
 export default function Fill() {
   const [amount, setAmount] = useState("0");
   const [selectedCurrencyCode, setSelectedCurrencyCode] = useState("USDT");
   const [isSheetOpen, setIsSheetOpen] = useState(false);
   const [wallets, setWallets] = useState<string[]>([]);
+  const [usdtBalance, setUsdtBalance] = useState("0");
+  const [kaiaBalance, setKaiaBalance] = useState("0");
   const [, forceRerender] = useState(0);
+
+  useEffect(() => {
+    if (wallets.length === 0) return;
+    const selectedWallet = wallets[0];
+
+    const getBalance = async () => {
+      const balance = await viemClient.readContract({
+        address: "0xd077a400968890eacc75cdc901f0356c943e4fdb",
+        abi: erc20Abi,
+        functionName: "balanceOf",
+        args: [selectedWallet as `0x${string}`],
+      });
+      const decimals = await viemClient.readContract({
+        address: "0xd077a400968890eacc75cdc901f0356c943e4fdb",
+        abi: erc20Abi,
+        functionName: "decimals",
+      });
+      const wei = await viemClient.getBalance({
+        address: selectedWallet as `0x${string}`,
+      });
+
+      setUsdtBalance(formatUnits(balance, decimals));
+      setKaiaBalance(formatUnits(wei, 18));
+    };
+    getBalance();
+  }, [wallets[0]]);
 
   useEffect(() => {
     const getWallets = async () => {
@@ -100,8 +152,21 @@ export default function Fill() {
 
         <div className="absolute top-[160px] left-[50%] translate-x-[-50%] flex justify-center items-center my-[8px] z-50">
           <div className="w-[30px] h-[30px] rounded-full bg-black flex items-center justify-center">
-            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="14" viewBox="0 0 10 14" fill="none">
-              <path d="M5 1V12.3332M5 12.3332L9 8.33317M5 12.3332L1 8.33317" stroke="white" strokeOpacity="0.5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="10"
+              height="14"
+              viewBox="0 0 10 14"
+              fill="none"
+            >
+              <path
+                d="M5 1V12.3332M5 12.3332L9 8.33317M5 12.3332L1 8.33317"
+                stroke="white"
+                strokeOpacity="0.5"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              />
             </svg>
           </div>
         </div>
@@ -110,7 +175,7 @@ export default function Fill() {
           supportedCurrencies={["KRW", "USDT", "KAIA"]}
           selectedCurrencyCode={selectedCurrencyCode}
           amount={amount}
-          balance="0"
+          balance={selectedCurrencyCode === "USDT" ? usdtBalance : kaiaBalance}
           onCurrencyChange={handleCurrencyChange}
           onAmountChange={handleAmountChange}
         />
