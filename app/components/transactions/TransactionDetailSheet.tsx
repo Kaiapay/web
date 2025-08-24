@@ -21,10 +21,12 @@ export default function TransactionDetailSheet({
   if (!transaction) return null;
   const iconInfo = TransactionUtils.getIconAndColor(transaction);
   const icon = getIconComponent(iconInfo.icon);
-  const secondaryIcon = iconInfo.secondaryIcon ? getIconComponent(iconInfo.secondaryIcon, 12) : undefined;
+  const secondaryIcon = iconInfo.secondaryIcon
+    ? getIconComponent(iconInfo.secondaryIcon, 12)
+    : undefined;
 
   return (
-    <AttachedSheet isOpen={isOpen} onClose={onClose} height="95dvh">
+    <AttachedSheet isOpen={isOpen} onClose={onClose} height="90dvh">
       <div className="flex flex-col gap-[10px]">
         {/* 거래 정보 헤더 */}
         <div className="flex gap-[10px]">
@@ -36,24 +38,30 @@ export default function TransactionDetailSheet({
               {TransactionUtils.getMethodText(transaction)}
             </span>
             <span className="text-white/50 text-[14px] font-normal leading-[1.571em] tracking-[-0.714%]">
-              {transaction.date.toLocaleDateString('ko-KR', { 
-                month: 'long', 
-                day: 'numeric' 
-              })}, {transaction.date.toLocaleTimeString('ko-KR', { 
-                hour: '2-digit', 
-                minute: '2-digit',
-                hour12: true 
+              {transaction.date.toLocaleDateString("ko-KR", {
+                month: "long",
+                day: "numeric",
+              })}
+              ,{" "}
+              {transaction.date.toLocaleTimeString("ko-KR", {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true,
               })}
             </span>
           </div>
-          
+
           {/* 아이콘 - 리스트와 동일한 크기와 스타일 */}
           <div className="relative h-[44px] w-[44px]">
-            <div className={`w-full h-full rounded-[36px] flex items-center justify-center ${iconInfo.iconBgColor}`}>
+            <div
+              className={`w-full h-full rounded-[36px] flex items-center justify-center ${iconInfo.iconBgColor}`}
+            >
               {icon}
             </div>
             {secondaryIcon && (
-              <div className={`absolute -bottom-[2px] -right-[2px] w-[20px] h-[20px] rounded-full border-2 border-[#1B1B1B] flex items-center justify-center ${iconInfo.secondaryIconBgColor}`}>
+              <div
+                className={`absolute -bottom-[2px] -right-[2px] w-[20px] h-[20px] rounded-full border-2 border-[#1B1B1B] flex items-center justify-center ${iconInfo.secondaryIconBgColor}`}
+              >
                 {secondaryIcon}
               </div>
             )}
@@ -71,7 +79,7 @@ export default function TransactionDetailSheet({
               {TransactionUtils.getStatusText(transaction)}
             </span>
           </div>
-          
+
           {/* 받은 사람 */}
           <div className="flex justify-between items-center">
             <span className="text-white/50 text-[14px] font-normal leading-[1.571em] tracking-[-0.714%]">
