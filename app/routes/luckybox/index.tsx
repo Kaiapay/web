@@ -14,7 +14,6 @@ interface LuckyBox {
 }
 
 export default function LuckyBox() {
-  const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalType, setModalType] = useState<"open" | "info">("open");
   const [openedAmount, setOpenedAmount] = useState("0.99");

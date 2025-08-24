@@ -28,7 +28,7 @@ export default function HomeHeader({ searchQuery, onSearchChange }: HomeHeaderPr
         />
       </div>
       
-      <IconButton iconSrc={GiftIcon} iconAlt="Gift" hasRedDot={true} onClick={() => navigate("/luckybox")} />
+      <IconButton iconSrc={GiftIcon} iconAlt="Gift" hasRedDot={true} onClick={() => navigate("/luckybox", { viewTransition: true })} />
       <IconButton iconSrc={CardIcon} iconAlt="Card" />
     </div>
   );

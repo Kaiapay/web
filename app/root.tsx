@@ -33,6 +33,14 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="description" content="KaiaPay - 간편하고 안전한 디지털 지갑 서비스" />
+        <meta name="keywords" content="KaiaPay, 디지털지갑, 결제, 송금, USDT, 암호화폐" />
+        <meta property="og:title" content="KaiaPay" />
+        <meta property="og:description" content="간편하고 안전한 디지털 지갑 서비스" />
+        <meta property="og:type" content="website" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="KaiaPay" />
+        <meta name="twitter:description" content="간편하고 안전한 디지털 지갑 서비스" />
         <Meta />
         <Links />
         {/* Adobe Fonts */}

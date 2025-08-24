@@ -18,7 +18,7 @@ const KaiaPayCard = () => {
   };
 
   const handleCloseButton = () => {
-    navigate('/home');
+    navigate('/home', { viewTransition: true });
   };
 
   return (

@@ -21,7 +21,7 @@ export default function ReceiveLink() {
 
   const handleErrorSheetButtonClick = () => {
     setIsBottomSheetOpen(false);
-    navigate("/home");
+    navigate("/home", { viewTransition: true });
   }
 
   const onButtonClick = () => {
@@ -29,7 +29,7 @@ export default function ReceiveLink() {
     }
 
     const onClose = () => {
-        navigate("/home");
+        navigate("/home", { viewTransition: true });
     }
   return (
     <div
