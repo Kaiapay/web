@@ -1,12 +1,13 @@
 @import "tailwindcss";
 
 @theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif,
-    "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --font-sans:
+    "Inter", ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   --font-kakao-big-sans: "kakao-big-sans", sans-serif;
   --font-pretendard: "pretendard", sans-serif;
-  --color-primary: #FFFFFF;
-  --color-secondary: #1A1C20;
+  --color-primary: #ffffff;
+  --color-secondary: #1a1c20;
 }
 
 html,
@@ -14,7 +15,5 @@ body {
   @apply bg-black;
 
   font-family: "pretendard", sans-serif;
-  @media (prefers-color-scheme: dark) {
-    color-scheme: dark;
-  }
+  color-scheme: dark;
 }
