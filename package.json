@@ -16,6 +16,7 @@
     "@tanstack/react-query-devtools": "^5.85.5",
     "@vitejs/plugin-react": "^4.7.0",
     "buffer": "^6.0.3",
+    "eruda": "^3.4.3",
     "isbot": "^5.1.27",
     "openapi-typescript-codegen": "^0.29.0",
     "permissionless": "^0.2.54",
