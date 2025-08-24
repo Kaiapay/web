@@ -3,7 +3,8 @@ import HomeHeader from "../../components/home/HomeHeader";
 import BalanceSection from "../../components/home/BalanceSection";
 import ActionButtons from "../../components/home/ActionButtons";
 import HomeContent from "../../components/home/HomeContent";
-import background from "../assets/home-bg.png";
+import backgroundVideoWebm from "../assets/home-bg.webm";
+import backgroundVideoMp4 from "../assets/home-bg.mp4";
 import PlusIcon from "../assets/icons/plus.svg";
 import SendIcon from "../assets/icons/send.svg";
 import DownloadIcon from "../assets/icons/download.svg";
@@ -103,12 +104,16 @@ export default function Home() {
 
   return (
     <div className="min-h-screen bg-[#040404] relative pb-[24px]">
-      <img
-        src={background}
-        alt="background"
+      <video
         className="fixed top-0 left-0 w-full h-auto max-h-screen object-cover z-0 pointer-events-none select-none"
-        draggable={false}
-      />
+        autoPlay
+        muted
+        loop
+        playsInline
+      >
+        <source src={backgroundVideoWebm} type="video/webm" />
+        <source src={backgroundVideoMp4} type="video/mp4" />
+      </video>
       <div className="relative z-10 flex flex-col">
         <HomeHeader 
           searchQuery={searchQuery} 
