@@ -4,6 +4,7 @@ export default [
   index("routes/splash/index.tsx"),
   route("pets", "routes/pets.tsx"),
   route("playground", "routes/playground.tsx"),
+  route("pc", "routes/pc.tsx"),
   route("send", "routes/send/index.tsx"),
   route("send/via-phone", "routes/send/via-phone/index.tsx"),
   route("send/via-kaiapay-id", "routes/send/via-kaiapay-id/index.tsx"),
