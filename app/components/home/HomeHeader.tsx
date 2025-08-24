@@ -1,9 +1,5 @@
 import IconButton from "../IconButton";
-import UserIcon from "../../routes/assets/icons/user.svg";
-import GiftIcon from "../../routes/assets/icons/gift.svg";
-import CardIcon from "../../routes/assets/icons/card.svg";
-import SearchIcon from "../../routes/assets/icons/search.svg";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 interface HomeHeaderProps {
   searchQuery: string;
@@ -18,14 +14,14 @@ export default function HomeHeader({
   return (
     <div className="flex flex-row gap-[8px] pt-[12px] px-[16px]">
       <IconButton
-        iconSrc={UserIcon}
+        iconSrc="/icons/user.svg"
         iconAlt="User"
-        onClick={() => navigate("/account", { viewTransition: true })}
+        onClick={() => navigate("/account")}
       />
 
       {/* 검색 영역 */}
       <div className="flex-1 bg-white/20 backdrop-blur-[10px] rounded-full px-3 py-1.5 flex items-center gap-1.5">
-        <img src={SearchIcon} alt="Search" className="w-[24px] h-[24px]" />
+        <img src="/icons/search.svg" alt="Search" className="w-[24px] h-[24px]" />
         <input
           type="text"
           placeholder="검색"
@@ -36,15 +32,15 @@ export default function HomeHeader({
       </div>
 
       <IconButton
-        iconSrc={GiftIcon}
+        iconSrc="/icons/gift.svg"
         iconAlt="Gift"
         hasRedDot={true}
-        onClick={() => navigate("/luckybox", { viewTransition: true })}
+        onClick={() => navigate("/luckybox")}
       />
       <IconButton
-        iconSrc={CardIcon}
+        iconSrc="/icons/card.svg"
         iconAlt="Card"
-        onClick={() => navigate("/kaiapay-card", { viewTransition: true })}
+        onClick={() => navigate("/kaiapay-card")}
       />
     </div>
   );

@@ -1,23 +1,20 @@
-import KRWLogo from "~/routes/assets/krw-logo.png";
-import USDTLogo from "~/routes/assets/usdt-logo.png";
-import KaiaLogo from "~/routes/assets/kaia-wallet.png";
 import type { Currency } from "~/types/currency";
 
 export const allCurrencies: Currency[] = [
     {
         code: "USDT",
         name: "테더",
-        logo: USDTLogo,
+        logo: "/usdt-logo.png",
     },
     {
         code: "KAIA",
         name: "카이아",
-        logo: KaiaLogo,
+        logo: "/kaia-wallet.png",
     },
     {
         code: "KRW",
         name: "원화",
-        logo: KRWLogo,
+        logo: "/krw-logo.png",
         isComingSoon: true,
     },
 ];

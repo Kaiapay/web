@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import HeaderWithBackButton from "~/components/HeaderWithBackButton";
 import GiftIcon from "~/components/icons/GiftIcon";
 import OpenGiftBoxIcon from "~/components/icons/OpenGiftBoxIcon";

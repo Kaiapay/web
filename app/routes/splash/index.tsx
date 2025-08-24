@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router";
-import kaiapayLogo from "../assets/kaiapay-logo.svg";
-import kaiaLogo from "../assets/kaia-logo.svg";
+import { useNavigate } from "react-router-dom";
 
 export default function Splash() {
   const navigate = useNavigate();
@@ -12,7 +10,7 @@ export default function Splash() {
     const timer = setTimeout(() => {
       setIsVisible(false);
       setTimeout(() => {
-        navigate("/onboarding", { viewTransition: true });
+        navigate("/onboarding");
       }, 500);
     }, 2000);
 
@@ -26,14 +24,14 @@ export default function Splash() {
       }`}
     >
       <div className="flex-1 flex items-center justify-center">
-        <img src={kaiapayLogo} alt="Kaiapay" className="w-[142px] h-auto" />
+        <img src="/kaiapay-logo.svg" alt="Kaiapay" className="w-[142px] h-auto" />
       </div>
 
       <div className="absolute bottom-[52px] left-0 right-0 flex flex-col items-center space-y-[8px]">
         <div className="text-white font-pretendard text-[14px] not-italic font-normal leading-[24px] tracking-[-0.28px]">
           Available On
         </div>
-        <img src={kaiaLogo} alt="Kaia" className="w-[63px] h-auto" />
+        <img src="/kaia-logo.svg" alt="Kaia" className="w-[63px] h-auto" />
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import HeaderWithBackButton from "~/components/HeaderWithBackButton";
 import ArrowLeftIcon from "~/components/icons/ArrowLeftIcon";
 import ChevronRightIcon from "~/components/icons/chevron-right";
@@ -49,7 +49,7 @@ export default function Send() {
           <div 
             key={i.via}
             className="flex flex-row gap-5 pt-[14px] pb-4 pr-6 pl-4 bg-white/10 backdrop-blur-[14px] rounded-[16px] cursor-pointer hover:opacity-90 active:opacity-50 transition-all duration-300"
-            onClick={() => navigate(i.route, { viewTransition: true })}
+            onClick={() => navigate(i.route)}
           >
             <div className="flex items-center justify-center w-10 h-10 rounded-full bg-white/20 backdrop-blur-[14px] flex-shrink-0">
               <i.icon size={24} color="white" />

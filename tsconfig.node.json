@@ -1,6 +1,5 @@
 {
-  "extends": "./tsconfig.json",
-  "include": ["vite.config.ts"],
+  "include": ["vite.config.ts", "orval.config.ts"],
   "compilerOptions": {
     "composite": true,
     "strict": true,
@@ -8,6 +7,9 @@
     "lib": ["ES2022"],
     "target": "ES2022",
     "module": "ES2022",
-    "moduleResolution": "bundler"
+    "moduleResolution": "bundler",
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true
   }
 }

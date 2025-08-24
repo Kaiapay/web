@@ -1,0 +1,1 @@
+export { default } from './via-wallet-address/index';
