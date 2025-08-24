@@ -2,18 +2,77 @@ import HeaderWithBackButton from "../../components/HeaderWithBackButton";
 import ContentCard from "../../components/ContentCard";
 import Button from "../../components/Button";
 import IconButton from "../../components/IconButton";
+import { useState } from "react";
+import BottomSheet from "~/components/BottomSheet";
+import CheckIcon from "~/components/icons/CheckIcon";
+import { useNavigate } from "react-router-dom";
+import CheckSmallIcon from "~/components/icons/CheckSmallIcon";
+import CloseXIcon from "~/components/icons/CloseXIcon";
+
+const STORE_URLS = {
+  IOS: "https://apps.apple.com/kr/app/kaia-wallet/id6502896387",
+  ANDROID:
+    "https://play.google.com/store/apps/details?id=io.klutch.wallet&hl=en",
+  DESKTOP:
+    "https://chromewebstore.google.com/detail/kaia-wallet/jblndlipeogpafnldhgmapagcccfchpi",
+} as const;
+
+const getDeviceType = () => {
+  const userAgent = navigator.userAgent.toLowerCase();
+
+  if (/iphone|ipad|ipod/.test(userAgent)) {
+    return "IOS";
+  }
+  if (/android/.test(userAgent)) {
+    return "ANDROID";
+  }
+  return "DESKTOP";
+};
 
 export default function WalletConnect() {
+  const [isConnecting, setIsConnecting] = useState(false);
+  const [connectSuccess, setConnectSuccess] = useState(false);
+  const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleErrorSheetClose = () => {
+    setIsBottomSheetOpen(false);
+  };
+
+  const handleErrorSheetButtonClick = () => {
+    setIsBottomSheetOpen(false);
+    navigate(-1);
+  };
+
   const handleDownloadClick = () => {
-    // 다운로드 페이지로 이동 로직
+    const deviceType = getDeviceType();
+    window.open(STORE_URLS[deviceType], "_blank");
   };
 
   const handleLearnMoreClick = () => {
     // 지갑 생성 방법 알아보기 로직
+    window.open("https://www.kaiawallet.io/", "_blank");
   };
 
-  const handleConnectClick = () => {
-    // 연동하기 로직
+  const handleConnectClick = async () => {
+    // @ts-ignore
+    const hasKaiaWallet = typeof window.klaytn !== "undefined";
+    if (!hasKaiaWallet) {
+      window.open("https://www.kaiawallet.io/", "_blank");
+      return;
+    }
+
+    setIsConnecting(true);
+    try {
+      // @ts-ignore
+      const accounts = await window.klaytn.enable();
+      setConnectSuccess(accounts.length > 0);
+    } catch (error) {
+      setConnectSuccess(false);
+      console.error(error);
+    }
+    setIsConnecting(false);
+    setIsBottomSheetOpen(true);
   };
 
   return (
@@ -112,10 +171,33 @@ export default function WalletConnect() {
           backgroundColor="bg-white"
           textColor="text-black"
           className="h-[52px] rounded-full"
+          isLoading={isConnecting}
         >
           연동하기
         </Button>
       </div>
+      <BottomSheet
+        isOpen={isBottomSheetOpen}
+        onClose={handleErrorSheetClose}
+        icon={connectSuccess ? <CheckIcon /> : <CloseXIcon />}
+        title={connectSuccess ? "지갑 연동 완료" : "지갑 연동 실패"}
+        buttonText="확인"
+        onButtonClick={handleErrorSheetButtonClick}
+      >
+        {connectSuccess ? (
+          <>
+            지갑 연동이 완료되었어요.
+            <br />
+            페이머니를 채우고 송금을 시작해보세요.
+          </>
+        ) : (
+          <>
+            지갑 연동에 실패했어요.
+            <br />
+            다시 시도해주세요.
+          </>
+        )}
+      </BottomSheet>
     </div>
   );
 }

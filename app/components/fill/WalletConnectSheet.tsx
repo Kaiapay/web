@@ -15,14 +15,14 @@ export default function WalletConnectSheet({
 
   const handleAddWalletClick = async () => {
     // @ts-ignore
-    const accounts = await window.klaytn.enable();
+    // const accounts = await window.klaytn.enable();
     console.log(accounts);
   };
 
   useEffect(() => {
     const getWallets = async () => {
       // @ts-ignore
-      const accounts = await window.klaytn.enable();
+      // const accounts = await window.klaytn.enable();
       setWallets(accounts);
     };
     getWallets();

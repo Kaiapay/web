@@ -34,10 +34,10 @@ export default function CurrencyInput({
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-    
+
     // 마이너스 기호 제거
-    const cleanValue = value.replace(/-/g, '');
-    
+    const cleanValue = value.replace(/-/g, "");
+
     if (cleanValue.includes(".")) {
       onAmountChange(cleanValue);
     } else {
@@ -106,6 +106,7 @@ export default function CurrencyInput({
         onClose={() => setIsSheetOpen(false)}
         onCurrencySelect={handleCurrencySelect}
         supportedCurrencies={supportedCurrencies}
+        balance={balance}
       />
     </>
   );

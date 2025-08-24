@@ -8,6 +8,7 @@ interface CurrencySelectorProps {
   onClose: () => void;
   onCurrencySelect: (currency: Currency) => void;
   supportedCurrencies?: string[];
+  balance: string;
 }
 
 export default function CurrencySelector({
@@ -15,6 +16,7 @@ export default function CurrencySelector({
   onClose,
   onCurrencySelect,
   supportedCurrencies = ["USDT", "KAIA", "KRW"],
+  balance,
 }: CurrencySelectorProps) {
   const balanceProvider = useBalance();
   const currencies = allCurrencies.filter((c) =>
@@ -48,7 +50,7 @@ export default function CurrencySelector({
               />
               <div className="flex flex-col items-start flex-1">
                 <span className="text-white text-[16px] font-normal font-pretendard leading-[1.375em] tracking-[-0.625%]">
-                  {currency.name}
+                  {currency.code}
                 </span>
                 {currency.isComingSoon && (
                   <span className="text-white/30 text-[14px] font-pretendard leading-[1.571em] tracking-[-0.714%]">
@@ -57,8 +59,7 @@ export default function CurrencySelector({
                 )}
                 {!currency.isComingSoon && (
                   <span className="text-white/30 text-[14px] font-pretendard leading-[1.571em] tracking-[-0.714%]">
-                    {getCurrencyBalance(currency.code, balanceProvider)}{" "}
-                    {currency.code}
+                    {balance} {currency.code}
                   </span>
                 )}
               </div>
