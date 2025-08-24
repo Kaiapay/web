@@ -35,8 +35,8 @@ export default function Home() {
 
   // 액션 버튼 핸들러들
   const handleFillClick = () => navigate("/fill");
-  const handleSendClick = () => console.log("보내기 클릭");
-  const handleReceiveClick = () => console.log("돈 받기 클릭");
+  const handleSendClick = () => navigate("/send");
+  const handleReceiveClick = () => navigate("/receive-link");
   const handleMoreClick = () => console.log("더보기 클릭");
 
   // 거래 클릭 핸들러
@@ -90,7 +90,7 @@ export default function Home() {
       description: "어디서나 자유롭게 결제",
       actionButton: "신청",
       iconSize: 24,
-      onActionClick: () => console.log("카드 신청"),
+      onActionClick: () => navigate("/kaiapay-card"),
     },
     {
       id: 2,
