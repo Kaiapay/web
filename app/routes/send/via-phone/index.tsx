@@ -7,7 +7,6 @@ import HeaderWithBackButton from "~/components/HeaderWithBackButton";
 import InputResetIcon from "~/components/icons/InputResetIcon";
 import SendIcon from "~/components/icons/SendIcon";
 import {
-  PostTransferWithLink200SeriesOneOf,
   PostTransferWithLinkBodyMethod,
   usePostTransferWithLink,
 } from "~/generated/api";
@@ -59,14 +58,11 @@ export default function SendViaPhone() {
         amount: `${amount}`,
         token: "USDT",
         method: PostTransferWithLinkBodyMethod.phone,
-        // @ts-expect-error
         phone: submitData.phoneNumber,
       },
     });
 
-    const {
-      result: { publicAddress, link },
-    } = data as unknown as PostTransferWithLink200SeriesOneOf;
+    const { publicAddress, link } = data;
 
     try {
       await transferToken({

@@ -8,7 +8,7 @@ import CheckIcon from "~/components/icons/CheckIcon";
 import CheckSmallIcon from "~/components/icons/CheckSmallIcon";
 import InputResetIcon from "~/components/icons/InputResetIcon";
 import XCircleIcon from "~/components/icons/XCircleIcon";
-import { postTransferWithKaiapayId, PostTransferWithKaiapayId200SeriesOneOf, PostTransferWithKaiapayId200SeriesOneOfResult, usePostTransferWithKaiapayId } from "~/generated/api";
+import { postTransferWithKaiapayId, usePostTransferWithKaiapayId } from "~/generated/api";
 import useKaiaPayTransfer from "~/hooks/useKaiaPayTransfer";
 
 interface IFormInput {
@@ -55,7 +55,7 @@ export default function SendViaKaiapayId() {
         kaiapayId: submitData.kaiapayId,
       });
 
-      const {publicAddress} = result as unknown as PostTransferWithKaiapayId200SeriesOneOfResult;
+      const { publicAddress } = result;
       try {
         await transferToken({
           toAddress: publicAddress,

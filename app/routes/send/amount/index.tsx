@@ -5,7 +5,7 @@ import Button from "~/components/Button";
 import HeaderWithBackButton from "~/components/HeaderWithBackButton";
 import CurrencyInput from "~/components/fill/CurrencyInput";
 import ShareIcon from "~/components/icons/ShareIcon";
-import { PostTransferWithLink200SeriesOneOf, PostTransferWithLinkBodyMethod, usePostTransferWithLink } from "~/generated/api";
+import { PostTransferWithLink200, PostTransferWithLinkBodyMethod, usePostTransferWithLink } from "~/generated/api";
 import { useKaiaPayPot } from "~/hooks/useKaiaPayPot";
 import useKaiaPayTransfer from "~/hooks/useKaiaPayTransfer";
 
@@ -39,7 +39,7 @@ export default function SendAmount() {
   };
 
   const handleShareLink = async () => {
-    const { result: { link } } = linkData as unknown as PostTransferWithLink200SeriesOneOf;
+    const {  link  } = linkData  as PostTransferWithLink200;
 
     try {
       if (!link) {
@@ -96,7 +96,7 @@ export default function SendAmount() {
         },
       });
 
-      const { result: { publicAddress } } = data as unknown as PostTransferWithLink200SeriesOneOf;
+      const {  publicAddress  } = data;
 
       try {
         await transferToken({
