@@ -8,7 +8,7 @@ import CheckIcon from "~/components/icons/CheckIcon";
 import CheckSmallIcon from "~/components/icons/CheckSmallIcon";
 import InputResetIcon from "~/components/icons/InputResetIcon";
 import XCircleIcon from "~/components/icons/XCircleIcon";
-import { postTransferWithKaiapayId, PostTransferWithKaiapayId200SeriesOneOf, usePostTransferWithKaiapayId } from "~/generated/api";
+import { postTransferWithKaiapayId, PostTransferWithKaiapayId200SeriesOneOf, PostTransferWithKaiapayId200SeriesOneOfResult, usePostTransferWithKaiapayId } from "~/generated/api";
 import useKaiaPayTransfer from "~/hooks/useKaiaPayTransfer";
 
 interface IFormInput {
@@ -38,7 +38,7 @@ export default function SendViaKaiapayId() {
 
   const handleErrorSheetButtonClick = () => {
     setIsBottomSheetOpen(false);
-    navigate('/home');
+    navigate('/home', { replace: true });
   }
 
   const onSubmit: SubmitHandler<IFormInput> = async (submitData) => {
@@ -48,31 +48,32 @@ export default function SendViaKaiapayId() {
       return;
     }
 
-      const result = await postTransferWithKaiapayId({
+      try {
+        const result = await postTransferWithKaiapayId({
         amount: `${amount}`,
         token: "USDT",
         kaiapayId: submitData.kaiapayId,
       });
 
-      console.log({result})
-
-
-      if (result.success) {
-        try {
-          // await transferToken({
-          //   toAddress: publicAddress,
-          //   amount: `${amount}`,
-          //   onSuccess: () => {
-          //     setIsBottomSheetOpen(true);
-          //   },
-          // });
-        } catch (error) {
-          alert(`트랜잭션에 실패했습니다. ${transferError}`);
-        }
-      } else {
-        alert(result.error)
+      const {publicAddress} = result as unknown as PostTransferWithKaiapayId200SeriesOneOfResult;
+      try {
+        await transferToken({
+          toAddress: publicAddress,
+          amount: `${amount}`,
+          onSuccess: () => {
+            setIsBottomSheetOpen(true);
+          },
+        });
+      } catch (error) {
+        alert(`트랜잭션에 실패했습니다. ${transferError}`);
       }
 
+    } catch (error) {
+      alert(`서버 호출에 실패했습니다. ${error}`);
+    }
+
+
+  
   }
 
   return (
