@@ -120,19 +120,6 @@ export default function Fill() {
     getBalance();
   }, [selectedWallet]);
 
-  useEffect(() => {
-    if (!selectedWallet) return;
-  }, [selectedWallet]);
-
-  useEffect(() => {
-    const getWallets = async () => {
-      // @ts-ignore
-      // const accounts = await window.klaytn.enable();
-      setWallets(accounts);
-    };
-    getWallets();
-  }, []);
-
   const handleAmountChange = (amount: string) => {
     setAmount(amount);
   };

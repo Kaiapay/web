@@ -17,6 +17,7 @@ export default defineConfig({
   server: {
     port: 5173,
     host: true,
+    allowedHosts: ["jisu.kaiapay.app"],
   },
   optimizeDeps: {
     include: ["buffer", "process"],

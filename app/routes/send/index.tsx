@@ -9,6 +9,7 @@ import WalletIcon from "~/components/icons/WalletIcon";
 export default function Send() {
   const navigate = useNavigate();
 
+
   const items = [
     {
       icon: LinkIcon,
