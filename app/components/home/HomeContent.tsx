@@ -1,20 +1,8 @@
 import ContentCard from "../ContentCard";
 import IconButton from "../IconButton";
-import LinkIcon from "../../routes/assets/icons/link.svg";
-import type { Transaction as TransactionModel } from "../../routes/transactions/types/transaction";
+import type { Transaction } from "../../routes/transactions/types/transaction";
 import TransactionCell from "../transactions/TransactionCell";
 
-interface Transaction {
-  id: number;
-  icon: string;
-  iconBg: string;
-  amount: string;
-  description: string;
-  status?: string;
-  hasBadge: boolean;
-  actionButton?: string;
-  onActionClick?: () => void;
-}
 
 interface Service {
   id: number;
@@ -27,10 +15,10 @@ interface Service {
 }
 
 interface HomeContentProps {
-  transactions: TransactionModel[];
+  transactions: Transaction[];
   services: Service[];
   onViewAll: () => void;
-  onTransactionClick: (transaction: TransactionModel) => void;
+  onTransactionClick: (transaction: Transaction) => void;
 }
 
 // 서비스 바로가기 Cell 컴포넌트
