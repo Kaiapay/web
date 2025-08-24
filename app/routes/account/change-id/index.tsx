@@ -16,10 +16,12 @@ export default function ChangeIdPage() {
   const updateKaiapayIdMutation = usePutUpdateKaiapayId({
     mutation: {
       onSuccess: (data) => {
-        if (data.series.success && 'result' in data.series) {
+        // FIXME: 실제 서버 응답이 PutUpdateKaiapayId200와 다르게 나오고 있어 임시 any 캐스팅
+        const response = data as any;
+        if (response.success && response.result) {
           navigate("/account");
-        } else if (data.series.success === false && 'error' in data.series) {
-          setErrorMessage(data.series.error || "아이디 변경에 실패했습니다.");
+        } else if (response.success === false && response.error) {
+          setErrorMessage(response.error || "아이디 변경에 실패했습니다.");
         } else {
           setErrorMessage("아이디 변경에 실패했습니다.");
         }

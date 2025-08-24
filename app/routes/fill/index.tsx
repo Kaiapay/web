@@ -98,7 +98,7 @@ export default function Fill() {
           </div>
         </ContentCard>
 
-        <div className="absolute top-[149px] left-[50%] translate-x-[-50%] flex justify-center items-center my-[8px] z-50">
+        <div className="absolute top-[160px] left-[50%] translate-x-[-50%] flex justify-center items-center my-[8px] z-50">
           <div className="w-[30px] h-[30px] rounded-full bg-black flex items-center justify-center">
             <svg xmlns="http://www.w3.org/2000/svg" width="10" height="14" viewBox="0 0 10 14" fill="none">
               <path d="M5 1V12.3332M5 12.3332L9 8.33317M5 12.3332L1 8.33317" stroke="white" strokeOpacity="0.5" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
