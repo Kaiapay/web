@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import ArrowLeftIcon from "./icons/ArrowLeftIcon";
 
 interface HeaderWithBackButtonProps {
@@ -40,7 +40,7 @@ export default function HeaderWithBackButton({
           <button
             type="button"
             onClick={rightButton.onClick}
-            className={`text-[14px] font-medium ${rightButton.className || 'text-white/50'}`}
+            className={`text-[14px] font-medium ${rightButton.className || "text-white/50"}`}
           >
             {rightButton.text}
           </button>
