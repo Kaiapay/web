@@ -1,7 +1,7 @@
 import { defineConfig } from "orval";
 
 export default defineConfig({
-  petstore: {
+  kaiapay: {
     input: "https://dev-api.kaiapay.app/openapi.json",
     output: {
       target: "./app/generated/api.ts",
@@ -19,6 +19,10 @@ export default defineConfig({
           useInfiniteQueryParam: "pageParam",
         },
       },
-    }
+    },
+    hooks: {
+      afterAllFilesWrite:
+        "npx prettier --write --ignore-path .prettierignore ./app/generated/api.ts",
+    },
   },
 });
