@@ -1,21 +1,34 @@
+import { useState } from "react";
+import { useForm, type SubmitHandler } from "react-hook-form";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import BottomSheet from "~/components/BottomSheet";
 import Button from "~/components/Button";
 import HeaderWithBackButton from "~/components/HeaderWithBackButton";
-import InputResetIcon from "~/components/icons/InputResetIcon";
-import { useForm, type SubmitHandler } from "react-hook-form"
-import { useState } from "react";
-import CheckSmallIcon from "~/components/icons/CheckSmallIcon";
-import BottomSheet from "~/components/BottomSheet";
-import XCircleIcon from "~/components/icons/XCircleIcon";
 import CheckIcon from "~/components/icons/CheckIcon";
-import { useNavigate } from "react-router-dom";
+import CheckSmallIcon from "~/components/icons/CheckSmallIcon";
+import InputResetIcon from "~/components/icons/InputResetIcon";
+import XCircleIcon from "~/components/icons/XCircleIcon";
+import { postTransferWithKaiapayId, PostTransferWithKaiapayId200SeriesOneOf, usePostTransferWithKaiapayId } from "~/generated/api";
+import useKaiaPayTransfer from "~/hooks/useKaiaPayTransfer";
 
 interface IFormInput {
   kaiapayId: string
 }
 
 export default function SendViaKaiapayId() {
+  const { isPending, mutateAsync, isError, error } = usePostTransferWithKaiapayId();
+  const {
+    transferToken,
+    isLoading: isTransferLoading,
+    error: transferError,
+  } = useKaiaPayTransfer();
+
+  const [searchParams] = useSearchParams();
+  const amount = searchParams.get("amount");
+  
   const { register, handleSubmit, reset, setValue, setFocus, setError, formState: { errors } } = useForm<IFormInput>();
-  const [isLoading, setIsLoading] = useState(false);
+
+  const isLoading = isPending || isTransferLoading;
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const navigate = useNavigate();
 
@@ -28,20 +41,38 @@ export default function SendViaKaiapayId() {
     navigate('/home');
   }
 
-  const onSubmit: SubmitHandler<IFormInput> = (data) => {
+  const onSubmit: SubmitHandler<IFormInput> = async (submitData) => {
     const regex = /^[a-zA-Z0-9가-힣]{4,16}$/;
-    if (!regex.test(data.kaiapayId)) {
+    if (!regex.test(submitData.kaiapayId)) {
       setError('kaiapayId', { type: 'manual', message: '올바른 KaiaPay 아이디가 아닙니다.' });
-      setIsLoading(false);
       return;
     }
-    setIsLoading(true);
-    
-    setTimeout(() => {
-      console.log(data)
-      setIsLoading(false);
-      setIsBottomSheetOpen(true);
-    }, 2000);
+
+      const result = await postTransferWithKaiapayId({
+        amount: `${amount}`,
+        token: "USDT",
+        kaiapayId: submitData.kaiapayId,
+      });
+
+      console.log({result})
+
+
+      if (result.success) {
+        try {
+          // await transferToken({
+          //   toAddress: publicAddress,
+          //   amount: `${amount}`,
+          //   onSuccess: () => {
+          //     setIsBottomSheetOpen(true);
+          //   },
+          // });
+        } catch (error) {
+          alert(`트랜잭션에 실패했습니다. ${transferError}`);
+        }
+      } else {
+        alert(result.error)
+      }
+
   }
 
   return (
