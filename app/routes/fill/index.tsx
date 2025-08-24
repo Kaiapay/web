@@ -3,12 +3,23 @@ import HeaderWithBackButton from "../../components/HeaderWithBackButton";
 import ContentCard from "../../components/ContentCard";
 import WalletConnectSheet from "../../components/fill/WalletConnectSheet";
 import CurrencyInput from "../../components/fill/CurrencyInput";
-import { createPublicClient, formatUnits, http } from "viem";
+import {
+  createPublicClient,
+  createWalletClient,
+  formatUnits,
+  http,
+  custom,
+  parseUnits,
+} from "viem";
 import { kaia } from "viem/chains";
+import Button from "~/components/Button";
+import { postDeposit } from "~/generated/api";
 
 const viemClient = createPublicClient({
   chain: kaia,
-  transport: http(),
+  transport: http(
+    "https://8217.rpc.thirdweb.com/f00f9bfe16df51cdf033331e0d62ca76"
+  ),
 });
 
 const erc20Abi = [
@@ -26,7 +37,34 @@ const erc20Abi = [
     inputs: [],
     outputs: [{ type: "uint8" }],
   },
+  {
+    type: "function",
+    name: "approve",
+    inputs: [
+      { name: "spender", type: "address", internalType: "address" },
+      { name: "amount", type: "uint256", internalType: "uint256" },
+    ],
+    outputs: [{ type: "bool" }],
+    stateMutability: "nonpayable",
+  },
 ] as const;
+
+const depositTokenAbi = [
+  {
+    type: "function",
+    name: "depositToken",
+    inputs: [
+      { name: "to", type: "address", internalType: "address" },
+      { name: "token", type: "address", internalType: "address" },
+      { name: "amount", type: "uint256", internalType: "uint256" },
+    ],
+    outputs: [],
+    stateMutability: "nonpayable",
+  },
+] as const;
+
+const USDT_ADDRESS = "0xd077a400968890eacc75cdc901f0356c943e4fdb";
+const CONTRACT_ADDRESS = "0x60f76BAdA29a44143Ee50460284028880d4aB736";
 
 export default function Fill() {
   const [amount, setAmount] = useState("0");
@@ -43,13 +81,13 @@ export default function Fill() {
 
     const getBalance = async () => {
       const balance = await viemClient.readContract({
-        address: "0xd077a400968890eacc75cdc901f0356c943e4fdb",
+        address: USDT_ADDRESS,
         abi: erc20Abi,
         functionName: "balanceOf",
         args: [selectedWallet as `0x${string}`],
       });
       const decimals = await viemClient.readContract({
-        address: "0xd077a400968890eacc75cdc901f0356c943e4fdb",
+        address: USDT_ADDRESS,
         abi: erc20Abi,
         functionName: "decimals",
       });
@@ -118,6 +156,62 @@ export default function Fill() {
     setIsSheetOpen(true);
   };
 
+  const handleSubmit = async () => {
+    if (selectedCurrencyCode !== "USDT") {
+      console.error("Only USDT deposits are supported");
+      return;
+    }
+
+    try {
+      const walletClient = createWalletClient({
+        chain: kaia,
+        // @ts-ignore
+        transport: custom(window.klaytn),
+      });
+
+      const decimals = await viemClient.readContract({
+        address: USDT_ADDRESS,
+        abi: erc20Abi,
+        functionName: "decimals",
+      });
+
+      const parsedAmount = parseUnits(amount, decimals);
+
+      // First approve USDT spending
+      const approveHash = await walletClient.writeContract({
+        account: wallets[0] as `0x${string}`,
+        address: USDT_ADDRESS,
+        abi: erc20Abi,
+        functionName: "approve",
+        args: [CONTRACT_ADDRESS as `0x${string}`, parsedAmount],
+      });
+
+      console.log("Approve hash:", approveHash);
+
+      // Wait for approve transaction to be mined
+      await viemClient.waitForTransactionReceipt({ hash: approveHash });
+
+      // Then deposit tokens
+      const hash = await walletClient.writeContract({
+        account: wallets[0] as `0x${string}`,
+        address: CONTRACT_ADDRESS,
+        abi: depositTokenAbi,
+        functionName: "depositToken",
+        args: [
+          wallets[0] as `0x${string}`,
+          USDT_ADDRESS as `0x${string}`,
+          parsedAmount,
+        ],
+      });
+
+      console.log("Transaction hash:", hash);
+      await postDeposit({ txHash: hash });
+    } catch (error) {
+      console.error("Transaction failed:", error);
+      // TODO: 에러 처리
+    }
+  };
+
   return (
     <div className="min-h-screen bg-[#040404] flex flex-col">
       {/* 헤더 */}
@@ -179,6 +273,17 @@ export default function Fill() {
           onCurrencyChange={handleCurrencyChange}
           onAmountChange={handleAmountChange}
         />
+        <Button
+          onClick={handleSubmit}
+          disabled={
+            selectedCurrencyCode === "USDT"
+              ? Number(amount) > Number(usdtBalance)
+              : Number(amount) > Number(kaiaBalance) || Number(amount) === 0
+          }
+          className="mt-2"
+        >
+          채우기
+        </Button>
       </div>
 
       {/* 지갑 연동 시트 */}
