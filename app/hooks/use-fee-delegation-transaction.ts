@@ -42,11 +42,7 @@ export const useFeeDelegationTransaction = (opts: Options) => {
       userSignedTx,
     });
 
-    if (res.error) {
-      throw new Error(`Relay error: ${res.error}`);
-    }
-
-    return res.result!.hash as `0x${string}`;
+    return res.hash as `0x${string}`;
   }
 
   async function signAndRelay(txReq: PrepareTransactionRequestParameters) {
@@ -56,7 +52,6 @@ export const useFeeDelegationTransaction = (opts: Options) => {
     return { hash, receipt };
   }
 
-  /** 스마트컨트랙트 호출 (전액 대납, 메인넷 고정) */
   async function writeContractFD(params: WriteParams) {
     const { abi, address, functionName, args = [], value = 0n, gas } = params;
     const data = encodeFunctionData({ abi, functionName, args });
