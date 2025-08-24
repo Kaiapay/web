@@ -1,15 +1,14 @@
 import React from "react";
 
 interface XCircleIconProps {
-  width?: number;
-  height?: number;
+  size?: number;
   color?: string;
 }
 
-const XCircleIcon: React.FC<XCircleIconProps> = ({ width = 24, height = 24, color = '#FF443D' }) => (
+const XCircleIcon: React.FC<XCircleIconProps> = ({ size = 24, color = '#FF443D' }) => (
   <svg
-    width={width}
-    height={height}
+    width={size}
+    height={size}
     viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
