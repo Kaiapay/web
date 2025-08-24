@@ -14,7 +14,7 @@ export default function HeaderWithBackButton({ onBack, heading, subheading }: He
         navigate(-1);
     }
     return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-[8px]">
       <button className="hover:opacity-90 px-4 pt-3 min-w-[32px] active:opacity-75 cursor-pointer" onClick={handleBack}>
           <ArrowLeftIcon />   
       </button>
