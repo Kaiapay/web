@@ -3,6 +3,7 @@ import HomeHeader from "../../components/home/HomeHeader";
 import BalanceSection from "../../components/home/BalanceSection";
 import ActionButtons from "../../components/home/ActionButtons";
 import HomeContent from "../../components/home/HomeContent";
+import TransactionDetailSheet from "../../components/transactions/TransactionDetailSheet";
 import backgroundVideoWebm from "../assets/home-bg.webm";
 import backgroundVideoMp4 from "../assets/home-bg.mp4";
 import PlusIcon from "../assets/icons/plus.svg";
@@ -14,10 +15,13 @@ import CardIcon from "../assets/icons/card.svg";
 import GiftIcon from "../assets/icons/gift.svg";
 import ReceiptIcon from "../assets/icons/receipt.svg";
 import { useNavigate } from "react-router";
+import type { Transaction } from "../transactions/types/transaction";
 
 export default function Home() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
+  const [isDetailSheetOpen, setIsDetailSheetOpen] = useState(false);
 
   // 검색 핸들러
   const handleSearchChange = (query: string) => {
@@ -35,26 +39,45 @@ export default function Home() {
   const handleReceiveClick = () => console.log("돈 받기 클릭");
   const handleMoreClick = () => console.log("더보기 클릭");
 
+  // 거래 클릭 핸들러
+  const handleTransactionClick = (transaction: Transaction) => {
+    setSelectedTransaction(transaction);
+    setIsDetailSheetOpen(true);
+  };
+
+  const handleCancel = () => {
+    console.log("거래 취소");
+  };
+
+  const handleReshare = () => {
+    console.log("다시 링크 공유");
+  };
+
   // 거래 내역 데이터
-  const transactions = [
+  const transactions: Transaction[] = [
     {
-      id: 1,
-      icon: GiftYellowIcon,
-      iconBg: "bg-[rgba(255,198,64,0.2)]",
-      amount: "+0.49 USDT",
-      description: "돈 보내기 완료 럭키박스 열기",
-      hasBadge: false,
+      id: "1",
+      date: new Date(2025, 7, 20, 15, 54),
+      amount: 0.49,
+      currency: "USDT",
+      type: "receive",
+      description: "15:54 · 돈 보내기 완료 럭키박스 열기",
+      method: "luckybox",
+      account: "기본 페이머니",
     },
     {
-      id: 2,
-      icon: SendIcon,
-      iconBg: "bg-white/20",
-      amount: "-20.00 USDT",
-      description: "링크 공유",
-      status: "대기중",
-      hasBadge: true,
-      actionButton: "취소",
-      onActionClick: () => console.log("거래 취소"),
+      id: "2",
+      date: new Date(2025, 7, 20, 15, 54),
+      amount: 20.00,
+      currency: "USDT",
+      type: "send",
+      description: "15:54 · 링크 공유",
+      status: "pending",
+      method: "link",
+      recipient: "@김카이아",
+      account: "기본 페이머니",
+      canCancel: true,
+      canReshare: true,
     },
   ];
 
@@ -99,7 +122,7 @@ export default function Home() {
 
   // 전체 보기 핸들러
   const handleViewAll = () => {
-    console.log("전체 보기 클릭");
+    navigate("/transactions");
   };
 
   return (
@@ -129,8 +152,18 @@ export default function Home() {
           transactions={transactions}
           services={services}
           onViewAll={handleViewAll}
+          onTransactionClick={handleTransactionClick}
         />
       </div>
+
+      {/* 거래 상세 시트 */}
+      <TransactionDetailSheet
+        isOpen={isDetailSheetOpen}
+        onClose={() => setIsDetailSheetOpen(false)}
+        transaction={selectedTransaction}
+        onCancel={handleCancel}
+        onReshare={handleReshare}
+      />
     </div>
   );
 }
