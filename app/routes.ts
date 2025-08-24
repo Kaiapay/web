@@ -2,7 +2,6 @@ import { type RouteConfig, index, route } from "@react-router/dev/routes";
 
 export default [
   index("routes/splash/index.tsx"),
-  route("pets", "routes/pets.tsx"),
   route("playground", "routes/playground.tsx"),
   route("pc", "routes/pc.tsx"),
   route("send", "routes/send/index.tsx"),
