@@ -1,31 +1,44 @@
+import { useState } from "react";
+import { useForm, type SubmitHandler } from "react-hook-form";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import BottomSheet from "~/components/BottomSheet";
 import Button from "~/components/Button";
 import HeaderWithBackButton from "~/components/HeaderWithBackButton";
-import InputResetIcon from "~/components/icons/InputResetIcon";
-import { useForm, type SubmitHandler } from "react-hook-form";
-import { useState } from "react";
-import CheckSmallIcon from "~/components/icons/CheckSmallIcon";
-import BottomSheet from "~/components/BottomSheet";
-import XCircleIcon from "~/components/icons/XCircleIcon";
 import CheckIcon from "~/components/icons/CheckIcon";
-import { useNavigate } from "react-router-dom";
+import CheckSmallIcon from "~/components/icons/CheckSmallIcon";
+import InputResetIcon from "~/components/icons/InputResetIcon";
+import XCircleIcon from "~/components/icons/XCircleIcon";
+import { usePostTransferWithExternalAddress } from "~/generated/api";
+import useKaiaPayWithdraw from "~/hooks/useKaiaPayWithdraw";
 
 interface IFormInput {
   walletAddress: string;
 }
 
 export default function SendViaWalletAddress() {
+  const {mutateAsync, isPending } = usePostTransferWithExternalAddress();
+  const {
+    transferToken,
+    isLoading: isTransferLoading,
+    error: transferError,
+  } = useKaiaPayWithdraw();
+  
+  const [searchParams] = useSearchParams();
+  const amount = searchParams.get("amount");
+
   const {
     register,
     handleSubmit,
     reset,
-    setValue,
     setFocus,
     setError,
     formState: { errors },
   } = useForm<IFormInput>();
-  const [isLoading, setIsLoading] = useState(false);
+  // const [isLoading, setIsLoading] = useState(false);
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const navigate = useNavigate();
+  const isLoading = isPending || isTransferLoading;
+  
 
   const handleErrorSheetClose = () => {
     setIsBottomSheetOpen(false);
@@ -36,23 +49,34 @@ export default function SendViaWalletAddress() {
     navigate("/home");
   };
 
-  const onSubmit: SubmitHandler<IFormInput> = (data) => {
+  const onSubmit: SubmitHandler<IFormInput> = async (submitData) => {
     const regex = /^0x[a-fA-F0-9]{40}$/;
-    if (!regex.test(data.walletAddress)) {
+    if (!regex.test(submitData.walletAddress)) {
       setError("walletAddress", {
         type: "manual",
         message: "올바른 지갑 주소가 아닙니다.",
       });
-      setIsLoading(false);
       return;
     }
-    setIsLoading(true);
 
-    setTimeout(() => {
-      console.log(data);
-      setIsLoading(false);
-      setIsBottomSheetOpen(true);
-    }, 2000);
+    await mutateAsync({data: {
+      amount: `${amount}`,
+      token: "USDT",
+      address: submitData.walletAddress,
+    }});
+
+
+    try {
+      await transferToken({
+        toAddress: submitData.walletAddress,
+        amount: `${amount}`,
+        onSuccess: () => {
+          setIsBottomSheetOpen(true);
+        },
+      });
+    } catch (error) {
+      alert(`트랜잭션에 실패했습니다. ${transferError}`);
+    }
   };
 
   return (
