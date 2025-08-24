@@ -34,9 +34,9 @@ export default function Home() {
   };
 
   // 액션 버튼 핸들러들
-  const handleFillClick = () => navigate("/fill");
-  const handleSendClick = () => navigate("/send");
-  const handleReceiveClick = () => navigate("/receive-link");
+  const handleFillClick = () => navigate("/fill", { viewTransition: true });
+  const handleSendClick = () => navigate("/send", { viewTransition: true });
+  const handleReceiveClick = () => navigate("/receive-link", { viewTransition: true });
   const handleMoreClick = () => console.log("더보기 클릭");
 
   // 거래 클릭 핸들러
@@ -90,7 +90,7 @@ export default function Home() {
       description: "어디서나 자유롭게 결제",
       actionButton: "신청",
       iconSize: 24,
-      onActionClick: () => navigate("/kaiapay-card"),
+      onActionClick: () => navigate("/kaiapay-card", { viewTransition: true }),
     },
     {
       id: 2,
@@ -99,7 +99,7 @@ export default function Home() {
       description: "보내기하면 열리는 보너스 혜택",
       actionButton: "받기",
       iconSize: 24,
-      onActionClick: () => navigate("/luckybox"),
+      onActionClick: () => navigate("/luckybox", { viewTransition: true }),
     },
     {
       id: 3,
@@ -122,7 +122,7 @@ export default function Home() {
 
   // 전체 보기 핸들러
   const handleViewAll = () => {
-    navigate("/transactions");
+    navigate("/transactions", { viewTransition: true });
   };
 
   return (

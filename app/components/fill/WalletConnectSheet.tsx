@@ -12,7 +12,7 @@ export default function WalletConnectSheet({ isOpen, onClose }: WalletConnectShe
   const wallets = ["0x3f…9c2d", "0x2e…8d9c"];
 
   const handleAddWalletClick = () => {
-    navigate("/wallet-connect");
+    navigate("/wallet-connect", { viewTransition: true });
   };
 
   return (

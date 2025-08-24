@@ -12,7 +12,7 @@ export default function Splash() {
     const timer = setTimeout(() => {
       setIsVisible(false);
       setTimeout(() => {
-        navigate("/onboarding");
+        navigate("/onboarding", { viewTransition: true });
       }, 500);
     }, 2000);
 

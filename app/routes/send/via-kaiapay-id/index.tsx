@@ -25,7 +25,7 @@ export default function SendViaKaiapayId() {
 
   const handleErrorSheetButtonClick = () => {
     setIsBottomSheetOpen(false);
-    navigate('/home');
+    navigate('/home', { viewTransition: true });
   }
 
   const onSubmit: SubmitHandler<IFormInput> = (data) => {
