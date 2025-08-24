@@ -5,8 +5,8 @@
   "scripts": {
     "build": "react-router build",
     "cf-typegen": "wrangler types",
-    "deploy:development": "npm run build && wrangler deploy --env development",
-    "deploy:production": "npm run build && wrangler deploy --env production",
+    "deploy:development": "npm run generate-orval && npm run build && wrangler deploy --env development",
+    "deploy:production": "npm run generate-orval && npm run build && wrangler deploy --env production",
     "dev": "npm run generate-orval && react-router dev",
     "postinstall": "npm run cf-typegen",
     "preview": "npm run build && vite preview",
