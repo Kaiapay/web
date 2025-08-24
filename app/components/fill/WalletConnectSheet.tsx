@@ -1,5 +1,5 @@
-import { useNavigate } from "react-router-dom";
 import AttachedSheet from "../AttachedSheet";
+import { useEffect, useState } from "react";
 
 interface WalletConnectSheetProps {
   isOpen: boolean;
@@ -10,12 +10,54 @@ export default function WalletConnectSheet({
   isOpen,
   onClose,
 }: WalletConnectSheetProps) {
-  const navigate = useNavigate();
-  const wallets = ["0x3f…9c2d", "0x2e…8d9c"];
+  const [wallets, setWallets] = useState<string[]>([]);
+  const [, forceRerender] = useState(0);
 
-  const handleAddWalletClick = () => {
-    navigate("/wallet-connect", { viewTransition: true });
+  const handleAddWalletClick = async () => {
+    // @ts-ignore
+    const accounts = await window.klaytn.enable();
+    console.log(accounts);
   };
+
+  useEffect(() => {
+    const getWallets = async () => {
+      // @ts-ignore
+      const accounts = await window.klaytn.enable();
+      setWallets(accounts);
+    };
+    getWallets();
+  }, []);
+
+  useEffect(() => {
+    // @ts-ignore
+    const provider = typeof window !== "undefined" ? window.klaytn : undefined;
+    if (!provider || !provider.on) return;
+
+    const handleAccountsChanged = (accounts: string[]) => {
+      setWallets(accounts || []);
+    };
+
+    const handleNetworkChanged = (_networkId: unknown) => {
+      forceRerender((v) => v + 1);
+    };
+
+    const handleDisconnected = () => {
+      setWallets([]);
+      forceRerender((v) => v + 1);
+    };
+
+    provider.on("accountsChanged", handleAccountsChanged);
+    provider.on("networkChanged", handleNetworkChanged);
+    provider.on("disconnected", handleDisconnected);
+
+    return () => {
+      if (provider.removeListener) {
+        provider.removeListener("accountsChanged", handleAccountsChanged);
+        provider.removeListener("networkChanged", handleNetworkChanged);
+        provider.removeListener("disconnected", handleDisconnected);
+      }
+    };
+  }, []);
 
   return (
     <AttachedSheet isOpen={isOpen} onClose={onClose}>
@@ -33,7 +75,7 @@ export default function WalletConnectSheet({
                 className="w-[40px] h-[40px]"
               />
               <span className="text-white text-[16px] font-normal font-pretendard leading-[1.375em] tracking-[-0.625%]">
-                {wallet}
+                {wallet.slice(0, 6) + "..." + wallet.slice(-6)}
               </span>
             </div>
           ))}

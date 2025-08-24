@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import HeaderWithBackButton from "../../components/HeaderWithBackButton";
 import ContentCard from "../../components/ContentCard";
 import WalletConnectSheet from "../../components/fill/WalletConnectSheet";
@@ -8,6 +8,51 @@ export default function Fill() {
   const [amount, setAmount] = useState("0");
   const [selectedCurrencyCode, setSelectedCurrencyCode] = useState("USDT");
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [wallets, setWallets] = useState<string[]>([]);
+  const [, forceRerender] = useState(0);
+
+  useEffect(() => {
+    const getWallets = async () => {
+      // @ts-ignore
+      const accounts = await window.klaytn.enable();
+      setWallets(accounts);
+    };
+    getWallets();
+  }, []);
+
+  useEffect(() => {
+    // Register Kaia/Klaytn provider event listeners to trigger re-render on changes
+    // @ts-ignore
+    const provider = typeof window !== "undefined" ? window.klaytn : undefined;
+    if (!provider || !provider.on) return;
+
+    const handleAccountsChanged = (accounts: string[]) => {
+      setWallets(accounts || []);
+    };
+
+    const handleNetworkChanged = (_networkId: unknown) => {
+      // Incrementing a version forces a re-render even if accounts didn't change
+      forceRerender((v) => v + 1);
+    };
+
+    const handleDisconnected = () => {
+      setWallets([]);
+      forceRerender((v) => v + 1);
+    };
+
+    provider.on("accountsChanged", handleAccountsChanged);
+    provider.on("networkChanged", handleNetworkChanged);
+    provider.on("disconnected", handleDisconnected);
+
+    return () => {
+      // Clean up listeners on unmount
+      if (provider.removeListener) {
+        provider.removeListener("accountsChanged", handleAccountsChanged);
+        provider.removeListener("networkChanged", handleNetworkChanged);
+        provider.removeListener("disconnected", handleDisconnected);
+      }
+    };
+  }, []);
 
   const handleAmountChange = (amount: string) => {
     setAmount(amount);
@@ -29,21 +74,27 @@ export default function Fill() {
       {/* 메인 콘텐츠 */}
       <div className="flex-1 flex flex-col px-[16px] pt-[20px] pb-[12px] gap-[8px]">
         <ContentCard>
-          <div className="flex flex-row items-center gap-[12px] justify-between">
+          <div className="flex flex-row items-center gap-[12px] justify-between min-h-[52px]">
             <div className="flex flex-row items-center gap-[12px]">
               <img
                 src="/kaia-wallet.png"
                 alt="Kaia Wallet"
                 className="w-[32px] h-[32px]"
               />
-              <p>Kaia Wallet</p>
+              {wallets.length > 0 ? (
+                <p>{wallets[0].slice(0, 6) + "..." + wallets[0].slice(-6)}</p>
+              ) : (
+                <p>Kaia Wallet</p>
+              )}
             </div>
-            <button
-              onClick={handleOpenSheet}
-              className="h-[40px] bg-white/20 rounded-[32px] px-[16px] text-white/90 text-[15px] font-medium hover:opacity-80 transition-opacity"
-            >
-              연동하기
-            </button>
+            {wallets.length === 0 && (
+              <button
+                onClick={handleOpenSheet}
+                className="h-[40px] bg-white/20 rounded-[32px] px-[16px] text-white/90 text-[15px] font-medium hover:opacity-80 transition-opacity"
+              >
+                연동하기
+              </button>
+            )}
           </div>
         </ContentCard>
 
