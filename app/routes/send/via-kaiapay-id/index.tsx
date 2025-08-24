@@ -7,7 +7,7 @@ import CheckSmallIcon from "~/components/icons/CheckSmallIcon";
 import BottomSheet from "~/components/BottomSheet";
 import XCircleIcon from "~/components/icons/XCircleIcon";
 import CheckIcon from "~/components/icons/CheckIcon";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 interface IFormInput {
   kaiapayId: string
@@ -25,7 +25,7 @@ export default function SendViaKaiapayId() {
 
   const handleErrorSheetButtonClick = () => {
     setIsBottomSheetOpen(false);
-    navigate('/home', { viewTransition: true });
+    navigate('/home');
   }
 
   const onSubmit: SubmitHandler<IFormInput> = (data) => {

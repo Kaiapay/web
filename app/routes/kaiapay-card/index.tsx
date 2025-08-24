@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import BottomSheet from "~/components/BottomSheet";
 import Button from "~/components/Button";
 import CheckIcon from "~/components/icons/CheckIcon";
@@ -18,7 +18,7 @@ const KaiaPayCard = () => {
   };
 
   const handleCloseButton = () => {
-    navigate("/home", { viewTransition: true });
+    navigate("/home");
   };
 
   const handleCardApplyClick = () => {

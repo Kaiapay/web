@@ -1,6 +1,5 @@
 import { useNavigate } from "react-router";
 import AttachedSheet from "../AttachedSheet";
-import KaiaWalletIcon from "../../routes/assets/kaia-wallet.png";
 
 interface WalletConnectSheetProps {
   isOpen: boolean;
@@ -22,7 +21,7 @@ export default function WalletConnectSheet({ isOpen, onClose }: WalletConnectShe
         <div className="flex flex-col gap-[24px] w-full pt-[24px]">
           {wallets.map((wallet) => (
             <div key={wallet} className="flex items-center gap-[16px] w-full h-[44px]">
-              <img src={KaiaWalletIcon} alt="Kaia Wallet" className="w-[40px] h-[40px]" />
+              <img src="/kaia-wallet.png" alt="Kaia Wallet" className="w-[40px] h-[40px]" />
               <span className="text-white text-[16px] font-normal font-pretendard leading-[1.375em] tracking-[-0.625%]">
                 {wallet}
               </span>

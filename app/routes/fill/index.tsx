@@ -3,7 +3,6 @@ import HeaderWithBackButton from "../../components/HeaderWithBackButton";
 import ContentCard from "../../components/ContentCard";
 import WalletConnectSheet from "../../components/fill/WalletConnectSheet";
 import CurrencyInput from "../../components/fill/CurrencyInput";
-import KaiaWalletIcon from "../assets/kaia-wallet.png";
 
 export default function Fill() {
   const [amount, setAmount] = useState("0");
@@ -33,7 +32,7 @@ export default function Fill() {
           <div className="flex flex-row items-center gap-[12px] justify-between">
             <div className="flex flex-row items-center gap-[12px]">
               <img
-                src={KaiaWalletIcon}
+                src="/kaia-wallet.png"
                 alt="Kaia Wallet"
                 className="w-[32px] h-[32px]"
               />

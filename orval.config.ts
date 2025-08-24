@@ -19,10 +19,6 @@ export default defineConfig({
           useInfiniteQueryParam: "pageParam",
         },
       },
-    },
-    hooks: {
-      afterAllFilesWrite:
-        "npx prettier --write --ignore-path .prettierignore ./app/generated/api.ts",
-    },
+    }
   },
 });

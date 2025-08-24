@@ -17,3 +17,5 @@
 !.env.example
 
 app/generated/
+
+/dist/

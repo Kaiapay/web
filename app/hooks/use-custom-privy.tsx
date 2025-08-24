@@ -36,7 +36,6 @@ interface UsePrivyLoginReturn {
 }
 
 export const useCustomPrivy = (): UsePrivyLoginReturn => {
-
   const { ready, authenticated, user, logout: privyLogout } = usePrivy();
   const { login: privyLogin } = useLogin();
   const { fundWallet: privyFundWallet } = useFundWallet();
@@ -52,7 +51,6 @@ export const useCustomPrivy = (): UsePrivyLoginReturn => {
 
   const walletAddress = user?.wallet?.address;
   const emailAddress = emailAccount?.address;
-  // No cross-app linking in single-app setup
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: userMe.mutateAsync
   useEffect(() => {
@@ -86,8 +84,6 @@ export const useCustomPrivy = (): UsePrivyLoginReturn => {
       setIsLoggingIn(false);
     }
   }, [ready, isLoggingIn, privyLogin]);
-
-  // No cross-app link action in single-app setup
 
   const logout = useCallback(() => {
     privyLogout();

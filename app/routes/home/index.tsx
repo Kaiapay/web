@@ -4,17 +4,7 @@ import BalanceSection from "../../components/home/BalanceSection";
 import ActionButtons from "../../components/home/ActionButtons";
 import HomeContent from "../../components/home/HomeContent";
 import TransactionDetailSheet from "../../components/transactions/TransactionDetailSheet";
-import backgroundVideoWebm from "../assets/home-bg.webm";
-import backgroundVideoMp4 from "../assets/home-bg.mp4";
-import PlusIcon from "../assets/icons/plus.svg";
-import SendIcon from "../assets/icons/send.svg";
-import DownloadIcon from "../assets/icons/download.svg";
-import EllipsisIcon from "../assets/icons/ellipsis.svg";
-import GiftYellowIcon from "../assets/icons/gift-yellow.svg";
-import CardIcon from "../assets/icons/card.svg";
-import GiftIcon from "../assets/icons/gift.svg";
-import ReceiptIcon from "../assets/icons/receipt.svg";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import type { Transaction } from "../transactions/types/transaction";
 import type { Currency } from "~/types/currency";
 
@@ -42,10 +32,10 @@ export default function Home() {
   };
 
   // 액션 버튼 핸들러들
-  const handleFillClick = () => navigate("/fill", { viewTransition: true });
-  const handleSendClick = () => navigate("/send", { viewTransition: true });
+  const handleFillClick = () => navigate("/fill");
+  const handleSendClick = () => navigate("/send");
   const handleReceiveClick = () =>
-    navigate("/receive-link", { viewTransition: true });
+    navigate("/receive-link");
   const handleMoreClick = () => console.log("더보기 클릭");
 
   // 거래 클릭 핸들러
@@ -94,25 +84,25 @@ export default function Home() {
   const services = [
     {
       id: 1,
-      icon: CardIcon,
+      icon: "/icons/card.svg",
       title: "KaiaPay 카드",
       description: "어디서나 자유롭게 결제",
       actionButton: "신청",
       iconSize: 24,
-      onActionClick: () => navigate("/kaiapay-card", { viewTransition: true }),
+      onActionClick: () => navigate("/kaiapay-card"),
     },
     {
       id: 2,
-      icon: GiftIcon,
+      icon: "/icons/gift.svg",
       title: "럭키박스",
       description: "보내기하면 열리는 보너스 혜택",
       actionButton: "받기",
       iconSize: 24,
-      onActionClick: () => navigate("/luckybox", { viewTransition: true }),
+      onActionClick: () => navigate("/luckybox"),
     },
     {
       id: 3,
-      icon: ReceiptIcon,
+      icon: "/icons/receipt.svg",
       title: "내 결제 페이지",
       description: "페이지 하나로 누구에게나 돈 받기",
       actionButton: "만들기",
@@ -123,15 +113,15 @@ export default function Home() {
 
   // 액션 버튼 데이터
   const actions = [
-    { icon: PlusIcon, label: "채우기", onClick: handleFillClick },
-    { icon: SendIcon, label: "보내기", onClick: handleSendClick },
-    { icon: DownloadIcon, label: "돈 받기", onClick: handleReceiveClick },
-    { icon: EllipsisIcon, label: "더보기", onClick: handleMoreClick },
+    { icon: "/icons/plus.svg", label: "채우기", onClick: handleFillClick },
+    { icon: "/icons/send.svg", label: "보내기", onClick: handleSendClick },
+    { icon: "/icons/download.svg", label: "돈 받기", onClick: handleReceiveClick },
+    { icon: "/icons/ellipsis.svg", label: "더보기", onClick: handleMoreClick },
   ];
 
   // 전체 보기 핸들러
   const handleViewAll = () => {
-    navigate("/transactions", { viewTransition: true });
+    navigate("/transactions");
   };
 
   return (
@@ -143,8 +133,8 @@ export default function Home() {
         loop
         playsInline
       >
-        <source src={backgroundVideoWebm} type="video/webm" />
-        <source src={backgroundVideoMp4} type="video/mp4" />
+        <source src="/home-bg.webm" type="video/webm" />
+        <source src="/home-bg.mp4" type="video/mp4" />
       </video>
       <div
         className="pointer-events-none select-none fixed top-0 left-0 w-full z-10"

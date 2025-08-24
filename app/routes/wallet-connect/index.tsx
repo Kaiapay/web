@@ -1,9 +1,6 @@
 import HeaderWithBackButton from "../../components/HeaderWithBackButton";
 import ContentCard from "../../components/ContentCard";
 import Button from "../../components/Button";
-import DownloadIcon from "../assets/icons/arrow-circle-broken-down.svg";
-import CheckCircleIcon from "../assets/icons/check-circle-broken.svg";
-import WalletIcon from "../assets/icons/wallet2.svg";
 import IconButton from "../../components/IconButton";
 
 export default function WalletConnect() {
@@ -36,7 +33,7 @@ export default function WalletConnect() {
             <div className="flex flex-col gap-[20px]">
               {/* 앱 다운로드 */}
               <div className="flex gap-[12px]">
-                <IconButton iconSrc={DownloadIcon} size={40} />
+                <IconButton iconSrc="/icons/arrow-circle-broken-down.svg" size={40} />
                 <div className="flex flex-col gap-[16px] flex-1 items-start">
                   <div className="flex flex-col gap-[4px]">
                     <h4 className="text-white text-[16px] font-normal font-pretendard leading-[1.375em] tracking-[-0.625%]">
@@ -89,7 +86,7 @@ export default function WalletConnect() {
             </h3>
 
             <div className="flex gap-[12px]">
-              <IconButton iconSrc={CheckCircleIcon} size={40} />
+              <IconButton iconSrc="/icons/check-circle-broken.svg" size={40} />
               <div className="flex flex-col gap-[4px] flex-1 items-start">
                 <h4 className="text-white text-[16px] font-normal font-pretendard leading-[1.375em] tracking-[-0.625%]">
                   서명

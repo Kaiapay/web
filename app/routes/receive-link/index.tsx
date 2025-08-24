@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { replace, useNavigate } from "react-router";
+import { replace, useNavigate } from "react-router-dom";
 import Alert from "~/components/Alert";
 import BottomSheet from "~/components/BottomSheet";
 import CheckIcon from "~/components/icons/CheckIcon";
@@ -21,7 +21,7 @@ export default function ReceiveLink() {
 
   const handleErrorSheetButtonClick = () => {
     setIsBottomSheetOpen(false);
-    navigate("/home", { viewTransition: true });
+    navigate("/home");
   }
 
   const onButtonClick = () => {
@@ -29,7 +29,7 @@ export default function ReceiveLink() {
     }
 
     const onClose = () => {
-        navigate("/home", { viewTransition: true });
+        navigate("/home");
     }
   return (
     <div
