@@ -70,9 +70,7 @@ export default function Onboarding() {
 
   const handleSignup = async () => {
     //navigate("/home");
-    privyLogin({
-      loginMethods: ["email"],
-    });
+    privyLogin();
     console.log("user", user);
   };
 
