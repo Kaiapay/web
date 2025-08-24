@@ -121,8 +121,8 @@ export default function ChangeIdPage() {
       </div>
 
       <div className="flex flex-col gap-4 px-4 py-7">
-        <Button onClick={handleSubmit} disabled={isSubmitDisabled}>
-          {updateKaiapayIdMutation.isPending ? "변경 중..." : "완료"}
+        <Button onClick={handleSubmit} disabled={isSubmitDisabled} isLoading={updateKaiapayIdMutation.isPending}>
+          완료
         </Button>
       </div>
     </div>

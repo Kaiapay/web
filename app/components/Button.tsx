@@ -49,7 +49,7 @@ const Button: React.FC<ButtonProps> = ({
       {isLoading ? (
         <div
           className="w-5 h-5 border-t-transparent border-b-transparent border-r-transparent border-2 rounded-full animate-spin"
-          style={{ borderLeftColor: "#BFF009" }}
+          style={{ borderLeftColor: backgroundColor === "bg-primary" ? "#000000" : "#BFF009" }}
         />
       ) : (
         children
