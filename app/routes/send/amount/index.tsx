@@ -1,11 +1,13 @@
+import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import BottomSheet from "~/components/BottomSheet";
 import Button from "~/components/Button";
 import HeaderWithBackButton from "~/components/HeaderWithBackButton";
 import CurrencyInput from "~/components/fill/CurrencyInput";
-import { useState } from "react";
-import BottomSheet from "~/components/BottomSheet";
 import ShareIcon from "~/components/icons/ShareIcon";
+import { PostTransferWithLink200SeriesOneOf, PostTransferWithLinkBodyMethod, usePostTransferWithLink } from "~/generated/api";
 import { useKaiaPayPot } from "~/hooks/useKaiaPayPot";
+import useKaiaPayTransfer from "~/hooks/useKaiaPayTransfer";
 
 export default function SendAmount() {
   const [searchParams] = useSearchParams();
@@ -14,7 +16,16 @@ export default function SendAmount() {
   const [selectedCurrencyCode, setSelectedCurrencyCode] = useState("USDT");
   const [amount, setAmount] = useState("0");
   const [isLinkSheetOpen, setIsLinkSheetOpen] = useState(false);
-  const [isLinkLoading, setIsLinkLoading] = useState(false);
+
+  const { isPending, data: linkData, mutateAsync } = usePostTransferWithLink();
+  const { transferToken, isLoading: isTransferLoading, error: transferError } = useKaiaPayTransfer();
+  
+  const isLinkLoading = {
+    link: isPending || isTransferLoading,
+    phone: false,
+    "kaiapay-id": false,
+    "wallet-address": false,
+  };
 
   const { getFormattedBalance } = useKaiaPayPot();
 
@@ -27,7 +38,31 @@ export default function SendAmount() {
     return "0";
   };
 
-  const handleShareLink = async () => {};
+  const handleShareLink = async () => {
+    const { result: { link } } = linkData as unknown as PostTransferWithLink200SeriesOneOf;
+
+    try {
+      if (!link) {
+        alert('링크가 생성되지 않았습니다. 다시 시도해주세요.');
+        return;
+      }
+  
+      if (navigator.share) {
+        await navigator.share({
+          title: 'KaiaPay 송금 링크',
+          text: `${amount} ${selectedCurrencyCode} 받기`,
+          url: link
+        });
+      } else {
+        // 공유 API를 지원하지 않는 브라우저를 위한 폴백
+        await navigator.clipboard.writeText(link);
+        alert('링크가 클립보드에 복사되었습니다.');
+      }
+      navigate("/home", {replace: true});
+    } catch (error) {
+      alert('링크 공유에 실패했습니다. 다시 시도해주세요.');
+    }
+  };
 
   const handleCurrencyChange = (currencyCode: string) => {
     setSelectedCurrencyCode(currencyCode);
@@ -51,13 +86,30 @@ export default function SendAmount() {
     return inputAmount > 0 && inputAmount <= currentBalance;
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (via === "link") {
-      setIsLinkLoading(true);
-      setTimeout(() => {
-        setIsLinkLoading(false);
-        setIsLinkSheetOpen(true);
-      }, 1000);
+      const data = await mutateAsync({
+        data: {
+          amount: `${amount}`,
+          token: selectedCurrencyCode,
+          method: PostTransferWithLinkBodyMethod.link,
+        },
+      });
+
+      const { result: { publicAddress } } = data as unknown as PostTransferWithLink200SeriesOneOf;
+
+      try {
+        await transferToken({
+          toAddress: publicAddress,
+          amount: `${amount}`,
+          onSuccess: () => {
+            setIsLinkSheetOpen(true);
+          }
+        });
+      } catch (error) {
+        alert(`트랜잭션에 실패했습니다. ${transferError}`);
+      }
+      
       return;
     }
 
@@ -101,10 +153,10 @@ export default function SendAmount() {
       <div className="flex flex-col gap-4 px-4 py-7">
         <Button
           onClick={handleNext}
-          isLoading={isLinkLoading}
-          disabled={isLinkLoading || !canProceed()}
+          isLoading={isLinkLoading[via as keyof typeof isLinkLoading]}
+          disabled={isLinkLoading[via as keyof typeof isLinkLoading] || !canProceed()}
         >
-          다음
+          {via === "link" ? "보내기" : "다음"}
         </Button>
       </div>
 
