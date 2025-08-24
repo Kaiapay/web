@@ -137,6 +137,13 @@ export default function Home() {
         <source src={backgroundVideoWebm} type="video/webm" />
         <source src={backgroundVideoMp4} type="video/mp4" />
       </video>
+      <div
+        className="pointer-events-none select-none fixed top-0 left-0 w-full z-10"
+        style={{
+          height: "80px",
+          background: "linear-gradient(180deg, #040404 0%, rgba(4,4,4,0) 100%)",
+        }}
+      />
       <div className="relative z-10 flex flex-col">
         <HomeHeader 
           searchQuery={searchQuery} 
