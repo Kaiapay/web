@@ -20,7 +20,6 @@ import ReceiveLinkPage from "./routes/receive-link";
 import KaiaPayCardPage from "./routes/kaiapay-card";
 import LuckyBoxPage from "./routes/luckybox";
 import AccountPage from "./routes/account";
-import PetsPage from "./routes/pets";
 import PlaygroundPage from "./routes/playground";
 import PCPage from "./routes/pc";
 
@@ -31,7 +30,6 @@ export default function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<SplashPage />} />
-            <Route path="/pets" element={<PetsPage />} />
             <Route path="/playground" element={<PlaygroundPage />} />
             <Route path="/pc" element={<PCPage />} />
             <Route path="/send" element={<SendPage />} />

@@ -12,6 +12,7 @@ export default defineConfig({
   define: {
     global: "globalThis",
     "process.env": {},
+    Buffer: ["buffer", "Buffer"],
   },
   build: {
     outDir: "dist",
@@ -22,11 +23,12 @@ export default defineConfig({
     host: true,
   },
   optimizeDeps: {
-    include: ['buffer'],
+    include: ['buffer', 'process'],
   },
   resolve: {
     alias: {
       buffer: 'buffer',
+      process: 'process/browser',
     },
   },
 });
