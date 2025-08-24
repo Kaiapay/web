@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import HomeHeader from "../../components/home/HomeHeader";
 import BalanceSection from "../../components/home/BalanceSection";
 import ActionButtons from "../../components/home/ActionButtons";
 import HomeContent from "../../components/home/HomeContent";
 import TransactionDetailSheet from "../../components/transactions/TransactionDetailSheet";
 import { useNavigate } from "react-router-dom";
+import { useUser } from "~/stores/userStore";
 import type { Transaction } from "../transactions/types/transaction";
 import type { Currency } from "~/types/currency";
 
@@ -15,7 +16,8 @@ export default function Home() {
     useState<Transaction | null>(null);
   const [isDetailSheetOpen, setIsDetailSheetOpen] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState("USDT");
-
+  useUser();
+  
   // 검색 핸들러
   const handleSearchChange = (query: string) => {
     setSearchQuery(query);
@@ -175,3 +177,4 @@ export default function Home() {
     </div>
   );
 }
+

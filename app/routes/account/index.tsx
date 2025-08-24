@@ -7,6 +7,7 @@ import LineIcon from "~/components/icons/LineIcon";
 import GoogleIcon from "~/components/icons/GoogleIcon";
 import UserIcon from "~/components/icons/UserIcon";
 import ChevronRightIcon from "~/components/icons/chevron-right";
+import { useUser } from "~/stores/userStore";
 
 type AccountType = "kakao" | "email" | "line" | "google";
 
@@ -19,6 +20,7 @@ interface AccountInfo {
 
 export default function AccountPage() {
   const navigate = useNavigate();
+  const { user } = useUser();
 
   // 계정 정보 상태 관리 (API 연동 시 쉽게 확장 가능)
   const [accounts, setAccounts] = useState<AccountInfo[]>([
@@ -135,7 +137,7 @@ export default function AccountPage() {
                   <p className="text-white text-[16px] font-medium">
                     KaiaPay 아이디
                   </p>
-                  <p className="text-white/50 text-[14px]">@KaiaPay공식계정</p>
+                  <p className="text-white/50 text-[14px]">@{user?.kaiapayId}</p>
                 </div>
                 <div className="w-5 h-10 flex items-center justify-center">
                   <ChevronRightIcon />
