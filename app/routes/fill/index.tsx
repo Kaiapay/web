@@ -15,6 +15,7 @@ import { kaia } from "viem/chains";
 import Button from "~/components/Button";
 import { postDeposit } from "~/generated/api";
 import { KAIA_RPC_URL } from "../../lib/constants";
+import { usePrivy } from "@privy-io/react-auth";
 
 const viemClient = createPublicClient({
   chain: kaia,
@@ -155,6 +156,8 @@ export default function Fill() {
     setIsSheetOpen(true);
   };
 
+  const { user } = usePrivy();
+
   const handleSubmit = async () => {
     if (selectedCurrencyCode !== "USDT") {
       console.error("Only USDT deposits are supported");
@@ -190,6 +193,10 @@ export default function Fill() {
       // Wait for approve transaction to be mined
       await viemClient.waitForTransactionReceipt({ hash: approveHash });
 
+      const smartWallet = user?.linkedAccounts.find(
+        (account) => account.type === "smart_wallet"
+      );
+
       // Then deposit tokens
       const hash = await walletClient.writeContract({
         account: wallets[0] as `0x${string}`,
@@ -197,7 +204,7 @@ export default function Fill() {
         abi: depositTokenAbi,
         functionName: "depositToken",
         args: [
-          wallets[0] as `0x${string}`,
+          smartWallet?.address as `0x${string}`,
           USDT_ADDRESS as `0x${string}`,
           parsedAmount,
         ],
