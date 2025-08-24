@@ -20,6 +20,7 @@ import ReceiveLinkPage from "./routes/receive-link";
 import KaiaPayCardPage from "./routes/kaiapay-card";
 import LuckyBoxPage from "./routes/luckybox";
 import AccountPage from "./routes/account";
+import ChangeIdPage from "./routes/account/change-id";
 import PlaygroundPage from "./routes/playground";
 import PCPage from "./routes/pc";
 
@@ -52,6 +53,7 @@ export default function App() {
             <Route path="/kaiapay-card" element={<KaiaPayCardPage />} />
             <Route path="/luckybox" element={<LuckyBoxPage />} />
             <Route path="/account" element={<AccountPage />} />
+            <Route path="/account/change-id" element={<ChangeIdPage />} />
           </Routes>
         </BrowserRouter>
         <ReactQueryDevtools initialIsOpen={false} />

@@ -5,12 +5,30 @@ import InputResetIcon from "~/components/icons/InputResetIcon";
 import CheckSmallIcon from "~/components/icons/CheckSmallIcon";
 import XCircleIcon from "~/components/icons/XCircleIcon";
 import Button from "~/components/Button";
+import { usePutUpdateKaiapayId } from "~/generated/api";
 
 export default function ChangeIdPage() {
   const navigate = useNavigate();
   const [id, setId] = useState("@김카이아");
   const [isValid, setIsValid] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
+
+  const updateKaiapayIdMutation = usePutUpdateKaiapayId({
+    mutation: {
+      onSuccess: (data) => {
+        if (data.series.success && 'result' in data.series) {
+          navigate("/account");
+        } else if (data.series.success === false && 'error' in data.series) {
+          setErrorMessage(data.series.error || "아이디 변경에 실패했습니다.");
+        } else {
+          setErrorMessage("아이디 변경에 실패했습니다.");
+        }
+      },
+      onError: () => {
+        setErrorMessage("아이디 변경 중 오류가 발생했습니다.");
+      },
+    },
+  });
 
   const handleIdChange = (value: string) => {
     const newId = value.startsWith("@") ? value : `@${value}`;
@@ -38,13 +56,16 @@ export default function ChangeIdPage() {
 
   const handleSubmit = () => {
     if (isValid && id.length >= 5) {
-      console.log("아이디 변경:", id);
-      // TODO: API 호출하여 아이디 변경 처리
-      navigate("/account", { viewTransition: true });
+      const kaiapayId = id.replace("@", "");
+      updateKaiapayIdMutation.mutate({
+        data: {
+          kaiapayId: kaiapayId,
+        },
+      });
     }
   };
 
-  const isSubmitDisabled = !isValid || id.length < 5;
+  const isSubmitDisabled = !isValid || id.length < 5 || updateKaiapayIdMutation.isPending;
 
   return (
     <div
@@ -99,7 +120,7 @@ export default function ChangeIdPage() {
 
       <div className="flex flex-col gap-4 px-4 py-7">
         <Button onClick={handleSubmit} disabled={isSubmitDisabled}>
-          완료
+          {updateKaiapayIdMutation.isPending ? "변경 중..." : "완료"}
         </Button>
       </div>
     </div>
