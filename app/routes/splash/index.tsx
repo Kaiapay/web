@@ -1,31 +1,20 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useCustomPrivy } from "~/hooks/use-custom-privy";
 
 export default function Splash() {
   const navigate = useNavigate();
   const [isVisible, setIsVisible] = useState(true);
-  const { authenticated, ready } = useCustomPrivy();
 
   useEffect(() => {
-    // 2초 후 로그인 상태에 따라 페이지 이동
     const timer = setTimeout(() => {
       setIsVisible(false);
       setTimeout(() => {
-        if (ready) {
-          if (authenticated) {
-            navigate("/home");
-          } else {
-            navigate("/onboarding");
-          }
-        } else {
-          navigate("/onboarding");
-        }
+        navigate("/onboarding");
       }, 500);
     }, 2000);
 
     return () => clearTimeout(timer);
-  }, [navigate, authenticated, ready]);
+  }, [navigate]);
 
   return (
     <div

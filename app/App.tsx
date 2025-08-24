@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import { queryClient } from "./lib/queryClient";
 import Providers from "./providers";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 import SplashPage from "./routes/splash";
 import HomePage from "./routes/home";
@@ -33,27 +34,130 @@ export default function App() {
             <Route path="/" element={<SplashPage />} />
             <Route path="/playground" element={<PlaygroundPage />} />
             <Route path="/pc" element={<PCPage />} />
-            <Route path="/send" element={<SendPage />} />
-            <Route path="/send/via-phone" element={<SendViaPhonePage />} />
+
+            {/* 비로그인 사용자 접근 가능 */}
+            <Route
+              path="/onboarding"
+              element={
+                <ProtectedRoute requireAuth={false} redirectTo="/home">
+                  <OnboardingPage />
+                </ProtectedRoute>
+              }
+            />
+
+            {/* 로그인이 필요 페이지 */}
+            <Route
+              path="/home"
+              element={
+                <ProtectedRoute requireAuth={true}>
+                  <HomePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/send"
+              element={
+                <ProtectedRoute requireAuth={true}>
+                  <SendPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/send/via-phone"
+              element={
+                <ProtectedRoute requireAuth={true}>
+                  <SendViaPhonePage />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="/send/via-kaiapay-id"
-              element={<SendViaKaiaPayIdPage />}
+              element={
+                <ProtectedRoute requireAuth={true}>
+                  <SendViaKaiaPayIdPage />
+                </ProtectedRoute>
+              }
             />
             <Route
               path="/send/via-wallet-address"
-              element={<SendViaWalletAddressPage />}
+              element={
+                <ProtectedRoute requireAuth={true}>
+                  <SendViaWalletAddressPage />
+                </ProtectedRoute>
+              }
             />
-            <Route path="/send/amount" element={<SendAmountPage />} />
-            <Route path="/fill" element={<FillPage />} />
-            <Route path="/wallet-connect" element={<WalletConnectPage />} />
-            <Route path="/transactions" element={<TransactionsPage />} />
-            <Route path="/onboarding" element={<OnboardingPage />} />
-            <Route path="/home" element={<HomePage />} />
-            <Route path="/receive-link" element={<ReceiveLinkPage />} />
-            <Route path="/kaiapay-card" element={<KaiaPayCardPage />} />
-            <Route path="/luckybox" element={<LuckyBoxPage />} />
-            <Route path="/account" element={<AccountPage />} />
-            <Route path="/account/change-id" element={<ChangeIdPage />} />
+            <Route
+              path="/send/amount"
+              element={
+                <ProtectedRoute requireAuth={true}>
+                  <SendAmountPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/fill"
+              element={
+                <ProtectedRoute requireAuth={true}>
+                  <FillPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/wallet-connect"
+              element={
+                <ProtectedRoute requireAuth={true}>
+                  <WalletConnectPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/transactions"
+              element={
+                <ProtectedRoute requireAuth={true}>
+                  <TransactionsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/receive-link"
+              element={
+                <ProtectedRoute requireAuth={true}>
+                  <ReceiveLinkPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/kaiapay-card"
+              element={
+                <ProtectedRoute requireAuth={true}>
+                  <KaiaPayCardPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/luckybox"
+              element={
+                <ProtectedRoute requireAuth={true}>
+                  <LuckyBoxPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/account"
+              element={
+                <ProtectedRoute requireAuth={true}>
+                  <AccountPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/account/change-id"
+              element={
+                <ProtectedRoute requireAuth={true}>
+                  <ChangeIdPage />
+                </ProtectedRoute>
+              }
+            />
           </Routes>
         </BrowserRouter>
         <ReactQueryDevtools initialIsOpen={false} />

@@ -65,19 +65,13 @@ export default function Onboarding() {
   const [progress, setProgress] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const { login, authenticated, ready } = useCustomPrivy();
-
-  useEffect(() => {
-    if (ready && authenticated) {
-      navigate("/home");
-    }
-  }, [ready, authenticated, navigate]);
+  const { login } = useCustomPrivy();
 
   const handleSignup = async () => {
     try {
       await login();
     } catch (error) {
-      console.error(error);
+      console.error("로그인 실패:", error);
     }
   };
 
