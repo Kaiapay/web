@@ -28,7 +28,7 @@ interface UsePrivyLoginReturn {
   // Advanced actions (for when AGW is connected)
   signMessage: (message: string) => Promise<string>;
   sendTransaction: (
-    txParams: Partial<UnsignedTransactionRequest>,
+    txParams: Partial<UnsignedTransactionRequest>
   ) => Promise<string>;
 
   // Loading states
@@ -46,7 +46,7 @@ export const useCustomPrivy = (): UsePrivyLoginReturn => {
 
   // Derived state
   const emailAccount = user?.linkedAccounts.find(
-    (account) => account.type === "email",
+    (account) => account.type === "email"
   );
 
   const walletAddress = user?.wallet?.address;
@@ -74,9 +74,7 @@ export const useCustomPrivy = (): UsePrivyLoginReturn => {
 
     setIsLoggingIn(true);
     try {
-      await privyLogin({
-        loginMethods: ["email"],
-      });
+      await privyLogin();
     } catch (error) {
       console.error("Login failed:", error);
       throw error;
@@ -99,7 +97,7 @@ export const useCustomPrivy = (): UsePrivyLoginReturn => {
   const signMessage = useCallback(
     async (message: string) => {
       const connectedEthWallet = connectedWallets.find(
-        (w) => w.type === "ethereum",
+        (w) => w.type === "ethereum"
       );
       if (!connectedEthWallet?.address) {
         throw new Error("No wallet available");
@@ -115,13 +113,13 @@ export const useCustomPrivy = (): UsePrivyLoginReturn => {
       })) as string;
       return signature;
     },
-    [connectedWallets],
+    [connectedWallets]
   );
 
   const sendTransaction = useCallback(
     async (txParams: Partial<UnsignedTransactionRequest>) => {
       const connectedEthWallet = connectedWallets.find(
-        (w) => w.type === "ethereum",
+        (w) => w.type === "ethereum"
       );
       if (!connectedEthWallet?.address) {
         throw new Error("No wallet available");
@@ -147,7 +145,7 @@ export const useCustomPrivy = (): UsePrivyLoginReturn => {
       })) as string;
       return hash;
     },
-    [connectedWallets],
+    [connectedWallets]
   );
 
   return {

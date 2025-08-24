@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Button from "../../components/Button";
-import { useLogin, usePrivy } from "@privy-io/react-auth";
+import { useCustomPrivy } from "~/hooks/use-custom-privy";
 
 interface OnboardingSlide {
   id: number;
@@ -65,13 +65,20 @@ export default function Onboarding() {
   const [progress, setProgress] = useState(0);
   const containerRef = useRef<HTMLDivElement>(null);
 
-  const { login: privyLogin } = useLogin();
-  const { user } = usePrivy()
+  const { login, authenticated, ready } = useCustomPrivy();
+
+  useEffect(() => {
+    if (ready && authenticated) {
+      navigate("/home");
+    }
+  }, [ready, authenticated, navigate]);
 
   const handleSignup = async () => {
-    //navigate("/home");
-    privyLogin();
-    console.log("user", user);
+    try {
+      await login();
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   const handleScreenClick = (e: React.MouseEvent) => {
