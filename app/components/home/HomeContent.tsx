@@ -70,6 +70,7 @@ export default function HomeContent({
       <div className="space-y-[12px]">
         {transactions.map((transaction) => (
           <TransactionCell
+            key={transaction.id}
             transaction={transaction}
             onClick={onTransactionClick}
           />
