@@ -143,6 +143,7 @@ const BottomSheet: React.FC<BottomSheetProps> = ({
           backdropFilter: "blur(8px)",
           WebkitBackdropFilter: "blur(8px)",
         }}
+        onClick={safeClose}
       />
 
       {/* 시트 컨테이너 */}
