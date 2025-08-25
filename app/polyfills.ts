@@ -1,6 +1,8 @@
-import { Buffer } from 'buffer';
+import { Buffer } from "buffer";
 
-if (typeof window !== 'undefined') {
+if (typeof window !== "undefined") {
+  // @ts-ignore
+  window.pBuffer = window.Buffer;
   window.Buffer = Buffer;
   window.global = window.global || window;
 
@@ -10,6 +12,6 @@ if (typeof window !== 'undefined') {
 }
 
 // Also set up for Node.js environment
-if (typeof global !== 'undefined' && !global.Buffer) {
+if (typeof global !== "undefined" && !global.Buffer) {
   global.Buffer = Buffer;
 }
