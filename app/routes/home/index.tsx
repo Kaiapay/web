@@ -6,14 +6,17 @@ import HomeContent from "../../components/home/HomeContent";
 import TransactionDetailSheet from "../../components/transactions/TransactionDetailSheet";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "~/stores/userStore";
-import type { Transaction } from "../transactions/types/transaction";
 import type { Currency } from "~/types/currency";
+import {
+  GetTransactionList200TransactionsItem,
+  useGetTransactionList,
+} from "~/generated/api";
 
 export default function Home() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTransaction, setSelectedTransaction] =
-    useState<Transaction | null>(null);
+    useState<GetTransactionList200TransactionsItem | null>(null);
   const [isDetailSheetOpen, setIsDetailSheetOpen] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState("USDT");
   useUser();
@@ -40,7 +43,9 @@ export default function Home() {
   const handleMoreClick = () => console.log("더보기 클릭");
 
   // 거래 클릭 핸들러
-  const handleTransactionClick = (transaction: Transaction) => {
+  const handleTransactionClick = (
+    transaction: GetTransactionList200TransactionsItem
+  ) => {
     setSelectedTransaction(transaction);
     setIsDetailSheetOpen(true);
   };
@@ -49,39 +54,10 @@ export default function Home() {
     console.log("거래 취소");
   };
 
-  const handleReshare = () => {
-    console.log("다시 링크 공유");
-  };
+  const { data: transactions } = useGetTransactionList({
+    limit: 5,
+  });
 
-  // 거래 내역 데이터
-  const transactions: Transaction[] = [
-    {
-      id: "1",
-      date: new Date(2025, 7, 20, 15, 54),
-      amount: 0.49,
-      currency: "USDT",
-      type: "receive",
-      description: "15:54 · 돈 보내기 완료 럭키박스 열기",
-      method: "luckybox",
-      account: "기본 페이머니",
-    },
-    {
-      id: "2",
-      date: new Date(2025, 7, 20, 15, 54),
-      amount: 20.0,
-      currency: "USDT",
-      type: "send",
-      description: "15:54 · 링크 공유",
-      status: "pending",
-      method: "link",
-      recipient: "@김카이아",
-      account: "기본 페이머니",
-      canCancel: true,
-      canReshare: true,
-    },
-  ];
-
-  // 서비스 바로가기 데이터
   const services = [
     {
       id: 1,
@@ -161,7 +137,8 @@ export default function Home() {
         />
         <ActionButtons actions={actions} />
         <HomeContent
-          transactions={transactions}
+          transactions={transactions?.transactions ?? []}
+          todayCount={transactions?.todayCount ?? 0}
           services={services}
           onViewAll={handleViewAll}
           onTransactionClick={handleTransactionClick}
@@ -174,7 +151,6 @@ export default function Home() {
         onClose={() => setIsDetailSheetOpen(false)}
         transaction={selectedTransaction}
         onCancel={handleCancel}
-        onReshare={handleReshare}
       />
     </div>
   );

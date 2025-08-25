@@ -33,7 +33,7 @@ function getAccountFromCompressed(compressedKey: string) {
 
     // hex 문자열로 변환하고 0x 접두사 추가
     // @ts-ignore
-    const privateKeyHex = Buffer.from(privateKeyBytes).toString("hex");
+    const privateKeyHex = window.pBuffer.from(privateKeyBytes).toString("hex");
     const privateKey = `0x${privateKeyHex}` as const;
     const account = privateKeyToAccount(privateKey);
     const publicAddress = account.address;

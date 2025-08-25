@@ -1,8 +1,7 @@
+import { GetTransactionList200TransactionsItem } from "~/generated/api";
 import ContentCard from "../ContentCard";
 import IconButton from "../IconButton";
-import type { Transaction } from "../../routes/transactions/types/transaction";
 import TransactionCell from "../transactions/TransactionCell";
-
 
 interface Service {
   id: number;
@@ -15,10 +14,13 @@ interface Service {
 }
 
 interface HomeContentProps {
-  transactions: Transaction[];
+  todayCount: number;
+  transactions: GetTransactionList200TransactionsItem[];
   services: Service[];
   onViewAll: () => void;
-  onTransactionClick: (transaction: Transaction) => void;
+  onTransactionClick: (
+    transaction: GetTransactionList200TransactionsItem
+  ) => void;
 }
 
 // 서비스 바로가기 Cell 컴포넌트
@@ -49,6 +51,7 @@ const ServiceCell = ({ service }: { service: Service }) => (
 export default function HomeContent({
   transactions,
   services,
+  todayCount,
   onViewAll,
   onTransactionClick,
 }: HomeContentProps) {
@@ -70,7 +73,7 @@ export default function HomeContent({
         <button onClick={onViewAll} className="text-white hover:opacity-80">
           전체 보기
         </button>
-        <span className="text-white/50">오늘 5건</span>
+        <span className="text-white/50">오늘 {todayCount}건</span>
       </div>
 
       {/* 서비스 바로가기 */}

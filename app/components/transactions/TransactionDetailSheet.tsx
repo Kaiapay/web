@@ -1,14 +1,13 @@
+import { GetTransactionList200TransactionsItem } from "~/generated/api";
 import AttachedSheet from "../AttachedSheet";
-import type { Transaction } from "~/routes/transactions/types/transaction";
 import { TransactionUtils } from "~/routes/transactions/types/transaction";
 import { getIconComponent } from "~/routes/transactions/utils/iconUtils";
 
 interface TransactionDetailSheetProps {
   isOpen: boolean;
   onClose: () => void;
-  transaction: Transaction | null;
+  transaction: GetTransactionList200TransactionsItem | null;
   onCancel?: () => void;
-  onReshare?: () => void;
 }
 
 export default function TransactionDetailSheet({
@@ -16,7 +15,6 @@ export default function TransactionDetailSheet({
   onClose,
   transaction,
   onCancel,
-  onReshare,
 }: TransactionDetailSheetProps) {
   if (!transaction) return null;
   const iconInfo = TransactionUtils.getIconAndColor(transaction);
@@ -38,12 +36,12 @@ export default function TransactionDetailSheet({
               {TransactionUtils.getMethodText(transaction)}
             </span>
             <span className="text-white/50 text-[14px] font-normal leading-[1.571em] tracking-[-0.714%]">
-              {transaction.date.toLocaleDateString("ko-KR", {
+              {new Date(transaction.updatedAt).toLocaleDateString("ko-KR", {
                 month: "long",
                 day: "numeric",
               })}
               ,{" "}
-              {transaction.date.toLocaleTimeString("ko-KR", {
+              {new Date(transaction.updatedAt).toLocaleTimeString("ko-KR", {
                 hour: "2-digit",
                 minute: "2-digit",
                 hour12: true,
@@ -86,7 +84,7 @@ export default function TransactionDetailSheet({
               받은 사람
             </span>
             <span className="text-white text-[14px] font-normal leading-[1.571em] tracking-[-0.714%]">
-              {transaction.recipient || "-"}
+              {transaction.recipientAlias || "-"}
             </span>
           </div>
         </div>
@@ -105,14 +103,14 @@ export default function TransactionDetailSheet({
             )}
 
             {/* 다시 링크 공유 버튼 */}
-            {transaction.canReshare && onReshare && (
+            {/* {transaction.canReshare && onReshare && (
               <button
                 onClick={onReshare}
                 className="w-full bg-[rgba(191,240,9,0.05)] backdrop-blur-[14px] rounded-[16px] p-[14px_16px] text-[#BFF009] text-[16px] font-semibold leading-[1.375em] tracking-[-2%] hover:opacity-80 transition-opacity"
               >
                 다시 링크 공유
               </button>
-            )}
+            )} */}
           </>
         )}
 
@@ -135,7 +133,7 @@ export default function TransactionDetailSheet({
               출금 계좌
             </span>
             <span className="text-white text-[14px] font-normal leading-[1.571em] tracking-[-0.714%]">
-              {transaction.account}
+              {transaction.fromAddress}
             </span>
           </div>
         </div>
