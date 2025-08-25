@@ -2,6 +2,7 @@ import { useMemo, useState } from "react";
 import HeaderWithBackButton from "../../components/HeaderWithBackButton";
 import TransactionDetailSheet from "../../components/transactions/TransactionDetailSheet";
 import TransactionCell from "../../components/transactions/TransactionCell";
+import TransactionCellSkeleton from "../../components/transactions/TransactionCellSkeleton";
 import {
   GetTransactionList200TransactionsItem,
   useGetTransactionList,
@@ -13,7 +14,7 @@ export default function Transactions() {
   const [selectedTransaction, setSelectedTransaction] =
     useState<GetTransactionList200TransactionsItem | null>(null);
   const [isDetailSheetOpen, setIsDetailSheetOpen] = useState(false);
-  const { data } = useGetTransactionList();
+  const { data, isLoading } = useGetTransactionList();
   const { user } = usePrivy();
 
   const smartWallet = user?.linkedAccounts.find(
@@ -21,7 +22,9 @@ export default function Transactions() {
   );
 
   const groupedTransactions = useMemo(() => {
-    return (data?.transactions ?? []).reduce<
+    if (!data?.transactions) return [];
+
+    return data.transactions.reduce<
       {
         date: string;
         totalAmount: bigint;
@@ -108,7 +111,27 @@ export default function Transactions() {
       {/* 콘텐츠 */}
       <div className="flex-1 flex flex-col px-[16px] pt-[24px] pb-[12px] gap-[16px]">
         {/* 거래내역 그룹 */}
-        {groupedTransactions.map(renderTransactionGroup)}
+        {isLoading || !data ? (
+          <>
+            <TransactionCellSkeleton />
+            <TransactionCellSkeleton />
+            <TransactionCellSkeleton />
+            <TransactionCellSkeleton />
+            <TransactionCellSkeleton />
+            <TransactionCellSkeleton />
+            <TransactionCellSkeleton />
+            <TransactionCellSkeleton />
+            <TransactionCellSkeleton />
+          </>
+        ) : groupedTransactions.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-16">
+            <div className="text-white/30 text-[14px] text-center">
+              아직 거래 내역이 없어요
+            </div>
+          </div>
+        ) : (
+          groupedTransactions.map(renderTransactionGroup)
+        )}
       </div>
 
       {/* 거래 상세 시트 */}
