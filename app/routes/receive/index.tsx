@@ -1,15 +1,18 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import BottomSheet from "~/components/BottomSheet";
 import ChevronRightIcon from "~/components/icons/chevron-right";
 import ExclamationIcon from "~/components/icons/ExclamationIcon";
+import { useUserStore } from "~/stores/userStore";
 import ContentCard from "../../components/ContentCard";
 import HeaderWithBackButton from "../../components/HeaderWithBackButton";
 import IconButton from "../../components/IconButton";
-import { useUser } from "~/stores/userStore";
+import CopyIcon from "~/components/icons/CopyIcon";
 
 export default function Receive() {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
-  const { user } = useUser();
+  const navigate = useNavigate();
+  const { user } = useUserStore();
 
   const handleErrorSheetClose = () => {
     setIsBottomSheetOpen(false);
@@ -19,8 +22,13 @@ export default function Receive() {
     setIsBottomSheetOpen(false);
   };
 
-  const handleCopyClick = () => {
-    // TODO
+  const handleIDClick = () => {
+    if (user?.kaiapayId) {
+      navigator.clipboard.writeText(`@${user.kaiapayId}`);
+      alert("클립보드에 복사되었습니다.");
+    } else {
+      navigate("/account/change-id");
+    }
   };
 
   return (
@@ -57,10 +65,17 @@ export default function Receive() {
                       </h4>
                     </div>
                     <button
-                      onClick={handleCopyClick}
+                      onClick={handleIDClick}
                       className="text-[#BFF009]/80 text-[14px] font-medium font-pretendard leading-[1.571em] tracking-[-0.714%] hover:opacity-80 transition-opacity"
                     >
-                      @{user?.kaiapayId}
+                      {user?.kaiapayId ? (
+                        <div className="flex items-center gap-[4px]">
+                          @{user?.kaiapayId}
+                          <CopyIcon />
+                        </div>
+                      ) : (
+                        "아이디 설정하기"
+                      )}
                     </button>
                   </div>
                 </div>
