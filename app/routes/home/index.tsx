@@ -134,7 +134,6 @@ export default function Home() {
         playsInline
         controls={false}
       >
-        <source src="/home-bg.webm" type="video/webm" />
         <source src="/home-bg.mp4" type="video/mp4" />
       </video>
       <div
