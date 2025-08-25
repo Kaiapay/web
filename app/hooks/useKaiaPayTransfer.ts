@@ -131,6 +131,7 @@ export function useKaiaPayTransfer() {
 
       return result;
     } catch (err: any) {
+      console.error(err);
       const errorMessage = err.message || "Transaction failed";
       setError(errorMessage);
       throw new Error(errorMessage);
