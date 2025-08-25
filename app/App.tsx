@@ -26,6 +26,7 @@ import PlaygroundPage from "./routes/playground";
 import PCPage from "./routes/pc";
 import SmartWalletDemoPage from "./routes/smart-wallet-demo";
 import ReceivePage from "./routes/receive";
+import ScrollToTop from "./components/scroll-to-top";
 // import { BufferDebug } from "./components/BufferDebug";
 
 export default function App() {
@@ -34,6 +35,7 @@ export default function App() {
       {/* <BufferDebug /> */}
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
+          <ScrollToTop />
           <Routes>
             <Route path="/" element={<SplashPage />} />
             <Route path="/playground" element={<PlaygroundPage />} />

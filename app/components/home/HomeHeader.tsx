@@ -34,7 +34,6 @@ export default function HomeHeader({
       <IconButton
         iconSrc="/icons/gift.svg"
         iconAlt="Gift"
-        hasRedDot={true}
         onClick={() => navigate("/luckybox")}
       />
       <IconButton

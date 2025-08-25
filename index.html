@@ -4,7 +4,10 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/jpeg" href="/icon.jpg" />
     <link rel="apple-touch-icon" href="/icon.jpg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
     <meta
       name="description"
       content="KaiaPay - 스테이블코인, USDT부터 원화까지 링크 하나로 간편하게 주고받기"
@@ -31,6 +34,37 @@
     <meta name="twitter:image" content="/og.png" />
 
     <title>KaiaPay</title>
+    <style>
+      /* 핀치줌 & 더블탭 확대 차단 */
+      html,
+      body {
+        touch-action: manipulation; /* 스크롤은 허용, 확대는 차단 */
+      }
+    </style>
+    <script>
+      // 핀치 줌 방지
+      document.addEventListener(
+        "gesturestart",
+        function (e) {
+          e.preventDefault();
+        },
+        { passive: false }
+      );
+
+      // 더블탭 확대 방지
+      let lastTouchEnd = 0;
+      document.addEventListener(
+        "touchend",
+        function (e) {
+          const now = Date.now();
+          if (now - lastTouchEnd <= 300) {
+            e.preventDefault();
+          }
+          lastTouchEnd = now;
+        },
+        { passive: false }
+      );
+    </script>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
