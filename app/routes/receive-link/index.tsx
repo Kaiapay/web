@@ -57,6 +57,7 @@ export default function ReceiveLink() {
 
   const navigate = useNavigate();
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
+  const [isButtonLoading, setIsButtonLoading] = useState(false);
   const { height: windowHeight } = useWindowSize();
 
   const logoMt = windowHeight / 2 - 144 - 62;
@@ -67,6 +68,7 @@ export default function ReceiveLink() {
 
   const onButtonClick = async () => {
     // 로그인이 안되어있으면 privy 로그인
+    setIsButtonLoading(true);
     if (!authenticated) {
       await login();
       return;
@@ -74,6 +76,7 @@ export default function ReceiveLink() {
       await handleReceive();
       setIsBottomSheetOpen(true);
     }
+    setIsButtonLoading(false);
   };
 
   const { writeContractFD, publicAddress: senderAddress } =
@@ -133,6 +136,7 @@ export default function ReceiveLink() {
         buttonText="받기"
         onButtonClick={onButtonClick}
         overlay={<div className="" />}
+        isButtonLoading={isButtonLoading}
       >
         {data?.transaction.senderAlias}님이 보냈어요 <br />
         아래 '받기' 버튼을 눌러야 송금이 완료돼요
