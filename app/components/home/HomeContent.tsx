@@ -2,6 +2,7 @@ import { GetTransactionList200TransactionsItem } from "~/generated/api";
 import ContentCard from "../ContentCard";
 import IconButton from "../IconButton";
 import TransactionCell from "../transactions/TransactionCell";
+import TransactionCellSkeleton from "../transactions/TransactionCellSkeleton";
 
 interface Service {
   id: number;
@@ -14,8 +15,9 @@ interface Service {
 }
 
 interface HomeContentProps {
+  isLoading: boolean;
   todayCount: number;
-  transactions: GetTransactionList200TransactionsItem[];
+  transactions: GetTransactionList200TransactionsItem[] | undefined;
   services: Service[];
   onViewAll: () => void;
   onTransactionClick: (
@@ -50,6 +52,7 @@ const ServiceCell = ({ service }: { service: Service }) => (
 
 export default function HomeContent({
   transactions,
+  isLoading,
   services,
   todayCount,
   onViewAll,
@@ -59,13 +62,21 @@ export default function HomeContent({
     <div className="px-4 space-y-[8px]">
       {/* 거래 내역 */}
       <div className="space-y-[12px]">
-        {transactions.map((transaction) => (
-          <TransactionCell
-            key={transaction.id}
-            transaction={transaction}
-            onClick={onTransactionClick}
-          />
-        ))}
+        {isLoading || transactions === undefined ? (
+          <>
+            <TransactionCellSkeleton />
+            <TransactionCellSkeleton />
+            <TransactionCellSkeleton />
+          </>
+        ) : (
+          transactions.map((transaction) => (
+            <TransactionCell
+              key={transaction.id}
+              transaction={transaction}
+              onClick={onTransactionClick}
+            />
+          ))
+        )}
       </div>
 
       {/* 전체 보기 */}
