@@ -11,6 +11,8 @@ import {
   GetTransactionList200TransactionsItem,
   useGetTransactionList,
 } from "~/generated/api";
+import BottomSheet from "~/components/BottomSheet";
+import ExclamationIcon from "~/components/icons/ExclamationIcon";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -18,6 +20,7 @@ export default function Home() {
   const [selectedTransaction, setSelectedTransaction] =
     useState<GetTransactionList200TransactionsItem | null>(null);
   const [isDetailSheetOpen, setIsDetailSheetOpen] = useState(false);
+  const [isPaymentPageSheetOpen, setIsPaymentPageSheetOpen] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState("USDT");
   useUser();
 
@@ -56,6 +59,15 @@ export default function Home() {
     console.log("거래 취소");
   };
 
+  // 결제 페이지 시트 핸들러들
+  const handlePaymentPageSheetOpen = () => {
+    setIsPaymentPageSheetOpen(true);
+  };
+
+  const handlePaymentPageSheetClose = () => {
+    setIsPaymentPageSheetOpen(false);
+  };
+
   const { data: transactions } = useGetTransactionList({
     limit: 5,
   });
@@ -86,7 +98,7 @@ export default function Home() {
       description: "페이지 하나로 누구에게나 돈 받기",
       actionButton: "만들기",
       iconSize: 20,
-      onActionClick: () => console.log("결제 페이지 만들기"),
+      onActionClick: handlePaymentPageSheetOpen,
     },
   ];
 
@@ -158,6 +170,20 @@ export default function Home() {
         transaction={selectedTransaction}
         onCancel={handleCancel}
       />
+
+      {/* 결제 페이지 만들기 시트 */}
+      <BottomSheet
+        isOpen={isPaymentPageSheetOpen}
+        onClose={handlePaymentPageSheetClose}
+        icon={<ExclamationIcon />}
+        title="준비중인 기능입니다"
+        buttonText="확인"
+        onButtonClick={handlePaymentPageSheetClose}
+      >
+        곧 결제 페이지를 비롯한 다양한 기능이
+        <br />
+        업데이트를 통해 제공될 예정입니다
+      </BottomSheet>
     </div>
   );
 }

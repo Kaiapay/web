@@ -1,15 +1,16 @@
-import React, { useState } from "react";
+import { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import HeaderWithBackButton from "~/components/HeaderWithBackButton";
-import KakaoIcon from "~/components/icons/KakaoIcon";
 import EmailIcon from "~/components/icons/EmailIcon";
 import LineIcon from "~/components/icons/LineIcon";
 import GoogleIcon from "~/components/icons/GoogleIcon";
 import UserIcon from "~/components/icons/UserIcon";
 import ChevronRightIcon from "~/components/icons/chevron-right";
 import { useUser } from "~/stores/userStore";
+import { useCustomPrivy } from "~/hooks/use-custom-privy";
+import { useLinkAccount } from "@privy-io/react-auth";
 
-type AccountType = "kakao" | "email" | "line" | "google";
+type AccountType = "email" | "google_oauth" | "line_oauth";
 
 interface AccountInfo {
   type: AccountType;
@@ -21,56 +22,72 @@ interface AccountInfo {
 export default function AccountPage() {
   const navigate = useNavigate();
   const { user } = useUser();
+  const { user: privyUser } = useCustomPrivy();
 
-  // 계정 정보 상태 관리 (API 연동 시 쉽게 확장 가능)
-  const [accounts, setAccounts] = useState<AccountInfo[]>([
-    {
-      type: "kakao",
-      name: "카카오 계정",
-      email: "kaiapay@kakao.com",
-      connected: true,
-    },
-    {
-      type: "email",
-      name: "이메일",
-      email: "kaiapay@kakao.com",
-      connected: true,
-    },
-    {
-      type: "line",
-      name: "LINE 계정",
-      email: undefined,
-      connected: false,
-    },
-    {
-      type: "google",
-      name: "Google 계정",
-      email: undefined,
-      connected: false,
-    },
-  ]);
+  const accounts = useMemo<AccountInfo[]>(() => {
+    const linkedAccounts = privyUser?.linkedAccounts || [];
+    
+    return [
+      {
+        type: "email" as const,
+        name: "이메일",
+        email: linkedAccounts.find(acc => acc.type === "email")?.address,
+        connected: linkedAccounts.some(acc => acc.type === "email"),
+      },
+      {
+        type: "google_oauth" as const,
+        name: "Google 계정",
+        email: linkedAccounts.find(acc => acc.type === "google_oauth")?.email,
+        connected: linkedAccounts.some(acc => acc.type === "google_oauth"),
+      },
+      {
+        type: "line_oauth" as const,
+        name: "LINE 계정",
+        email: linkedAccounts.find(acc => acc.type === "line_oauth")?.name || linkedAccounts.find(acc => acc.type === "line_oauth")?.email,
+        connected: linkedAccounts.some(acc => acc.type === "line_oauth"),
+      },
+    ];
+  }, [privyUser?.linkedAccounts]);
 
-  const handleAccountConnect = (accountType: AccountType) => {
-    console.log(accountType);
+  const { linkEmail, linkGoogle, linkLine } = useLinkAccount();
+
+  const handleAccountConnect = async (accountType: AccountType) => {
+    try {
+      switch (accountType) {
+        case "email":
+          linkEmail();
+          break;
+        case "google_oauth":
+          linkGoogle();
+          break;
+        case "line_oauth":
+          linkLine();
+          break;
+        default:
+          console.log(`지원되지 않는 계정 타입: ${accountType}`);
+      }
+      console.log(`${accountType} 계정 연동 시도`);
+    } catch (error) {
+      console.error("계정 연동 실패:", error);
+    }
   };
 
   // 아이콘 렌더링 함수
   const renderAccountIcon = (type: AccountType) => {
     switch (type) {
-      case "kakao":
-        return <KakaoIcon size={20} className="text-white" />;
       case "email":
         return <EmailIcon size={16} className="text-white" />;
-      case "line":
-        return <LineIcon size={18} className="text-white" />;
-      case "google":
+      case "google_oauth":
         return <GoogleIcon size={18} className="text-white" />;
+      case "line_oauth":
+        return <LineIcon size={18} className="text-white" />;
       default:
         return null;
     }
   };
 
   return (
+    
     <div className="min-h-screen bg-[#040404] flex flex-col">
       {/* 헤더 */}
       <HeaderWithBackButton heading="계정" />

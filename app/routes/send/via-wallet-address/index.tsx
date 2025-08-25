@@ -104,7 +104,7 @@ export default function SendViaWalletAddress() {
 
               <input
                 type="text"
-                className="bg-transparent outline-none text-white font-normal text-[16px] leading-[22px] tracking-[-0.1px]"
+                className="w-full bg-transparent outline-none text-white font-normal text-[16px] leading-[22px] tracking-[-0.1px]"
                 placeholder="0x1234...abcd"
                 inputMode="text"
                 {...register("walletAddress")}
