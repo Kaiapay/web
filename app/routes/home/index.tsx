@@ -37,7 +37,9 @@ export default function Home() {
   const handleFillClick = () => navigate("/fill");
   const handleSendClick = () => navigate("/send");
   const handleReceiveClick = () => navigate("/receive");
-  const handleMoreClick = () => console.log("더보기 클릭");
+  const handleMoreClick = () => {
+    window.open("https://x.com/KaiaPay", "_blank");
+  };
 
   // 거래 클릭 핸들러
   const handleTransactionClick = (transaction: Transaction) => {
