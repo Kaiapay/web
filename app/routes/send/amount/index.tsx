@@ -63,11 +63,10 @@ export default function SendAmount() {
           text: `${amount} ${selectedCurrencyCode} 받기`,
           url: link,
         });
-      } else {
-        // 공유 API를 지원하지 않는 브라우저를 위한 폴백
-        await navigator.clipboard.writeText(link);
-        alert("링크가 클립보드에 복사되었습니다.");
       }
+      await navigator.clipboard.writeText(link);
+      alert("링크가 클립보드에 복사되었습니다.");
+
       navigate("/home", { replace: true });
     } catch (error) {
       alert("링크 공유에 실패했습니다. 다시 시도해주세요.");
