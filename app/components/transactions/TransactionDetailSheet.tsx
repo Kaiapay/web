@@ -126,14 +126,21 @@ export default function TransactionDetailSheet({
           </div>
         </div>
 
-        {/* 출금 계좌 */}
+        {/* transaction explorer link */}
         <div className="bg-white/5 backdrop-blur-[14px] rounded-[16px] p-[14px_16px] flex flex-col gap-[16px]">
           <div className="flex justify-between items-center">
             <span className="text-white/50 text-[14px] font-normal leading-[1.571em] tracking-[-0.714%]">
-              출금 계좌
+              Explorer
             </span>
             <span className="text-white text-[14px] font-normal leading-[1.571em] tracking-[-0.714%]">
-              {transaction.fromAddress}
+              <a
+                href={`https://kaiascan.io/tx/${transaction.txHash}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {transaction.txHash!.slice(0, 6)}...
+                {transaction.txHash!.slice(-4)}
+              </a>
             </span>
           </div>
         </div>

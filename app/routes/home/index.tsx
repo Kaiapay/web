@@ -13,6 +13,7 @@ import {
 } from "~/generated/api";
 import BottomSheet from "~/components/BottomSheet";
 import ExclamationIcon from "~/components/icons/ExclamationIcon";
+import Alert from "~/components/Alert";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -21,6 +22,7 @@ export default function Home() {
     useState<GetTransactionList200TransactionsItem | null>(null);
   const [isDetailSheetOpen, setIsDetailSheetOpen] = useState(false);
   const [isPaymentPageSheetOpen, setIsPaymentPageSheetOpen] = useState(false);
+  const [isDesktopAlertOpen, setIsDesktopAlertOpen] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState("USDT");
 
   useUser();
@@ -41,7 +43,13 @@ export default function Home() {
   };
 
   // 액션 버튼 핸들러들
-  const handleFillClick = () => navigate("/fill");
+  const handleFillClick = () => {
+    if (!(window as any).klaytn) {
+      setIsDesktopAlertOpen(true);
+      return;
+    }
+    navigate("/fill");
+  };
   const handleSendClick = () => navigate("/send");
   const handleReceiveClick = () => navigate("/receive");
   const handleMoreClick = () => {
@@ -208,6 +216,18 @@ export default function Home() {
         <br />
         업데이트를 통해 제공될 예정입니다
       </BottomSheet>
+
+      {/* 데스크톱 지원 안내 Alert */}
+      <Alert
+        isOpen={isDesktopAlertOpen}
+        onClose={() => setIsDesktopAlertOpen(false)}
+        icon={<ExclamationIcon />}
+        title="준비중"
+        buttonText="확인"
+        onButtonClick={() => setIsDesktopAlertOpen(false)}
+      >
+        현재 채우기는 데스크톱에서만{'\n'}지원됩니다.
+      </Alert>
     </div>
   );
 }
