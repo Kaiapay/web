@@ -123,7 +123,11 @@ export default function Home() {
       label: "돈 받기",
       onClick: handleReceiveClick,
     },
-    { icon: "/icons/ellipsis.svg", label: "더보기", onClick: handleMoreClick },
+    {
+      icon: "/icons/x-logo.svg",
+      label: "X/Twitter",
+      onClick: handleMoreClick,
+    },
   ];
 
   // 전체 보기 핸들러
