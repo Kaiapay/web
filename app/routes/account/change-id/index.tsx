@@ -5,7 +5,10 @@ import InputResetIcon from "~/components/icons/InputResetIcon";
 import CheckSmallIcon from "~/components/icons/CheckSmallIcon";
 import XCircleIcon from "~/components/icons/XCircleIcon";
 import Button from "~/components/Button";
-import { usePutUpdateKaiapayId } from "~/generated/api";
+import {
+  usePutUpdateKaiapayId,
+  PutUpdateKaiapayIdMutationError
+} from "~/generated/api";
 import { useUser } from "~/stores/userStore";
 
 export default function ChangeIdPage() {
@@ -17,20 +20,13 @@ export default function ChangeIdPage() {
 
   const updateKaiapayIdMutation = usePutUpdateKaiapayId({
     mutation: {
-      onSuccess: (data) => {
-        // FIXME: 실제 서버 응답이 PutUpdateKaiapayId200와 다르게 나오고 있어 임시 any 캐스팅
-        const response = data as any;
-        if (response.success && response.result) {
-          refetchUser();
-          navigate(-1);
-        } else if (response.success === false && response.error) {
-          setErrorMessage(response.error || "아이디 변경에 실패했습니다.");
-        } else {
-          setErrorMessage("아이디 변경에 실패했습니다.");
-        }
+      onSuccess: () => {
+        refetchUser();
+        navigate(-1);
       },
-      onError: () => {
-        setErrorMessage("아이디 변경 중 오류가 발생했습니다.");
+      onError: (error: PutUpdateKaiapayIdMutationError) => {
+        const message = 'message' in error ? error.message : 'error' in error ? error.error : "아이디 변경 중 오류가 발생했습니다.";
+        setErrorMessage(message);
       },
     },
   });
