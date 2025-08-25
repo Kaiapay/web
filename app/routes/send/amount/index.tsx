@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { parseUnits } from "viem";
+import Alert from "~/components/Alert";
 import BottomSheet from "~/components/BottomSheet";
 import Button from "~/components/Button";
 import HeaderWithBackButton from "~/components/HeaderWithBackButton";
 import CurrencyInput from "~/components/fill/CurrencyInput";
 import ShareIcon from "~/components/icons/ShareIcon";
+import CheckIcon from "~/components/icons/CheckIcon";
 import {
   PostTransferWithLink200,
   PostTransferWithLinkBodyMethod,
@@ -22,6 +24,7 @@ export default function SendAmount() {
   const [selectedCurrencyCode, setSelectedCurrencyCode] = useState("USDT");
   const [amount, setAmount] = useState("0");
   const [isLinkSheetOpen, setIsLinkSheetOpen] = useState(false);
+  const [showCheckAnimation, setShowCheckAnimation] = useState(false);
 
   const { isPending, data: linkData, mutateAsync } = usePostTransferWithLink();
   const {
@@ -63,11 +66,14 @@ export default function SendAmount() {
           text: `${amount} ${selectedCurrencyCode} 받기`,
           url: link,
         });
-      } else {
-        // 공유 API를 지원하지 않는 브라우저를 위한 폴백
-        await navigator.clipboard.writeText(link);
-        alert("링크가 클립보드에 복사되었습니다.");
       }
+
+      await navigator.clipboard.writeText(link);
+      setShowCheckAnimation(true);
+      setTimeout(() => {
+        setShowCheckAnimation(false);
+      }, 2000);
+
       navigate("/home", { replace: true });
     } catch (error) {
       alert("링크 공유에 실패했습니다. 다시 시도해주세요.");
@@ -189,6 +195,16 @@ export default function SendAmount() {
           다른 사람이 링크를 열지 않도록 주의하세요
         </div>
       </BottomSheet>
+
+      <Alert
+        isOpen={showCheckAnimation}
+        onClose={() => setShowCheckAnimation(false)}
+        icon={<CheckIcon size={28} color="#10B981" />}
+        title="복사 완료"
+        buttonText="확인"
+      >
+        링크가 클립보드에 복사되었습니다
+      </Alert>
     </div>
   );
 }
