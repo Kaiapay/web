@@ -69,7 +69,7 @@ export default function Home() {
     setIsPaymentPageSheetOpen(false);
   };
 
-  const { data: transactions } = useGetTransactionList({
+  const { data: transactions, isLoading } = useGetTransactionList({
     limit: 5,
   });
 
@@ -156,8 +156,9 @@ export default function Home() {
         />
         <ActionButtons actions={actions} />
         <HomeContent
-          transactions={transactions?.transactions ?? []}
-          todayCount={transactions?.todayCount ?? 0}
+          isLoading={isLoading}
+          transactions={transactions?.transactions?.slice(0, 5)}
+          todayCount={transactions?.transactions?.length ?? 0}
           services={services}
           onViewAll={handleViewAll}
           onTransactionClick={handleTransactionClick}
