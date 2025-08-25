@@ -26,12 +26,12 @@ import PlaygroundPage from "./routes/playground";
 import PCPage from "./routes/pc";
 import SmartWalletDemoPage from "./routes/smart-wallet-demo";
 import ReceivePage from "./routes/receive";
-import { BufferDebug } from "./components/BufferDebug";
+// import { BufferDebug } from "./components/BufferDebug";
 
 export default function App() {
   return (
     <Providers>
-      <BufferDebug />
+      {/* <BufferDebug /> */}
       <QueryClientProvider client={queryClient}>
         <BrowserRouter>
           <Routes>
