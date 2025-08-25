@@ -1,5 +1,5 @@
-import React from 'react';
-import Button from './Button';
+import React from "react";
+import Button from "./Button";
 
 interface AlertProps {
   isOpen: boolean;
@@ -11,6 +11,7 @@ interface AlertProps {
   onButtonClick?: () => void;
   className?: string;
   overlay?: React.ReactNode;
+  isButtonLoading?: boolean;
 }
 
 const Alert: React.FC<AlertProps> = ({
@@ -22,7 +23,8 @@ const Alert: React.FC<AlertProps> = ({
   buttonText = "확인",
   onButtonClick,
   className = "",
-  overlay
+  overlay,
+  isButtonLoading = false,
 }) => {
   if (!isOpen) return null;
 
@@ -36,32 +38,26 @@ const Alert: React.FC<AlertProps> = ({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center">
       {/* 배경 오버레이 */}
-      {
-        overlay ?? <div
-        className={`absolute inset-0 transition-all duration-300 ${
-          isOpen ? "opacity-100" : "opacity-0"
-        }`}
-        style={{
-          backgroundColor: "rgba(0, 0, 0, 0.5)",
-          backdropFilter: "blur(8px)",
-          WebkitBackdropFilter: "blur(8px)",
-        }}
-      />
-      }
-      
+      {overlay ?? (
+        <div
+          className={`absolute inset-0 transition-all duration-300 ${
+            isOpen ? "opacity-100" : "opacity-0"
+          }`}
+          style={{
+            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            backdropFilter: "blur(8px)",
+            WebkitBackdropFilter: "blur(8px)",
+          }}
+        />
+      )}
 
-      
       {/* Alert 컨테이너 */}
-      <div 
+      <div
         className={`relative w-full mx-[20px] bg-white/10 border border-white/20 border-opacity-20 rounded-[44px] px-[20px] pt-[48px] pb-[20px] flex flex-col items-center gap-[24px] backdrop-blur-[14px] ${className}`}
         onClick={(e) => e.stopPropagation()}
       >
         {/* 아이콘 */}
-        {icon && (
-          <div className="w-7 h-7">
-            {icon}
-          </div>
-        )}
+        {icon && <div className="w-7 h-7">{icon}</div>}
 
         {/* 금액 */}
         {title && (
@@ -83,6 +79,7 @@ const Alert: React.FC<AlertProps> = ({
           textColor="text-black"
           onClick={handleButtonClick}
           className="font-semibold text-base leading-[1.375] tracking-[-0.02] w-full"
+          isLoading={isButtonLoading}
         >
           {buttonText}
         </Button>

@@ -36,7 +36,7 @@ export default function Home() {
   // 액션 버튼 핸들러들
   const handleFillClick = () => navigate("/fill");
   const handleSendClick = () => navigate("/send");
-  const handleReceiveClick = () => navigate("/receive-link");
+  const handleReceiveClick = () => navigate("/receive");
   const handleMoreClick = () => console.log("더보기 클릭");
 
   // 거래 클릭 핸들러

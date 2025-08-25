@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import BottomSheet from "../BottomSheet";
 import CheckIcon from "../icons/CheckIcon";
 import XCircleIcon from "../icons/XCircleIcon";
@@ -43,6 +43,24 @@ export default function BalanceSection({
   };
 
   const currentBalance = getCurrencyBalance(selectedCurrency, balanceProvider);
+
+  useEffect(() => {
+    // 페이지가 포커스될 때마다 잔액 새로고침
+    const handleFocus = () => {
+      balanceProvider.refreshBalances();
+    };
+
+    // 컴포넌트 마운트 시 잔액 새로고침
+    balanceProvider.refreshBalances();
+
+    // 이벤트 리스너 등록
+    window.addEventListener("focus", handleFocus);
+
+    // 컴포넌트 언마운트 시 이벤트 리스너 제거
+    return () => {
+      window.removeEventListener("focus", handleFocus);
+    };
+  }, []);
 
   return (
     <div className="text-center pt-[72px] pb-[48px] px-2 font-pretendard">

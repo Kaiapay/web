@@ -173,16 +173,18 @@ export default function Onboarding() {
               />
             </div>
           </div>
-
-          <Button
-            onClick={(e) => {
-              e.stopPropagation();
-              handleSignup();
-            }}
-          >
-            시작하기
-          </Button>
         </div>
+      </div>
+
+      <div className="fixed bottom-0 left-0 right-0 px-[16px] pb-[24px] bg-black">
+        <Button
+          onClick={(e) => {
+            e.stopPropagation();
+            handleSignup();
+          }}
+        >
+          시작하기
+        </Button>
       </div>
     </div>
   );
