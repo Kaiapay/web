@@ -67,7 +67,7 @@ export default function ReceiveLink() {
 
   useEffect(() => {
     if (!data?.transaction || isLoading) return;
-    if (data.transaction.status !== "pending") {
+    if (!data.transaction.canCancel) {
       alert("만료되었거나 이미 받기 완료된 링크입니다.");
       navigate("/home", { replace: true });
     }
@@ -110,26 +110,31 @@ export default function ReceiveLink() {
     const smartWallet = user?.linkedAccounts.find(
       (account) => account.type === "smart_wallet"
     );
+    try {
+      const { hash } = await writeContractFD({
+        address: KAIAPAY_VAULT_ADDRESS,
+        value: 0n,
+        abi: KAIAPAY_VAULT_ABI,
+        functionName: "transferToken",
+        args: [
+          senderAddress,
+          smartWallet?.address as `0x${string}`,
+          USDT_ADDRESS as `0x${string}`,
+          data.transaction.amount,
+          0n,
+          smartWallet?.address as `0x${string}`,
+        ],
+      });
 
-    const { hash } = await writeContractFD({
-      address: KAIAPAY_VAULT_ADDRESS,
-      value: 0n,
-      abi: KAIAPAY_VAULT_ABI,
-      functionName: "transferToken",
-      args: [
-        senderAddress,
-        smartWallet?.address as `0x${string}`,
-        USDT_ADDRESS as `0x${string}`,
-        data.transaction.amount,
-        0n,
-        smartWallet?.address as `0x${string}`,
-      ],
-    });
-
-    await postTransferFromLink({
-      prevTransactionId: data.transaction.id,
-      txHash: hash,
-    });
+      await postTransferFromLink({
+        prevTransactionId: data.transaction.id,
+        txHash: hash,
+      });
+    } catch (error) {
+      console.log(error);
+      alert("만료되었거나 이미 받기 완료된 링크입니다.");
+      navigate("/home", { replace: true });
+    }
   };
 
   if (isLoading || !data) {
