@@ -29,7 +29,8 @@ function getAccountFromCompressed(compressedKey: string) {
     const privateKeyBytes = bs58.decode(compressedKey);
 
     // hex 문자열로 변환하고 0x 접두사 추가
-    const privateKeyHex = Buffer.from(privateKeyBytes).toString("hex");
+    // @ts-ignore
+    const privateKeyHex = window.pBuffer.from(privateKeyBytes).toString("hex");
     const privateKey = `0x${privateKeyHex}` as const;
     const account = privateKeyToAccount(privateKey);
     const publicAddress = account.address;
@@ -39,6 +40,7 @@ function getAccountFromCompressed(compressedKey: string) {
       publicAddress,
     };
   } catch (error) {
+    console.log(error);
     throw new Error(`Failed to decompress private key from: ${compressedKey}`);
   }
 }
@@ -72,10 +74,6 @@ export default function ReceiveLink() {
       await handleReceive();
       setIsBottomSheetOpen(true);
     }
-  };
-
-  const onClose = () => {
-    navigate("/home");
   };
 
   const { writeContractFD, publicAddress: senderAddress } =

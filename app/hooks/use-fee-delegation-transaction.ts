@@ -1,15 +1,12 @@
-// src/hooks/useFeeDelegationTransaction.ts
 import {
   KaiaWalletClient,
   TxType,
   kaia,
   Account,
-  type PrepareTransactionRequestParameters,
   createPublicClient,
   http,
   encodeFunctionData,
   Hex,
-  SignTransactionParameters,
 } from "@kaiachain/viem-ext";
 import { KAIA_RPC_URL } from "~/lib/constants";
 import { postRelayFeePay } from "~/generated/api";
@@ -52,7 +49,7 @@ export const useFeeDelegationTransaction = (opts: Options) => {
       to: address,
       value: 0n,
       data,
-      gas: 1000000n,
+      gas: 1000000n, // 가스 estimate 계산을 막기 위해 필요
     });
 
     const signedTx2 = await walletClient.signTransaction(tx2);
