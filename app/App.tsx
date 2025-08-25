@@ -25,6 +25,7 @@ import ChangeIdPage from "./routes/account/change-id";
 import PlaygroundPage from "./routes/playground";
 import PCPage from "./routes/pc";
 import SmartWalletDemoPage from "./routes/smart-wallet-demo";
+import ReceivePage from "./routes/receive";
 
 export default function App() {
   return (
@@ -100,6 +101,14 @@ export default function App() {
               element={
                 <ProtectedRoute requireAuth={true}>
                   <FillPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/receive"
+              element={
+                <ProtectedRoute requireAuth={true}>
+                  <ReceivePage />
                 </ProtectedRoute>
               }
             />
