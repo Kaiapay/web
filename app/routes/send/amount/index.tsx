@@ -5,7 +5,11 @@ import Button from "~/components/Button";
 import HeaderWithBackButton from "~/components/HeaderWithBackButton";
 import CurrencyInput from "~/components/fill/CurrencyInput";
 import ShareIcon from "~/components/icons/ShareIcon";
-import { PostTransferWithLink200, PostTransferWithLinkBodyMethod, usePostTransferWithLink } from "~/generated/api";
+import {
+  PostTransferWithLink200,
+  PostTransferWithLinkBodyMethod,
+  usePostTransferWithLink,
+} from "~/generated/api";
 import { useKaiaPayPot } from "~/hooks/useKaiaPayPot";
 import useKaiaPayTransfer from "~/hooks/useKaiaPayTransfer";
 
@@ -18,8 +22,12 @@ export default function SendAmount() {
   const [isLinkSheetOpen, setIsLinkSheetOpen] = useState(false);
 
   const { isPending, data: linkData, mutateAsync } = usePostTransferWithLink();
-  const { transferToken, isLoading: isTransferLoading, error: transferError } = useKaiaPayTransfer();
-  
+  const {
+    transferToken,
+    isLoading: isTransferLoading,
+    error: transferError,
+  } = useKaiaPayTransfer();
+
   const isLinkLoading = {
     link: isPending || isTransferLoading,
     phone: false,
@@ -39,28 +47,28 @@ export default function SendAmount() {
   };
 
   const handleShareLink = async () => {
-    const {  link  } = linkData  as PostTransferWithLink200;
+    const { link } = linkData as PostTransferWithLink200;
 
     try {
       if (!link) {
-        alert('링크가 생성되지 않았습니다. 다시 시도해주세요.');
+        alert("링크가 생성되지 않았습니다. 다시 시도해주세요.");
         return;
       }
-  
+
       if (navigator.share) {
         await navigator.share({
-          title: 'KaiaPay 송금 링크',
+          title: "KaiaPay 송금 링크",
           text: `${amount} ${selectedCurrencyCode} 받기`,
-          url: link
+          url: link,
         });
       } else {
         // 공유 API를 지원하지 않는 브라우저를 위한 폴백
         await navigator.clipboard.writeText(link);
-        alert('링크가 클립보드에 복사되었습니다.');
+        alert("링크가 클립보드에 복사되었습니다.");
       }
-      navigate("/home", {replace: true});
+      navigate("/home", { replace: true });
     } catch (error) {
-      alert('링크 공유에 실패했습니다. 다시 시도해주세요.');
+      alert("링크 공유에 실패했습니다. 다시 시도해주세요.");
     }
   };
 
@@ -96,20 +104,21 @@ export default function SendAmount() {
         },
       });
 
-      const {  publicAddress  } = data;
+      const { publicAddress, transactionId } = data;
 
       try {
         await transferToken({
+          transactionId,
           toAddress: publicAddress,
           amount: `${amount}`,
           onSuccess: () => {
             setIsLinkSheetOpen(true);
-          }
+          },
         });
       } catch (error) {
         alert(`트랜잭션에 실패했습니다. ${transferError}`);
       }
-      
+
       return;
     }
 
@@ -154,7 +163,9 @@ export default function SendAmount() {
         <Button
           onClick={handleNext}
           isLoading={isLinkLoading[via as keyof typeof isLinkLoading]}
-          disabled={isLinkLoading[via as keyof typeof isLinkLoading] || !canProceed()}
+          disabled={
+            isLinkLoading[via as keyof typeof isLinkLoading] || !canProceed()
+          }
         >
           {via === "link" ? "보내기" : "다음"}
         </Button>

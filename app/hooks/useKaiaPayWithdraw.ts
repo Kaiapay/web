@@ -3,6 +3,7 @@ import { usePrivy } from "@privy-io/react-auth";
 import { useSmartWallets } from "@privy-io/react-auth/smart-wallets";
 import { encodeFunctionData } from "viem";
 import { KAIAPAY_VAULT_ADDRESS, USDT_ADDRESS } from "../lib/constants";
+import { postConfirmTransfer } from "~/generated/api";
 
 // KaiaPayVault ABI for transferToken function
 const KAIAPAY_VAULT_ABI = [
@@ -20,6 +21,7 @@ const KAIAPAY_VAULT_ABI = [
 ] as const;
 
 export interface TransferParams {
+  transactionId: string;
   toAddress: string;
   amount: string; // In USDT (e.g., "1.5")
   onSuccess?: () => void; // Optional callback to refresh balances or other actions
@@ -42,6 +44,7 @@ export function useKaiaPayWithdraw() {
   );
 
   const transferToken = async ({
+    transactionId,
     toAddress,
     amount,
     onSuccess,
@@ -66,8 +69,6 @@ export function useKaiaPayWithdraw() {
     setError("");
 
     try {
-      const fromAddress = smartWallet.address;
-
       // Convert amount to wei (USDT has 6 decimals)
       const amountWei = BigInt(parseFloat(amount) * 1000000);
 
@@ -94,8 +95,8 @@ export function useKaiaPayWithdraw() {
         explorerUrl: `https://kaiachain.io/tx/${hash}`,
       };
 
-      // TODO: Send txHash to API here?
-
+      // Send txHash to API here
+      postConfirmTransfer({ transactionId, txHash: hash });
       // Call success callback to refresh balances
       onSuccess?.();
 

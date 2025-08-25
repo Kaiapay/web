@@ -2,7 +2,7 @@ function parseCookie(cookie: string) {
   return cookie.split(";").reduce(
     (acc, curr) => {
       const [key, value] = curr.split("=");
-      acc[key.trim()] = value.trim();
+      acc[key.trim()] = value ? value.trim() : "";
       return acc;
     },
     {} as Record<string, string>
@@ -36,18 +36,19 @@ export const customInstance = async <T>({
 
   const cookie = parseCookie(document.cookie);
   // 헤더 설정
-  const defaultHeaders: Record<string, string> = {
+  const defaultHeaders: Record<string, string | undefined> = {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${cookie["privy-token"]}`,
+    Authorization: cookie["privy-token"] ? `Bearer ${cookie["privy-token"]}`: undefined,
     ...headers,
   };
 
   try {
     const response = await fetch(finalUrl, {
       method,
-      headers: defaultHeaders,
+      headers: Object.fromEntries(
+        Object.entries(defaultHeaders).filter(([_, value]) => value !== undefined)
+      ) as Record<string, string>,
       body: data ? JSON.stringify(data) : undefined,
-      signal,
     });
 
     if (!response.ok) {

@@ -9,6 +9,19 @@ import DownloadIcon from "~/components/icons/DownloadIcon";
 import useWindowSize from "~/hooks/use-window-size";
 import { privateKeyToAccount } from "viem/accounts";
 import { useCustomPrivy } from "~/hooks/use-custom-privy";
+import {
+  useGetPublicTransactionGetByToAddress,
+  useGetUserMe,
+} from "~/generated/api";
+import { useFeeDelegationTransaction } from "~/hooks/use-fee-delegation-transaction";
+import { createWalletClient, http, kaia } from "@kaiachain/viem-ext";
+import { getHttpRpcClient } from "viem/utils";
+import {
+  KAIA_RPC_URL,
+  KAIAPAY_VAULT_ADDRESS,
+  USDT_ADDRESS,
+} from "~/lib/constants";
+import { KAIAPAY_VAULT_ABI } from "~/hooks/useKaiaPayTransfer";
 
 function getAccountFromCompressed(compressedKey: string) {
   try {
@@ -29,13 +42,17 @@ function getAccountFromCompressed(compressedKey: string) {
     throw new Error(`Failed to decompress private key from: ${compressedKey}`);
   }
 }
+
 export default function ReceiveLink() {
   const { hash } = useParams<{ hash: string }>();
-  const { login, authenticated } = useCustomPrivy();
+  const { login, authenticated, user } = useCustomPrivy();
 
-  const { publicAddress } = getAccountFromCompressed(hash!);
-  console.log(publicAddress);
-  const isExpoApp = /Expo/.test(navigator.userAgent);
+  const { publicAddress, privateKey } = getAccountFromCompressed(hash!);
+
+  const { data, isLoading } = useGetPublicTransactionGetByToAddress({
+    address: publicAddress,
+  });
+
   const navigate = useNavigate();
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const { height: windowHeight } = useWindowSize();
@@ -46,17 +63,13 @@ export default function ReceiveLink() {
     setIsBottomSheetOpen(false);
   };
 
-  const handleErrorSheetButtonClick = () => {
-    setIsBottomSheetOpen(false);
-    navigate("/home");
-  };
-
   const onButtonClick = async () => {
     // 로그인이 안되어있으면 privy 로그인
     if (!authenticated) {
       await login();
       return;
     } else {
+      await handleReceive();
       setIsBottomSheetOpen(true);
     }
   };
@@ -64,6 +77,59 @@ export default function ReceiveLink() {
   const onClose = () => {
     navigate("/home");
   };
+
+  const { writeContractFD, publicAddress: senderAddress } =
+    useFeeDelegationTransaction({
+      walletClient: createWalletClient({
+        chain: kaia,
+        transport: http(KAIA_RPC_URL),
+        account: privateKeyToAccount(privateKey as `0x${string}`),
+      }),
+    });
+
+  const handleErrorSheetButtonClick = async () => {
+    setIsBottomSheetOpen(false);
+    navigate("/home");
+  };
+
+  const handleReceive = async () => {
+    if (!data) return;
+
+    const smartWallet = user?.linkedAccounts.find(
+      (account) => account.type === "smart_wallet"
+    );
+
+    const amountWei = BigInt(parseFloat(data.transaction.amount) * 1000000);
+
+    console.log(
+      senderAddress,
+      smartWallet?.address as `0x${string}`,
+      USDT_ADDRESS as `0x${string}`,
+      amountWei,
+      0n,
+      smartWallet?.address as `0x${string}`
+    );
+    const { hash } = await writeContractFD({
+      address: KAIAPAY_VAULT_ADDRESS,
+      value: 0n,
+      abi: KAIAPAY_VAULT_ABI,
+      functionName: "transferToken",
+      args: [
+        senderAddress,
+        smartWallet?.address as `0x${string}`,
+        USDT_ADDRESS as `0x${string}`,
+        amountWei,
+        0n,
+        smartWallet?.address as `0x${string}`,
+      ],
+    });
+    console.log(hash);
+  };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div
       className="flex flex-col h-screen gap-2 bg-cover bg-center overflow-hidden"
@@ -75,36 +141,26 @@ export default function ReceiveLink() {
         isOpen={true}
         onClose={() => {}}
         icon={<DownloadIcon />}
-        title="10.50 USDT"
+        title={`${data?.transaction.amount} USDT`}
         buttonText="받기"
         onButtonClick={onButtonClick}
         overlay={<div className="" />}
       >
-        @김카이아님이 보냈어요 <br />
+        {data?.transaction.senderAlias}님이 보냈어요 <br />
         아래 '받기' 버튼을 눌러야 송금이 완료돼요
       </Alert>
-      {isExpoApp ? (
-        <div className="h-16 flex justify-start items-center pr-4">
-          <button
-            className="w-16 h-16 flex justify-center items-center transition-all duration-200 hover:opacity-50 active:opacity-50 z-55"
-            onClick={onClose}
-          >
-            <CloseXIcon />
-          </button>
-        </div>
-      ) : (
-        <div
-          className="h-16 flex justify-start items-center pr-4"
-          style={{
-            backgroundImage: "url('/logo.png')",
-            backgroundSize: "contain",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-            height: "32px",
-            marginTop: `${logoMt}px`,
-          }}
-        />
-      )}
+
+      <div
+        className="h-16 flex justify-start items-center pr-4"
+        style={{
+          backgroundImage: "url('/logo.png')",
+          backgroundSize: "contain",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          height: "32px",
+          marginTop: `${logoMt}px`,
+        }}
+      />
 
       <BottomSheet
         isOpen={isBottomSheetOpen}

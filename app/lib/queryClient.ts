@@ -1,4 +1,4 @@
-import { QueryClient } from '@tanstack/react-query';
+import { QueryClient } from "@tanstack/react-query";
 
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -7,6 +7,7 @@ export const queryClient = new QueryClient({
       gcTime: 1000 * 60 * 10, // 10분 (이전 cacheTime)
       retry: 1,
       refetchOnWindowFocus: false,
+      throwOnError: true,
     },
     mutations: {
       retry: 1,

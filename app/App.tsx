@@ -119,14 +119,16 @@ export default function App() {
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="/i/:hash"
               element={
-                <ProtectedRoute requireAuth={true}>
-                  <ReceiveLinkPage />
-                </ProtectedRoute>
+                // <ProtectedRoute requireAuth={false}>
+                <ReceiveLinkPage />
+                // </ProtectedRoute>
               }
             />
+
             <Route
               path="/kaiapay-card"
               element={

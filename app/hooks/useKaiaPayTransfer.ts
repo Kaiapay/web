@@ -3,9 +3,10 @@ import { usePrivy } from "@privy-io/react-auth";
 import { useSmartWallets } from "@privy-io/react-auth/smart-wallets";
 import { encodeFunctionData } from "viem";
 import { KAIAPAY_VAULT_ADDRESS, USDT_ADDRESS } from "../lib/constants";
+import { postConfirmTransfer } from "~/generated/api";
 
 // KaiaPayVault ABI for transferToken function
-const KAIAPAY_VAULT_ABI = [
+export const KAIAPAY_VAULT_ABI = [
   {
     inputs: [
       { name: "from", type: "address" },
@@ -23,6 +24,7 @@ const KAIAPAY_VAULT_ABI = [
 ] as const;
 
 export interface TransferParams {
+  transactionId: string;
   toAddress: string;
   amount: string; // In USDT (e.g., "1.5")
   isTemporaryWallet?: boolean; // If true, creates temporary wallet with 24h deadline
@@ -46,6 +48,7 @@ export function useKaiaPayTransfer() {
   );
 
   const transferToken = async ({
+    transactionId,
     toAddress,
     amount,
     isTemporaryWallet = true,
@@ -86,6 +89,14 @@ export function useKaiaPayTransfer() {
         ? fromAddress // For temporary wallets, owner is the sender (smart wallet)
         : toAddress; // For regular transfers, owner is the recipient
 
+      console.log([
+        fromAddress as `0x${string}`,
+        toAddress as `0x${string}`,
+        USDT_ADDRESS as `0x${string}`,
+        amountWei,
+        deadline,
+        owner as `0x${string}`,
+      ]);
       // Encode the function call
       const data = encodeFunctionData({
         abi: KAIAPAY_VAULT_ABI,
@@ -112,7 +123,8 @@ export function useKaiaPayTransfer() {
         explorerUrl: `https://kaiachain.io/tx/${hash}`,
       };
 
-      // TODO: Send txHash to API here?
+      // Send txHash to API here
+      postConfirmTransfer({ transactionId, txHash: hash });
 
       // Call success callback to refresh balances
       onSuccess?.();

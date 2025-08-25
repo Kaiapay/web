@@ -16,13 +16,13 @@ interface IFormInput {
 }
 
 export default function SendViaWalletAddress() {
-  const {mutateAsync, isPending } = usePostTransferWithExternalAddress();
+  const { mutateAsync, isPending } = usePostTransferWithExternalAddress();
   const {
     transferToken,
     isLoading: isTransferLoading,
     error: transferError,
   } = useKaiaPayWithdraw();
-  
+
   const [searchParams] = useSearchParams();
   const amount = searchParams.get("amount");
 
@@ -38,7 +38,6 @@ export default function SendViaWalletAddress() {
   const [isBottomSheetOpen, setIsBottomSheetOpen] = useState(false);
   const navigate = useNavigate();
   const isLoading = isPending || isTransferLoading;
-  
 
   const handleErrorSheetClose = () => {
     setIsBottomSheetOpen(false);
@@ -59,15 +58,17 @@ export default function SendViaWalletAddress() {
       return;
     }
 
-    await mutateAsync({data: {
-      amount: `${amount}`,
-      token: "USDT",
-      address: submitData.walletAddress,
-    }});
-
+    const { transactionId } = await mutateAsync({
+      data: {
+        amount: `${amount}`,
+        token: "USDT",
+        address: submitData.walletAddress,
+      },
+    });
 
     try {
       await transferToken({
+        transactionId,
         toAddress: submitData.walletAddress,
         amount: `${amount}`,
         onSuccess: () => {

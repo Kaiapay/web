@@ -62,10 +62,11 @@ export default function SendViaPhone() {
       },
     });
 
-    const { publicAddress, link } = data;
+    const { publicAddress, link, transactionId } = data;
 
     try {
       await transferToken({
+        transactionId,
         toAddress: publicAddress,
         amount: `${amount}`,
         onSuccess: () => {

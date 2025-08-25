@@ -17,6 +17,7 @@ export default defineConfig({
           useMutation: true,
           useInfinite: false,
           useInfiniteQueryParam: "pageParam",
+         
         },
       },
     },

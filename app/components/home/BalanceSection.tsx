@@ -9,7 +9,6 @@ import { getCurrencyBalance } from "~/lib/currency";
 import { useBalance } from "~/contexts/BalanceContext";
 
 interface BalanceSectionProps {
-  balance: string;
   interest: string;
   onInterestClick: () => void;
   selectedCurrency?: string;
@@ -17,7 +16,6 @@ interface BalanceSectionProps {
 }
 
 export default function BalanceSection({
-  balance,
   interest,
   onInterestClick,
   selectedCurrency = "USDT",
@@ -64,9 +62,7 @@ export default function BalanceSection({
                 </span>
               );
             }
-            return (
-              <span className="text-[24px] ml-2">{selectedCurrency}</span>
-            );
+            return <span className="text-[24px] ml-2">{selectedCurrency}</span>;
           })()}
         </h1>
         {onCurrencyChange && (

@@ -1,5 +1,11 @@
 // src/hooks/useFeeDelegationTransaction.ts
-import { createPublicClient, http, encodeFunctionData, Hex } from "viem";
+import {
+  createPublicClient,
+  http,
+  encodeFunctionData,
+  Hex,
+  Account,
+} from "viem";
 import {
   TxType,
   kaia,
@@ -27,6 +33,7 @@ type Options = {
       method: string;
       params?: any[];
     }) => Promise<T>;
+    account: Account;
   };
 };
 
@@ -72,6 +79,7 @@ export const useFeeDelegationTransaction = (opts: Options) => {
   return {
     publicClient,
     walletClient,
+    publicAddress: walletClient.account.address,
     writeContractFD,
   };
 };

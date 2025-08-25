@@ -41,6 +41,11 @@ export const useCustomPrivy = (): UsePrivyLoginReturn => {
   const { fundWallet: privyFundWallet } = useFundWallet();
   const { wallets: connectedWallets } = useWallets();
 
+  const smartWallet = user?.linkedAccounts.find(
+    (account) => account.type === "smart_wallet"
+  );
+  console.log(`smartwallet address: ${smartWallet?.address}`);
+
   // Local state
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 

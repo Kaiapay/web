@@ -17,7 +17,7 @@ export default function Home() {
   const [isDetailSheetOpen, setIsDetailSheetOpen] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState("USDT");
   useUser();
-  
+
   // 검색 핸들러
   const handleSearchChange = (query: string) => {
     setSearchQuery(query);
@@ -36,8 +36,7 @@ export default function Home() {
   // 액션 버튼 핸들러들
   const handleFillClick = () => navigate("/fill");
   const handleSendClick = () => navigate("/send");
-  const handleReceiveClick = () =>
-    navigate("/receive-link");
+  const handleReceiveClick = () => navigate("/receive-link");
   const handleMoreClick = () => console.log("더보기 클릭");
 
   // 거래 클릭 핸들러
@@ -117,7 +116,11 @@ export default function Home() {
   const actions = [
     { icon: "/icons/plus.svg", label: "채우기", onClick: handleFillClick },
     { icon: "/icons/send.svg", label: "보내기", onClick: handleSendClick },
-    { icon: "/icons/download.svg", label: "돈 받기", onClick: handleReceiveClick },
+    {
+      icon: "/icons/download.svg",
+      label: "돈 받기",
+      onClick: handleReceiveClick,
+    },
     { icon: "/icons/ellipsis.svg", label: "더보기", onClick: handleMoreClick },
   ];
 
@@ -151,7 +154,6 @@ export default function Home() {
           onSearchChange={handleSearchChange}
         />
         <BalanceSection
-          balance="10.43"
           interest="1.02 USDT"
           onInterestClick={handleInterestClick}
           selectedCurrency={selectedCurrency}
@@ -177,4 +179,3 @@ export default function Home() {
     </div>
   );
 }
-
