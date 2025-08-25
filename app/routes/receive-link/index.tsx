@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import bs58 from "bs58";
 import Alert from "~/components/Alert";
@@ -61,6 +61,14 @@ export default function ReceiveLink() {
   const { height: windowHeight } = useWindowSize();
 
   const logoMt = windowHeight / 2 - 144 - 62;
+
+  useEffect(() => {
+    if (!data?.transaction || isLoading) return;
+    if (data.transaction.status !== "pending") {
+      alert("만료되었거나 이미 받기 완료된 링크입니다.");
+      navigate("/home", { replace: true });
+    }
+  }, [data]);
 
   const handleErrorSheetClose = () => {
     setIsBottomSheetOpen(false);
