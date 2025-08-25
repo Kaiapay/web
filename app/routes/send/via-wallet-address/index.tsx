@@ -11,6 +11,7 @@ import InputResetIcon from "~/components/icons/InputResetIcon";
 import XCircleIcon from "~/components/icons/XCircleIcon";
 import { usePostTransferWithExternalAddress } from "~/generated/api";
 import useKaiaPayWithdraw from "~/hooks/useKaiaPayWithdraw";
+import { USDT_ADDRESS } from "~/lib/constants";
 
 interface IFormInput {
   walletAddress: string;
@@ -62,7 +63,7 @@ export default function SendViaWalletAddress() {
     const { transactionId } = await mutateAsync({
       data: {
         amount: parseUnits(amount!, 6).toString(),
-        token: "USDT",
+        token: USDT_ADDRESS,
         address: submitData.walletAddress,
       },
     });

@@ -13,6 +13,7 @@ import {
 } from "~/generated/api";
 import { useCustomPrivy } from "~/hooks/use-custom-privy";
 import useKaiaPayTransfer from "~/hooks/useKaiaPayTransfer";
+import { USDT_ADDRESS } from "~/lib/constants";
 
 interface IFormInput {
   phoneNumber: string;
@@ -57,7 +58,7 @@ export default function SendViaPhone() {
     const data = await mutateAsync({
       data: {
         amount: parseUnits(amount!, 6).toString(),
-        token: "USDT",
+        token: USDT_ADDRESS,
         method: PostTransferWithLinkBodyMethod.phone,
         phone: submitData.phoneNumber,
       },
@@ -79,6 +80,7 @@ export default function SendViaPhone() {
           }&body=${encodeURIComponent(message)}`;
           window.location.href = smsUrl;
         },
+        isTemporaryWallet: true,
       });
       setIsLinkSheetOpen(true);
     } catch (error) {

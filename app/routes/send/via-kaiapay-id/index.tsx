@@ -14,6 +14,7 @@ import {
   usePostTransferWithKaiapayId,
 } from "~/generated/api";
 import useKaiaPayTransfer from "~/hooks/useKaiaPayTransfer";
+import { USDT_ADDRESS } from "~/lib/constants";
 
 interface IFormInput {
   kaiapayId: string;
@@ -67,7 +68,7 @@ export default function SendViaKaiapayId() {
     try {
       const result = await postTransferWithKaiapayId({
         amount: parseUnits(amount!, 6).toString(),
-        token: "USDT",
+        token: USDT_ADDRESS,
         kaiapayId: submitData.kaiapayId,
       });
 
@@ -80,6 +81,7 @@ export default function SendViaKaiapayId() {
           onSuccess: () => {
             setIsBottomSheetOpen(true);
           },
+          isTemporaryWallet: false,
         });
       } catch (error) {
         alert(`트랜잭션에 실패했습니다. ${transferError}`);

@@ -7,7 +7,10 @@ import CheckIcon from "~/components/icons/CheckIcon";
 import DownloadIcon from "~/components/icons/DownloadIcon";
 import useWindowSize from "~/hooks/use-window-size";
 import { useCustomPrivy } from "~/hooks/use-custom-privy";
-import { useGetPublicTransactionGetByToAddress } from "~/generated/api";
+import {
+  postTransferFromLink,
+  useGetPublicTransactionGetByToAddress,
+} from "~/generated/api";
 import { useFeeDelegationTransaction } from "~/hooks/use-fee-delegation-transaction";
 import {
   createWalletClient,
@@ -50,7 +53,7 @@ export default function ReceiveLink() {
   const { login, authenticated, user } = useCustomPrivy();
 
   const { publicAddress, privateKey } = getAccountFromCompressed(hash!);
-
+  console.log({ publicAddress });
   const { data, isLoading } = useGetPublicTransactionGetByToAddress({
     address: publicAddress,
   });
@@ -111,7 +114,11 @@ export default function ReceiveLink() {
         smartWallet?.address as `0x${string}`,
       ],
     });
-    console.log(hash);
+
+    await postTransferFromLink({
+      prevTransactionId: data.transaction.id,
+      txHash: hash,
+    });
   };
 
   if (isLoading || !data) {

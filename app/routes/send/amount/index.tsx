@@ -13,6 +13,7 @@ import {
 } from "~/generated/api";
 import { useKaiaPayPot } from "~/hooks/useKaiaPayPot";
 import useKaiaPayTransfer from "~/hooks/useKaiaPayTransfer";
+import { USDT_ADDRESS } from "~/lib/constants";
 
 export default function SendAmount() {
   const [searchParams] = useSearchParams();
@@ -101,7 +102,7 @@ export default function SendAmount() {
       const data = await mutateAsync({
         data: {
           amount: parseUnits(amount, 6).toString(),
-          token: selectedCurrencyCode,
+          token: USDT_ADDRESS,
           method: PostTransferWithLinkBodyMethod.link,
         },
       });
@@ -116,6 +117,7 @@ export default function SendAmount() {
           onSuccess: () => {
             setIsLinkSheetOpen(true);
           },
+          isTemporaryWallet: true,
         });
       } catch (error) {
         alert(`트랜잭션에 실패했습니다. ${transferError}`);
