@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import HeaderWithBackButton from "~/components/HeaderWithBackButton";
 import InputResetIcon from "~/components/icons/InputResetIcon";
@@ -17,10 +17,18 @@ export default function ChangeIdPage() {
   const [id, setId] = useState(user?.kaiapayId ? `@${user.kaiapayId}` : "");
   const [isValid, setIsValid] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
 
   const updateKaiapayIdMutation = usePutUpdateKaiapayId({
     mutation: {
-      onSuccess: () => {
+      onSuccess: (data) => {
+        console.log(data);
         refetchUser();
         navigate(-1);
       },
@@ -91,6 +99,7 @@ export default function ChangeIdPage() {
               @
             </div>
             <input
+              ref={inputRef}
               type="text"
               className="bg-transparent outline-none text-white font-normal text-[16px] leading-[22px] tracking-[-0.1px]"
               placeholder="아이디"
