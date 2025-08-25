@@ -37,6 +37,8 @@ export class TransactionUtils {
             ? `${transaction.recipientAlias}`
             : transaction.kind === "send_to_temporal"
             ? ""
+            : transaction.kind === "receive"
+            ? transaction.senderAlias
             : transaction.toAddress;
 
           return (
