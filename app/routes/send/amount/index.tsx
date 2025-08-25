@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { formatUnits, parseUnits } from "viem";
 import BottomSheet from "~/components/BottomSheet";
 import Button from "~/components/Button";
 import HeaderWithBackButton from "~/components/HeaderWithBackButton";
@@ -94,11 +95,12 @@ export default function SendAmount() {
     return inputAmount > 0 && inputAmount <= currentBalance;
   };
 
+  console.log(amount);
   const handleNext = async () => {
     if (via === "link") {
       const data = await mutateAsync({
         data: {
-          amount: `${amount}`,
+          amount: parseUnits(amount, 6).toString(),
           token: selectedCurrencyCode,
           method: PostTransferWithLinkBodyMethod.link,
         },

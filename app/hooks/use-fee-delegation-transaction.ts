@@ -1,15 +1,15 @@
 // src/hooks/useFeeDelegationTransaction.ts
 import {
+  KaiaWalletClient,
+  TxType,
+  kaia,
+  Account,
+  type PrepareTransactionRequestParameters,
   createPublicClient,
   http,
   encodeFunctionData,
   Hex,
-  Account,
-} from "viem";
-import {
-  TxType,
-  kaia,
-  type PrepareTransactionRequestParameters,
+  SignTransactionParameters,
 } from "@kaiachain/viem-ext";
 import { KAIA_RPC_URL } from "~/lib/constants";
 import { postRelayFeePay } from "~/generated/api";
@@ -24,17 +24,7 @@ type WriteParams = {
 };
 
 type Options = {
-  walletClient: {
-    signTransaction: (tx: PrepareTransactionRequestParameters) => Promise<Hex>;
-    prepareTransactionRequest: (
-      tx: PrepareTransactionRequestParameters
-    ) => Promise<PrepareTransactionRequestParameters>;
-    request: <T = unknown>(args: {
-      method: string;
-      params?: any[];
-    }) => Promise<T>;
-    account: Account;
-  };
+  walletClient: KaiaWalletClient<Account>;
 };
 
 export const useFeeDelegationTransaction = (opts: Options) => {
@@ -52,34 +42,29 @@ export const useFeeDelegationTransaction = (opts: Options) => {
     return res.hash as `0x${string}`;
   }
 
-  async function signAndRelay(txReq: PrepareTransactionRequestParameters) {
-    const userSignedTx = await walletClient.signTransaction(txReq);
-    const hash = await postToRelay(userSignedTx);
-    const receipt = await publicClient.waitForTransactionReceipt({ hash });
-    return { hash, receipt };
-  }
-
   async function writeContractFD(params: WriteParams) {
-    const { abi, address, functionName, args = [], value = 0n, gas } = params;
+    const { abi, address, functionName, args = [] } = params;
     const data = encodeFunctionData({ abi, functionName, args });
 
-    const base: PrepareTransactionRequestParameters = {
-      type: TxType.FeeDelegatedSmartContractExecution as any,
-      chain: kaia,
+    const tx2 = await walletClient.prepareTransactionRequest({
+      type: TxType.FeeDelegatedSmartContractExecution,
+      account: walletClient.account,
       to: address,
+      value: 0n,
       data,
-      value,
-      ...(gas ? { gas } : {}),
-    };
+      gas: 1000000n,
+    });
 
-    const txReq = await walletClient.prepareTransactionRequest(base);
-    return await signAndRelay(txReq);
+    const signedTx2 = await walletClient.signTransaction(tx2);
+    const hash = await postToRelay(signedTx2 as `0x${string}`);
+
+    return { hash };
   }
 
   return {
     publicClient,
     walletClient,
-    publicAddress: walletClient.account.address,
+    publicAddress: (walletClient.account as any).address as `0x${string}`,
     writeContractFD,
   };
 };

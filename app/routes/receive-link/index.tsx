@@ -1,21 +1,21 @@
-import { useEffect, useState } from "react";
-import { replace, useNavigate, useParams } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import bs58 from "bs58";
 import Alert from "~/components/Alert";
 import BottomSheet from "~/components/BottomSheet";
 import CheckIcon from "~/components/icons/CheckIcon";
-import CloseXIcon from "~/components/icons/CloseXIcon";
 import DownloadIcon from "~/components/icons/DownloadIcon";
 import useWindowSize from "~/hooks/use-window-size";
-import { privateKeyToAccount } from "viem/accounts";
 import { useCustomPrivy } from "~/hooks/use-custom-privy";
-import {
-  useGetPublicTransactionGetByToAddress,
-  useGetUserMe,
-} from "~/generated/api";
+import { useGetPublicTransactionGetByToAddress } from "~/generated/api";
 import { useFeeDelegationTransaction } from "~/hooks/use-fee-delegation-transaction";
-import { createWalletClient, http, kaia } from "@kaiachain/viem-ext";
-import { getHttpRpcClient } from "viem/utils";
+import {
+  createWalletClient,
+  http,
+  kaia,
+  privateKeyToAccount,
+} from "@kaiachain/viem-ext";
+import { formatUnits } from "viem/utils";
 import {
   KAIA_RPC_URL,
   KAIAPAY_VAULT_ADDRESS,
@@ -99,16 +99,6 @@ export default function ReceiveLink() {
       (account) => account.type === "smart_wallet"
     );
 
-    const amountWei = BigInt(parseFloat(data.transaction.amount) * 1000000);
-
-    console.log(
-      senderAddress,
-      smartWallet?.address as `0x${string}`,
-      USDT_ADDRESS as `0x${string}`,
-      amountWei,
-      0n,
-      smartWallet?.address as `0x${string}`
-    );
     const { hash } = await writeContractFD({
       address: KAIAPAY_VAULT_ADDRESS,
       value: 0n,
@@ -118,7 +108,7 @@ export default function ReceiveLink() {
         senderAddress,
         smartWallet?.address as `0x${string}`,
         USDT_ADDRESS as `0x${string}`,
-        amountWei,
+        data.transaction.amount,
         0n,
         smartWallet?.address as `0x${string}`,
       ],
@@ -126,8 +116,8 @@ export default function ReceiveLink() {
     console.log(hash);
   };
 
-  if (isLoading) {
-    return <div>Loading...</div>;
+  if (isLoading || !data) {
+    return <div></div>;
   }
 
   return (
@@ -141,7 +131,7 @@ export default function ReceiveLink() {
         isOpen={true}
         onClose={() => {}}
         icon={<DownloadIcon />}
-        title={`${data?.transaction.amount} USDT`}
+        title={`${formatUnits(BigInt(data?.transaction.amount!), 6)} USDT`}
         buttonText="받기"
         onButtonClick={onButtonClick}
         overlay={<div className="" />}

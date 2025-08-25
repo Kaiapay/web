@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { parseUnits } from "viem";
 import BottomSheet from "~/components/BottomSheet";
 import Button from "~/components/Button";
 import HeaderWithBackButton from "~/components/HeaderWithBackButton";
@@ -65,7 +66,7 @@ export default function SendViaKaiapayId() {
 
     try {
       const result = await postTransferWithKaiapayId({
-        amount: `${amount}`,
+        amount: parseUnits(amount!, 6).toString(),
         token: "USDT",
         kaiapayId: submitData.kaiapayId,
       });
