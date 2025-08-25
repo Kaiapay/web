@@ -121,7 +121,7 @@ export default function BalanceSection({
           <>
             받을 이자가 없어요.
             <br />
-            현재 이율 약 1.02%
+            현재 이율 약 5.02%
           </>
         ) : (
           <>
@@ -134,6 +134,7 @@ export default function BalanceSection({
 
       {/* 통화 선택 시트 */}
       <CurrencySelector
+        balance={currentBalance}
         isOpen={isCurrencySelectorOpen}
         onClose={() => setIsCurrencySelectorOpen(false)}
         onCurrencySelect={handleCurrencySelect}

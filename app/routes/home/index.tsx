@@ -40,7 +40,9 @@ export default function Home() {
   const handleFillClick = () => navigate("/fill");
   const handleSendClick = () => navigate("/send");
   const handleReceiveClick = () => navigate("/receive");
-  const handleMoreClick = () => console.log("더보기 클릭");
+  const handleMoreClick = () => {
+    window.open("https://x.com/KaiaPay", "_blank");
+  };
 
   // 거래 클릭 핸들러
   const handleTransactionClick = (
@@ -97,7 +99,11 @@ export default function Home() {
       label: "돈 받기",
       onClick: handleReceiveClick,
     },
-    { icon: "/icons/ellipsis.svg", label: "더보기", onClick: handleMoreClick },
+    {
+      icon: "/icons/x-logo.svg",
+      label: "X/Twitter",
+      onClick: handleMoreClick,
+    },
   ];
 
   // 전체 보기 핸들러
@@ -130,7 +136,7 @@ export default function Home() {
           onSearchChange={handleSearchChange}
         />
         <BalanceSection
-          interest="1.02 USDT"
+          interest="0 USDT"
           onInterestClick={handleInterestClick}
           selectedCurrency={selectedCurrency}
           onCurrencyChange={handleCurrencyChange}
