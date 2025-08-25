@@ -81,6 +81,7 @@ export default function Home() {
     data: transactions,
     isLoading,
     refetch: refetchTransactions,
+    isRefetching,
   } = useGetTransactionList({
     limit: 5,
   });
@@ -186,7 +187,7 @@ export default function Home() {
         />
         <ActionButtons actions={actions} />
         <HomeContent
-          isLoading={isLoading}
+          isLoading={isLoading || isRefetching}
           transactions={transactions?.transactions?.slice(0, 5)}
           todayCount={transactions?.transactions?.length ?? 0}
           services={services}
@@ -226,7 +227,7 @@ export default function Home() {
         buttonText="확인"
         onButtonClick={() => setIsDesktopAlertOpen(false)}
       >
-        현재 채우기는 데스크톱에서만{'\n'}지원됩니다.
+        현재 채우기는 데스크톱에서만{"\n"}지원됩니다.
       </Alert>
     </div>
   );

@@ -10,16 +10,22 @@ import { GetUserMe200, useGetUserMe } from "~/generated/api";
 
 export default function Send() {
   const navigate = useNavigate();
-  const { data, isLoading } = useGetUserMe();
+  const { data, isLoading, isRefetching } = useGetUserMe({
+    query: {
+      refetchOnMount: true,
+      refetchOnReconnect: true,
+      refetchOnWindowFocus: true,
+    },
+  });
 
   useEffect(() => {
-    if (isLoading || !data) return;
+    if (isLoading || isRefetching || !data) return;
     const { user } = data as GetUserMe200;
     // @ts-ignore
     if (!user?.kaiapayId) {
       navigate("/account/change-id");
     }
-  }, [data, isLoading, navigate]);
+  }, [data, isLoading, isRefetching, navigate]);
 
   const items = [
     {
