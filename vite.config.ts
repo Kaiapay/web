@@ -13,6 +13,7 @@ export default defineConfig({
   build: {
     outDir: "dist",
     sourcemap: true,
+    target: "es2020",
   },
   server: {
     port: 5173,
@@ -22,6 +23,7 @@ export default defineConfig({
   optimizeDeps: {
     include: ["buffer", "process"],
   },
+
   resolve: {
     alias: {
       buffer: "buffer",

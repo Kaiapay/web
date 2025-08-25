@@ -3,11 +3,14 @@ import HeaderWithBackButton from "../../components/HeaderWithBackButton";
 import TransactionDetailSheet from "../../components/transactions/TransactionDetailSheet";
 import TransactionCell from "../../components/transactions/TransactionCell";
 import type { Transaction, TransactionGroup } from "./types/transaction";
+import { useGetTransactionList } from "~/generated/api";
 
 export default function Transactions() {
-  const [selectedTransaction, setSelectedTransaction] = useState<Transaction | null>(null);
+  const [selectedTransaction, setSelectedTransaction] =
+    useState<Transaction | null>(null);
   const [isDetailSheetOpen, setIsDetailSheetOpen] = useState(false);
-  
+  const { data } = useGetTransactionList();
+  console.log(data);
   const [transactionGroups] = useState<TransactionGroup[]>([
     {
       date: "8월 20일",
@@ -26,7 +29,7 @@ export default function Transactions() {
         {
           id: "2",
           date: new Date(2025, 7, 20, 15, 54),
-          amount: 20.00,
+          amount: 20.0,
           currency: "USDT",
           type: "send",
           description: "15:54 · 링크 공유",
@@ -40,7 +43,7 @@ export default function Transactions() {
         {
           id: "3",
           date: new Date(2025, 7, 20, 15, 54),
-          amount: 20.00,
+          amount: 20.0,
           currency: "USDT",
           type: "send",
           description: "15:54 · 링크 공유",
@@ -52,7 +55,7 @@ export default function Transactions() {
         {
           id: "4",
           date: new Date(2025, 7, 20, 15, 54),
-          amount: 20.00,
+          amount: 20.0,
           currency: "USDT",
           type: "send",
           description: "15:54 · 링크 공유",
@@ -74,7 +77,7 @@ export default function Transactions() {
         {
           id: "6",
           date: new Date(2025, 7, 20, 15, 54),
-          amount: 20.00,
+          amount: 20.0,
           currency: "USDT",
           type: "receive",
           description: "15:54 · 링크 공유",
@@ -85,7 +88,7 @@ export default function Transactions() {
         {
           id: "7",
           date: new Date(2025, 7, 20, 15, 54),
-          amount: 20.00,
+          amount: 20.0,
           currency: "USDT",
           type: "receive",
           description: "15:54 · 링크 공유",
@@ -96,7 +99,7 @@ export default function Transactions() {
         {
           id: "8",
           date: new Date(2025, 7, 20, 15, 54),
-          amount: 20.00,
+          amount: 20.0,
           currency: "USDT",
           type: "receive",
           description: "15:54 · 링크 공유",
@@ -133,7 +136,7 @@ export default function Transactions() {
         {
           id: "11",
           date: new Date(2025, 7, 19, 15, 54),
-          amount: 20.00,
+          amount: 20.0,
           currency: "USDT",
           type: "send",
           description: "15:54 · 핸드폰 번호",
@@ -146,7 +149,7 @@ export default function Transactions() {
         {
           id: "12",
           date: new Date(2025, 7, 19, 15, 54),
-          amount: 20.00,
+          amount: 20.0,
           currency: "USDT",
           type: "send",
           description: "15:54 · KaiaPay 아이디로 보내기",
@@ -157,7 +160,7 @@ export default function Transactions() {
         {
           id: "13",
           date: new Date(2025, 7, 19, 15, 54),
-          amount: 20.00,
+          amount: 20.0,
           currency: "USDT",
           type: "send",
           description: "15:54 · 지갑으로 보내기",
@@ -170,7 +173,7 @@ export default function Transactions() {
         {
           id: "14",
           date: new Date(2025, 7, 19, 15, 54),
-          amount: 20.00,
+          amount: 20.0,
           currency: "USDT",
           type: "receive",
           description: "15:54 · 핸드폰 번호로 받음",
@@ -180,7 +183,7 @@ export default function Transactions() {
         {
           id: "15",
           date: new Date(2025, 7, 19, 15, 54),
-          amount: 20.00,
+          amount: 20.0,
           currency: "USDT",
           type: "receive",
           description: "15:54 · KaiaPay 아이디로 받음",
@@ -191,7 +194,7 @@ export default function Transactions() {
         {
           id: "16",
           date: new Date(2025, 7, 19, 15, 54),
-          amount: 20.00,
+          amount: 20.0,
           currency: "USDT",
           type: "receive",
           description: "15:54 · 지갑으로 받음",
@@ -203,7 +206,7 @@ export default function Transactions() {
         {
           id: "17",
           date: new Date(2025, 7, 19, 15, 54),
-          amount: 15.00,
+          amount: 15.0,
           currency: "USDT",
           type: "send",
           description: "15:54 · 링크 공유",
@@ -231,7 +234,7 @@ export default function Transactions() {
 
   const renderTransactionItem = (transaction: Transaction) => (
     <div key={transaction.id} className="flex flex-col gap-[12px]">
-      <TransactionCell 
+      <TransactionCell
         transaction={transaction}
         onClick={handleTransactionClick}
       />
