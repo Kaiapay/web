@@ -14,7 +14,11 @@ import {
 import { kaia } from "viem/chains";
 import Button from "~/components/Button";
 import { postDeposit } from "~/generated/api";
-import { KAIA_RPC_URL } from "../../lib/constants";
+import {
+  KAIA_RPC_URL,
+  KAIAPAY_VAULT_ADDRESS,
+  USDT_ADDRESS,
+} from "../../lib/constants";
 import { usePrivy } from "@privy-io/react-auth";
 import { useNavigate } from "react-router-dom";
 import BottomSheet from "~/components/BottomSheet";
@@ -65,9 +69,6 @@ const depositTokenAbi = [
     stateMutability: "nonpayable",
   },
 ] as const;
-
-const USDT_ADDRESS = "0xd077a400968890eacc75cdc901f0356c943e4fdb";
-const CONTRACT_ADDRESS = "0x60f76BAdA29a44143Ee50460284028880d4aB736";
 
 export default function Fill() {
   const [amount, setAmount] = useState("0");
@@ -163,7 +164,7 @@ export default function Fill() {
         address: USDT_ADDRESS,
         abi: erc20Abi,
         functionName: "approve",
-        args: [CONTRACT_ADDRESS as `0x${string}`, parsedAmount],
+        args: [KAIAPAY_VAULT_ADDRESS as `0x${string}`, parsedAmount],
       });
 
       // Wait for approve transaction to be mined
@@ -176,7 +177,7 @@ export default function Fill() {
       // Then deposit tokens
       const hash = await walletClient.writeContract({
         account: selectedWallet as `0x${string}`,
-        address: CONTRACT_ADDRESS,
+        address: KAIAPAY_VAULT_ADDRESS,
         abi: depositTokenAbi,
         functionName: "depositToken",
         args: [
