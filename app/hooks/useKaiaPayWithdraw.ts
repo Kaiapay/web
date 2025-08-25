@@ -3,7 +3,7 @@ import { usePrivy } from "@privy-io/react-auth";
 import { useSmartWallets } from "@privy-io/react-auth/smart-wallets";
 import { encodeFunctionData } from "viem";
 import { KAIAPAY_VAULT_ADDRESS, USDT_ADDRESS } from "../lib/constants";
-import { postConfirmTransfer } from "~/generated/api";
+import { postConfirmTransfer, postConfirmWithdraw } from "~/generated/api";
 
 // KaiaPayVault ABI for transferToken function
 const KAIAPAY_VAULT_ABI = [
@@ -96,7 +96,7 @@ export function useKaiaPayWithdraw() {
       };
 
       // Send txHash to API here
-      postConfirmTransfer({ transactionId, txHash: hash });
+      postConfirmWithdraw({ transactionId, txHash: hash });
       // Call success callback to refresh balances
       onSuccess?.();
 

@@ -59,7 +59,7 @@ export default function TransactionCell({
           </div>
           <div className="flex items-center gap-[6px]">
             <span className="text-white/50 text-[14px] font-normal leading-[1.571em] tracking-[-0.714%] truncate">
-              {transaction.senderAlias}
+              {TransactionUtils.getMethodText(transaction)}
             </span>
             {transaction.status === "pending" && (
               <span className="text-[#FF443D]/80 text-[14px] font-normal leading-[1.571em] tracking-[-0.714%] flex-shrink-0">

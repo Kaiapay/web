@@ -22,6 +22,7 @@ export default function Home() {
   const [isDetailSheetOpen, setIsDetailSheetOpen] = useState(false);
   const [isPaymentPageSheetOpen, setIsPaymentPageSheetOpen] = useState(false);
   const [selectedCurrency, setSelectedCurrency] = useState("USDT");
+
   useUser();
 
   // 검색 핸들러

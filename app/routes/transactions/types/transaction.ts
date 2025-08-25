@@ -33,13 +33,16 @@ export class TransactionUtils {
             transaction.kind === "send_to_temporal"
               ? "→"
               : "←";
-          return `${sign}${baseAmount} ${direction} ${
-            transaction.recipientAlias
-              ? `${transaction.recipientAlias}`
-              : transaction.kind === "send_to_temporal"
-              ? ""
-              : transaction.toAddress
-          }`;
+          const recipient = transaction.recipientAlias
+            ? `${transaction.recipientAlias}`
+            : transaction.kind === "send_to_temporal"
+            ? ""
+            : transaction.toAddress;
+
+          return (
+            `${sign}${baseAmount}` +
+            (recipient ? ` ${direction} ${recipient}` : "")
+          );
         }
         return `${sign}${baseAmount}`;
       case "luckybox":
@@ -65,7 +68,7 @@ export class TransactionUtils {
   ): string {
     switch (transaction.method) {
       case "link":
-        return transaction.kind === "send_to_user"
+        return transaction.kind === "send_to_temporal"
           ? "링크 공유로 보냄"
           : "링크 공유로 받음";
       case "kaiapayId":
@@ -73,11 +76,11 @@ export class TransactionUtils {
           ? "KaiaPay 아이디로 보냄"
           : "KaiaPay 아이디로 받음";
       case "phone":
-        return transaction.kind === "send_to_user"
+        return transaction.kind === "send_to_temporal"
           ? "핸드폰 번호로 보냄"
           : "핸드폰 번호로 받음";
       case "wallet":
-        return transaction.kind === "send_to_user"
+        return transaction.kind === "withdraw"
           ? "지갑으로 보냄"
           : "지갑으로 받음";
       case "luckybox":
