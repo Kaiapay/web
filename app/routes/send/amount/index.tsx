@@ -60,13 +60,13 @@ export default function SendAmount() {
         return;
       }
 
-      if (navigator.share) {
-        await navigator.share({
-          title: "KaiaPay 송금 링크",
-          text: `${amount} ${selectedCurrencyCode} 받기`,
-          url: link,
-        });
-      }
+      // if (navigator.share) {
+      //   await navigator.share({
+      //     title: "KaiaPay 송금 링크",
+      //     text: `${amount} ${selectedCurrencyCode} 받기`,
+      //     url: link,
+      //   });
+      // }
 
       await navigator.clipboard.writeText(link);
       setShowCheckAnimation(true);
