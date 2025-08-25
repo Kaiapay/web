@@ -156,7 +156,7 @@ export default function Home() {
           onSearchChange={handleSearchChange}
         />
         <BalanceSection
-          interest="1.02 USDT"
+          interest="0 USDT"
           onInterestClick={handleInterestClick}
           selectedCurrency={selectedCurrency}
           onCurrencyChange={handleCurrencyChange}
