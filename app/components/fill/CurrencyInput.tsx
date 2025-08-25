@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import ContentCard from "../ContentCard";
 import ChevronDownIcon from "~/components/icons/chevron-down";
 import CurrencySelector from "../CurrencySelector";
@@ -25,12 +25,19 @@ export default function CurrencyInput({
   backgroundColor = "bg-white/20",
 }: CurrencyInputProps) {
   const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const currencies = allCurrencies.filter((c) =>
     supportedCurrencies.includes(c.code)
   );
   const selectedCurrency =
     currencies.find((c) => c.code === selectedCurrencyCode) || currencies[0];
+
+  useEffect(() => {
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, []);
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -82,6 +89,7 @@ export default function CurrencyInput({
             </div>
             <div className="flex flex-row items-center gap-[8px]">
               <input
+                ref={inputRef}
                 type="number"
                 value={amount}
                 onChange={handleAmountChange}
