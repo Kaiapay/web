@@ -39,6 +39,7 @@ function getAccountFromCompressed(compressedKey: string) {
       publicAddress,
     };
   } catch (error) {
+    console.log(error);
     throw new Error(`Failed to decompress private key from: ${compressedKey}`);
   }
 }
@@ -72,10 +73,6 @@ export default function ReceiveLink() {
       await handleReceive();
       setIsBottomSheetOpen(true);
     }
-  };
-
-  const onClose = () => {
-    navigate("/home");
   };
 
   const { writeContractFD, publicAddress: senderAddress } =
