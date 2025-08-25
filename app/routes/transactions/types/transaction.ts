@@ -16,7 +16,11 @@ export class TransactionUtils {
       return baseAmount;
     }
 
-    const sign = transaction.kind === "send_to_user" ? "-" : "+";
+    const sign =
+      transaction.kind === "send_to_user" ||
+      transaction.kind === "send_to_temporal"
+        ? "-"
+        : "+";
 
     switch (transaction.method) {
       case "link":
@@ -24,10 +28,16 @@ export class TransactionUtils {
       case "phone":
       case "wallet":
         if (transaction.toAddress) {
-          const direction = transaction.kind === "send_to_user" ? "→" : "←";
+          const direction =
+            transaction.kind === "send_to_user" ||
+            transaction.kind === "send_to_temporal"
+              ? "→"
+              : "←";
           return `${sign}${baseAmount} ${direction} ${
             transaction.recipientAlias
-              ? `@${transaction.recipientAlias}`
+              ? `${transaction.recipientAlias}`
+              : transaction.kind === "send_to_temporal"
+              ? ""
               : transaction.toAddress
           }`;
         }
@@ -148,7 +158,10 @@ export class TransactionUtils {
       case "wallet":
         return {
           icon:
-            transaction.kind === "send_to_user" ? "SendIcon" : "ArrowDownIcon",
+            transaction.kind === "send_to_user" ||
+            transaction.kind === "send_to_temporal"
+              ? "SendIcon"
+              : "ArrowDownIcon",
           iconBgColor: "bg-white/20",
           secondaryIcon:
             transaction.method === "link"
