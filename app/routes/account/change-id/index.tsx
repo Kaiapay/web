@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import HeaderWithBackButton from "~/components/HeaderWithBackButton";
 import InputResetIcon from "~/components/icons/InputResetIcon";
 import CheckSmallIcon from "~/components/icons/CheckSmallIcon";
@@ -7,7 +7,7 @@ import XCircleIcon from "~/components/icons/XCircleIcon";
 import Button from "~/components/Button";
 import {
   usePutUpdateKaiapayId,
-  PutUpdateKaiapayIdMutationError
+  PutUpdateKaiapayIdMutationError,
 } from "~/generated/api";
 import { useUser } from "~/stores/userStore";
 
@@ -28,12 +28,17 @@ export default function ChangeIdPage() {
   const updateKaiapayIdMutation = usePutUpdateKaiapayId({
     mutation: {
       onSuccess: (data) => {
-        console.log(data);
+        console.log("success", data);
         refetchUser();
         navigate(-1);
       },
       onError: (error: PutUpdateKaiapayIdMutationError) => {
-        const message = 'message' in error ? error.message : 'error' in error ? error.error : "아이디 변경 중 오류가 발생했습니다.";
+        const message =
+          "message" in error
+            ? error.message
+            : "error" in error
+            ? error.error
+            : "아이디 변경 중 오류가 발생했습니다.";
         setErrorMessage(message);
       },
     },
@@ -74,7 +79,8 @@ export default function ChangeIdPage() {
     }
   };
 
-  const isSubmitDisabled = !isValid || id.length < 5 || updateKaiapayIdMutation.isPending;
+  const isSubmitDisabled =
+    !isValid || id.length < 5 || updateKaiapayIdMutation.isPending;
 
   return (
     <div
@@ -129,7 +135,11 @@ export default function ChangeIdPage() {
       </div>
 
       <div className="flex flex-col gap-4 px-4 py-7">
-        <Button onClick={handleSubmit} disabled={isSubmitDisabled} isLoading={updateKaiapayIdMutation.isPending}>
+        <Button
+          onClick={handleSubmit}
+          disabled={isSubmitDisabled}
+          isLoading={updateKaiapayIdMutation.isPending}
+        >
           완료
         </Button>
       </div>

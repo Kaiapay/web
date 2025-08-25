@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import HeaderWithBackButton from "~/components/HeaderWithBackButton";
 import ChevronRightIcon from "~/components/icons/chevron-right";
@@ -5,10 +6,20 @@ import LinkIcon from "~/components/icons/LinkIcon";
 import PhoneIcon from "~/components/icons/PhoneIcon";
 import UserIcon from "~/components/icons/UserIcon";
 import WalletIcon from "~/components/icons/WalletIcon";
+import { GetUserMe200, useGetUserMe } from "~/generated/api";
 
 export default function Send() {
   const navigate = useNavigate();
+  const { data, isLoading } = useGetUserMe();
 
+  useEffect(() => {
+    if (isLoading || !data) return;
+    const { user } = data as GetUserMe200;
+    // @ts-ignore
+    if (!user?.kaiapayId) {
+      navigate("/account/change-id");
+    }
+  }, [data, isLoading, navigate]);
 
   const items = [
     {
