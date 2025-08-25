@@ -226,7 +226,9 @@ export default function Home() {
         buttonText="확인"
         onButtonClick={() => setIsDesktopAlertOpen(false)}
       >
-        현재 채우기는 데스크톱에서만{'\n'}지원됩니다.
+        {/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+          ? "현재 채우기는 데스크톱에서만 지원됩니다."
+          : "현재는 카이아 월렛만 지원되며, 곧 더 다양한 월렛을 이용하실 수 있습니다."}
       </Alert>
     </div>
   );
