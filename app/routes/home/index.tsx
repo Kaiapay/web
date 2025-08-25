@@ -69,9 +69,31 @@ export default function Home() {
     setIsPaymentPageSheetOpen(false);
   };
 
-  const { data: transactions, isLoading } = useGetTransactionList({
+  const {
+    data: transactions,
+    isLoading,
+    refetch: refetchTransactions,
+  } = useGetTransactionList({
     limit: 5,
   });
+
+  useEffect(() => {
+    // 페이지가 포커스될 때마다 transations 새로고침
+    const handleFocus = () => {
+      refetchTransactions();
+    };
+
+    // 컴포넌트 마운트 시 transations 새로고침
+    refetchTransactions();
+
+    // 이벤트 리스너 등록
+    window.addEventListener("focus", handleFocus);
+
+    // 컴포넌트 언마운트 시 이벤트 리스너 제거
+    return () => {
+      window.removeEventListener("focus", handleFocus);
+    };
+  }, []);
 
   const services = [
     {
