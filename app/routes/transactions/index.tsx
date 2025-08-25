@@ -6,18 +6,25 @@ import {
   GetTransactionList200TransactionsItem,
   useGetTransactionList,
 } from "~/generated/api";
+import { formatUnits } from "viem";
+import { usePrivy } from "@privy-io/react-auth";
 
 export default function Transactions() {
   const [selectedTransaction, setSelectedTransaction] =
     useState<GetTransactionList200TransactionsItem | null>(null);
   const [isDetailSheetOpen, setIsDetailSheetOpen] = useState(false);
   const { data } = useGetTransactionList();
+  const { user } = usePrivy();
+
+  const smartWallet = user?.linkedAccounts.find(
+    (account) => account.type === "smart_wallet"
+  );
 
   const groupedTransactions = useMemo(() => {
     return (data?.transactions ?? []).reduce<
       {
         date: string;
-        totalAmount: string;
+        totalAmount: bigint;
         transactions: GetTransactionList200TransactionsItem[];
       }[]
     >((acc, transaction) => {
@@ -30,13 +37,18 @@ export default function Transactions() {
       if (!acc.find((group) => group.date === date)) {
         acc.push({
           date,
-          totalAmount: "0",
+          totalAmount: BigInt(0),
           transactions: [],
         });
       }
       const group = acc.find((group) => group.date === date);
       if (group) {
         group.transactions.push(transaction);
+        group.totalAmount =
+          BigInt(group.totalAmount) +
+          (transaction.fromAddress === smartWallet?.address
+            ? BigInt(transaction.amount) * BigInt(-1)
+            : BigInt(transaction.amount));
       }
       return acc;
     }, []);
@@ -70,7 +82,7 @@ export default function Transactions() {
 
   const renderTransactionGroup = (group: {
     date: string;
-    totalAmount: string;
+    totalAmount: bigint;
     transactions: GetTransactionList200TransactionsItem[];
   }) => (
     <div key={group.date} className="flex flex-col gap-[8px]">
@@ -79,7 +91,7 @@ export default function Transactions() {
           {group.date}
         </span>
         <span className="text-white/50 text-[15px] font-medium leading-[1.382em] tracking-[-2%]">
-          {group.totalAmount}
+          {formatUnits(group.totalAmount, 6)} USDT
         </span>
       </div>
       <div className="flex flex-col gap-[12px]">
