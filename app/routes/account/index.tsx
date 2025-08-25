@@ -43,7 +43,7 @@ export default function AccountPage() {
       {
         type: "line_oauth" as const,
         name: "LINE 계정",
-        email: linkedAccounts.find(acc => acc.type === "line_oauth")?.name || linkedAccounts.find(acc => acc.type === "line_oauth")?.email,
+        email: linkedAccounts.find(acc => acc.type === "line_oauth")?.name || linkedAccounts.find(acc => acc.type === "line_oauth")?.email || undefined,
         connected: linkedAccounts.some(acc => acc.type === "line_oauth"),
       },
     ];
@@ -154,7 +154,9 @@ export default function AccountPage() {
                   <p className="text-white text-[16px] font-medium">
                     KaiaPay 아이디
                   </p>
-                  <p className="text-white/50 text-[14px]">@{user?.kaiapayId}</p>
+                  <p className="text-white/50 text-[14px]">
+                    {user?.kaiapayId ? `@${user.kaiapayId}` : "아이디 설정이 필요해요"}
+                  </p>
                 </div>
                 <div className="w-5 h-10 flex items-center justify-center">
                   <ChevronRightIcon />

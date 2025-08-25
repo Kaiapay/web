@@ -111,7 +111,7 @@ export default function SendViaKaiapayId() {
                 KaiaPay 아이디
               </div>
               <div className="flex flex-row items-center">
-                <div className="font-normal text-[16px] leading-[22px] tracking-[-0.1px] text-white pb-1">
+                <div className="font-normal text-[16px] leading-[22px] tracking-[-0.1px] text-white/70 pr-0.5 pb-0.5">
                   @
                 </div>
                 <input
