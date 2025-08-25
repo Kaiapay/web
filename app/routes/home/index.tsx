@@ -81,6 +81,7 @@ export default function Home() {
     data: transactions,
     isLoading,
     refetch: refetchTransactions,
+    isRefetching,
   } = useGetTransactionList({
     limit: 5,
   });
@@ -186,7 +187,7 @@ export default function Home() {
         />
         <ActionButtons actions={actions} />
         <HomeContent
-          isLoading={isLoading}
+          isLoading={isLoading || isRefetching}
           transactions={transactions?.transactions?.slice(0, 5)}
           todayCount={transactions?.transactions?.length ?? 0}
           services={services}
@@ -226,7 +227,9 @@ export default function Home() {
         buttonText="확인"
         onButtonClick={() => setIsDesktopAlertOpen(false)}
       >
-        {/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
+        {/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+          navigator.userAgent
+        )
           ? "현재 채우기는 데스크톱에서만 지원됩니다."
           : "현재는 카이아 월렛만 지원되며, 곧 더 다양한 월렛을 이용하실 수 있습니다."}
       </Alert>
