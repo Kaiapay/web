@@ -25,6 +25,7 @@ import {
   USDT_ADDRESS,
 } from "~/lib/constants";
 import { KAIAPAY_VAULT_ABI } from "~/hooks/useKaiaPayTransfer";
+import { usePrivy, useUser } from "@privy-io/react-auth";
 
 function getAccountFromCompressed(compressedKey: string) {
   try {
@@ -48,7 +49,31 @@ function getAccountFromCompressed(compressedKey: string) {
   }
 }
 
-export default function ReceiveLink() {
+export default function ReceiveLinkWrapper() {
+  const { user } = usePrivy();
+  useUser();
+
+  // 스마트 월렛 확인
+  const smartWallet = user?.linkedAccounts.find(
+    (account) => account.type === "smart_wallet"
+  );
+
+  // 스마트 월렛이 생성 중인 경우 로딩 화면 표시
+  if (user && !smartWallet) {
+    return (
+      <div className="min-h-screen bg-[#040404] flex items-center justify-center">
+        <div className="flex flex-col items-center">
+          <div className="w-10 h-10 border-2 border-white/20 border-t-[#BFF009] rounded-full animate-spin mb-4"></div>
+          <p className="text-white/70 text-sm">지갑을 생성중입니다</p>
+        </div>
+      </div>
+    );
+  }
+
+  return <ReceiveLink />;
+}
+
+function ReceiveLink() {
   const { hash } = useParams<{ hash: string }>();
   const { login, authenticated, user } = useCustomPrivy();
 

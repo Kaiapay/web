@@ -31,7 +31,7 @@ function HomeWrapper() {
       <div className="min-h-screen bg-[#040404] flex items-center justify-center">
         <div className="flex flex-col items-center">
           <div className="w-10 h-10 border-2 border-white/20 border-t-[#BFF009] rounded-full animate-spin mb-4"></div>
-          <p className="text-white/70 text-sm">지갑이 생성중입니다</p>
+          <p className="text-white/70 text-sm">지갑을 생성중입니다</p>
         </div>
       </div>
     );
