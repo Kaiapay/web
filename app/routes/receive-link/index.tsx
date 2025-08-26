@@ -107,12 +107,13 @@ function ReceiveLink() {
     setIsButtonLoading(true);
     if (!authenticated) {
       await login();
+      setIsButtonLoading(false);
       return;
     } else {
       await handleReceive();
       setIsBottomSheetOpen(true);
+      setIsButtonLoading(false);
     }
-    setIsButtonLoading(false);
   };
 
   const { writeContractFD, publicAddress: senderAddress } =
