@@ -8,12 +8,15 @@ import Button from "~/components/Button";
 import {
   usePutUpdateKaiapayId,
   PutUpdateKaiapayIdMutationError,
+  getGetUserMeQueryKey,
 } from "~/generated/api";
 import { useUser } from "~/stores/userStore";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function ChangeIdPage() {
   const navigate = useNavigate();
   const { user, refetchUser } = useUser();
+  const queryClient = useQueryClient();
   const [id, setId] = useState(user?.kaiapayId ? `@${user.kaiapayId}` : "");
   const [isValid, setIsValid] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
@@ -27,9 +30,9 @@ export default function ChangeIdPage() {
 
   const updateKaiapayIdMutation = usePutUpdateKaiapayId({
     mutation: {
-      onSuccess: (data) => {
+      onSuccess: async (data) => {
         console.log("success", data);
-        refetchUser();
+        await queryClient.refetchQueries({ queryKey: getGetUserMeQueryKey() });
         navigate(-1);
       },
       onError: (error: PutUpdateKaiapayIdMutationError) => {
