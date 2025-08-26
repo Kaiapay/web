@@ -2,6 +2,7 @@ import { GetTransactionList200TransactionsItem } from "~/generated/api";
 import AttachedSheet from "../AttachedSheet";
 import { TransactionUtils } from "~/routes/transactions/types/transaction";
 import { getIconComponent } from "~/routes/transactions/utils/iconUtils";
+import { usePrivy } from "@privy-io/react-auth";
 
 interface TransactionDetailSheetProps {
   isOpen: boolean;
@@ -23,6 +24,13 @@ export default function TransactionDetailSheet({
     ? getIconComponent(iconInfo.secondaryIcon, 12)
     : undefined;
 
+  const { user } = usePrivy();
+  const smartWallet = user?.linkedAccounts.find(
+    (account) => account.type === "smart_wallet"
+  );
+
+  const address = smartWallet?.address;
+
   return (
     <AttachedSheet isOpen={isOpen} onClose={onClose} height="90dvh">
       <div className="flex flex-col gap-[10px]">
@@ -33,7 +41,7 @@ export default function TransactionDetailSheet({
               {TransactionUtils.getDetailAmountDisplay(transaction)}
             </span>
             <span className="text-white text-[15px] font-medium leading-[1.467em] tracking-[-0.667%]">
-              {TransactionUtils.getMethodText(transaction)}
+              {TransactionUtils.getMethodText(transaction, address)}
             </span>
             <span className="text-white/50 text-[14px] font-normal leading-[1.571em] tracking-[-0.714%]">
               {new Date(transaction.updatedAt).toLocaleDateString("ko-KR", {
