@@ -17,7 +17,7 @@ export default function ChangeIdPage() {
   const navigate = useNavigate();
   const { user, refetchUser } = useUser();
   const queryClient = useQueryClient();
-  const [id, setId] = useState(user?.kaiapayId ? `@${user.kaiapayId}` : "");
+  const [id, setId] = useState(user?.kaiapayId ? `@${user.kaiapayId}` : "@");
   const [isValid, setIsValid] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
