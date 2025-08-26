@@ -21,8 +21,7 @@ interface IFormInput {
 }
 
 export default function SendViaKaiapayId() {
-  const { isPending, mutateAsync, isError, error } =
-    usePostTransferWithKaiapayId();
+  const { isPending } = usePostTransferWithKaiapayId();
   const {
     transferToken,
     isLoading: isTransferLoading,
