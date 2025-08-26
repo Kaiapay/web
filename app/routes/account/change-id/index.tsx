@@ -14,7 +14,7 @@ import { useUser } from "~/stores/userStore";
 export default function ChangeIdPage() {
   const navigate = useNavigate();
   const { user, refetchUser } = useUser();
-  const [id, setId] = useState(user?.kaiapayId ? `@${user.kaiapayId}` : "");
+  const [id, setId] = useState(user?.kaiapayId ? `@${user.kaiapayId}` : "@");
   const [isValid, setIsValid] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
@@ -37,8 +37,8 @@ export default function ChangeIdPage() {
           "message" in error
             ? error.message
             : "error" in error
-            ? error.error
-            : "아이디 변경 중 오류가 발생했습니다.";
+              ? error.error
+              : "아이디 변경 중 오류가 발생했습니다.";
         setErrorMessage(message);
       },
     },
