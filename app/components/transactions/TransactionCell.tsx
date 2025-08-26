@@ -2,6 +2,7 @@ import React from "react";
 import { TransactionUtils } from "../../routes/transactions/types/transaction";
 import { getIconComponent } from "../../routes/transactions/utils/iconUtils";
 import { GetTransactionList200TransactionsItem } from "~/generated/api";
+import { usePrivy } from "@privy-io/react-auth";
 
 interface TransactionCellProps {
   transaction: GetTransactionList200TransactionsItem;
@@ -24,6 +25,13 @@ export default function TransactionCell({
   const actionButton = showActionButton
     ? TransactionUtils.getActionButton(transaction)
     : null;
+
+  const { user } = usePrivy();
+  const smartWallet = user?.linkedAccounts.find(
+    (account) => account.type === "smart_wallet"
+  );
+
+  const address = smartWallet?.address;
 
   return (
     <div
@@ -59,7 +67,7 @@ export default function TransactionCell({
           </div>
           <div className="flex items-center gap-[6px]">
             <span className="text-white/50 text-[14px] font-normal leading-[1.571em] tracking-[-0.714%] truncate">
-              {TransactionUtils.getMethodText(transaction)}
+              {TransactionUtils.getMethodText(transaction, address)}
             </span>
             {transaction.status === "pending" && (
               <span className="text-[#FF443D]/80 text-[14px] font-normal leading-[1.571em] tracking-[-0.714%] flex-shrink-0">

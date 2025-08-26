@@ -8,7 +8,8 @@ import {
 export class TransactionUtils {
   // 금액 표시 형식 (목록용)
   static getListAmountDisplay(
-    transaction: GetTransactionList200TransactionsItem
+    transaction: GetTransactionList200TransactionsItem,
+    address?: string
   ): string {
     const baseAmount = `${formatUnits(BigInt(transaction.amount), 6)} USDT`;
 
@@ -16,37 +17,34 @@ export class TransactionUtils {
       return baseAmount;
     }
 
-    const sign =
-      transaction.kind === "send_to_user" ||
-      transaction.kind === "send_to_temporal"
-        ? "-"
-        : "+";
+    const sign = transaction.fromAddress === address ? "-" : "+";
 
     switch (transaction.method) {
       case "link":
       case "kaiapayId":
       case "phone":
       case "wallet":
-        if (transaction.toAddress) {
-          const direction =
-            transaction.kind === "send_to_user" ||
-            transaction.kind === "send_to_temporal"
-              ? "→"
-              : "←";
-          const recipient = transaction.recipientAlias
-            ? `${transaction.recipientAlias}`
-            : transaction.kind === "send_to_temporal"
-            ? ""
-            : transaction.kind === "receive"
-            ? transaction.senderAlias
-            : transaction.toAddress;
+        const direction = transaction.fromAddress === address ? "→" : "←";
 
-          return (
-            `${sign}${baseAmount}` +
-            (recipient ? ` ${direction} ${recipient}` : "")
-          );
+        if (direction === "→") {
+          // 내가 보낸 것. 받는 사람이 표시되어야함
+          if (transaction.recipientAlias) {
+            return `${sign}${baseAmount} → ${transaction.recipientAlias}`;
+          } else {
+            return `${sign}${baseAmount}`;
+          }
+        } else {
+          // 내가 받은 것. 보낸 사람이 표시되어야함.
+          if (transaction.senderAlias) {
+            return `${sign}${baseAmount} ← ${transaction.senderAlias}`;
+          } else {
+            return `${sign}${baseAmount} ← ${transaction.fromAddress.slice(
+              0,
+              6
+            )}...${transaction.fromAddress.slice(-4)}`;
+          }
         }
-        return `${sign}${baseAmount}`;
+
       case "luckybox":
       case "interest":
       case "payment":
@@ -66,7 +64,8 @@ export class TransactionUtils {
 
   // 메서드 텍스트 생성
   static getMethodText(
-    transaction: GetTransactionList200TransactionsItem
+    transaction: GetTransactionList200TransactionsItem,
+    address?: string
   ): string {
     switch (transaction.method) {
       case "link":
@@ -74,7 +73,7 @@ export class TransactionUtils {
           ? "링크 공유로 보냄"
           : "링크 공유로 받음";
       case "kaiapayId":
-        return transaction.kind === "send_to_user"
+        return transaction.fromAddress === address
           ? "KaiaPay 아이디로 보냄"
           : "KaiaPay 아이디로 받음";
       case "phone":
