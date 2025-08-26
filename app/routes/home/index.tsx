@@ -6,6 +6,7 @@ import HomeContent from "../../components/home/HomeContent";
 import TransactionDetailSheet from "../../components/transactions/TransactionDetailSheet";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "~/stores/userStore";
+import { usePrivy } from "@privy-io/react-auth";
 import type { Currency } from "~/types/currency";
 import {
   GetTransactionList200TransactionsItem,
@@ -15,7 +16,31 @@ import BottomSheet from "~/components/BottomSheet";
 import ExclamationIcon from "~/components/icons/ExclamationIcon";
 import Alert from "~/components/Alert";
 
-export default function Home() {
+function HomeWrapper() {
+  const { user } = usePrivy();
+  useUser();
+
+  // 스마트 월렛 확인
+  const smartWallet = user?.linkedAccounts.find(
+    (account) => account.type === "smart_wallet"
+  );
+
+  // 스마트 월렛이 생성 중인 경우 로딩 화면 표시
+  if (!smartWallet) {
+    return (
+      <div className="min-h-screen bg-[#040404] flex items-center justify-center">
+        <div className="flex flex-col items-center">
+          <div className="w-10 h-10 border-2 border-white/20 border-t-[#BFF009] rounded-full animate-spin mb-4"></div>
+          <p className="text-white/70 text-sm">지갑이 생성중입니다</p>
+        </div>
+      </div>
+    );
+  }
+
+  return <Home />;
+}
+
+function Home() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedTransaction, setSelectedTransaction] =
@@ -236,3 +261,5 @@ export default function Home() {
     </div>
   );
 }
+
+export default HomeWrapper;
