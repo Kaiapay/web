@@ -1,0 +1,67 @@
+name: Deploy Cloudflare Worker
+
+on:
+  push:
+    branches: [main]
+  release:
+    types: [published]
+
+jobs:
+  deploy-web:
+    name: Deploy Kaiapay Web
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Web
+        run: |
+          if [ "${{ github.event_name }}" = "release" ]; then
+            VITE_APP_ENV=production VITE_API_BASE_URL=https://api.kaiapay.app npm run build
+          else
+            VITE_APP_ENV=development VITE_API_BASE_URL=https://dev-api.kaiapay.app npm run build
+          fi
+
+      - name: Deploy Cloudflare
+        if: ${{ github.event_name != 'release' }}
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: 6377196122dd8a0ce3a9b3ef18fdfdd7
+          command: pages deploy dist --project-name=kaiapay-web-dev --branch=main
+
+      - name: Deploy Cloudflare
+        if: ${{ github.event_name == 'release' }}
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: 6377196122dd8a0ce3a9b3ef18fdfdd7
+          command: pages deploy dist --project-name=kaiapay-web --branch=main
+
+  create-release:
+    name: Create Production Release Draft
+    needs: [deploy-web]
+    runs-on: ubuntu-latest
+    # always run this job, but fail if any of the dependent jobs failed (not skipped)
+    if: ${{ always() && !contains(join(needs.*.result, ','), 'fail') && github.event_name != 'release' }}
+    permissions:
+      contents: write
+    steps:
+      - name: Create Release Tag
+        id: create-release-tag
+        run: echo "tag_name=r-$(printf %06d $GITHUB_RUN_NUMBER)" >> $GITHUB_OUTPUT
+      - name: Create Draft Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.create-release-tag.outputs.tag_name }}
+          name: Release ${{ steps.create-release-tag.outputs.tag_name }}
+          generate_release_notes: true
+          token: ${{ secrets.RELEASE_TOKEN }}
+          draft: ${{ !contains(github.event.head_commit.message, 'CHECKED') }}
