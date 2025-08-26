@@ -38,7 +38,7 @@ export default function TransactionDetailSheet({
         <div className="flex gap-[10px]">
           <div className="flex-1 flex flex-col gap-[4px]">
             <span className="text-white text-[32px] font-semibold leading-[1.193em] tracking-[1.5625%]">
-              {TransactionUtils.getDetailAmountDisplay(transaction)}
+              {TransactionUtils.getDetailAmountDisplay(transaction, address)}
             </span>
             <span className="text-white text-[15px] font-medium leading-[1.467em] tracking-[-0.667%]">
               {TransactionUtils.getMethodText(transaction, address)}

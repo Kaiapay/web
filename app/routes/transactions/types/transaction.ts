@@ -56,9 +56,10 @@ export class TransactionUtils {
 
   // 금액 표시 형식 (상세용)
   static getDetailAmountDisplay(
-    transaction: GetTransactionList200TransactionsItem
+    transaction: GetTransactionList200TransactionsItem,
+    address?: string
   ): string {
-    const sign = transaction.kind === "send_to_user" ? "-" : "+";
+    const sign = transaction.fromAddress === address ? "-" : "+";
     return `${sign}${formatUnits(BigInt(transaction.amount), 6)} USDT`;
   }
 

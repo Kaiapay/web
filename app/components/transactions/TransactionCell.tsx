@@ -62,7 +62,7 @@ export default function TransactionCell({
                 transaction.status === "canceled" ? "line-through" : ""
               }`}
             >
-              {TransactionUtils.getListAmountDisplay(transaction)}
+              {TransactionUtils.getListAmountDisplay(transaction, address)}
             </span>
           </div>
           <div className="flex items-center gap-[6px]">
