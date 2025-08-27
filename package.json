@@ -1,0 +1,42 @@
+{
+  "name": "kaiapay-web",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "npm run generate-orval && vite",
+    "build": "npm run generate-orval && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit",
+    "generate-orval": "orval",
+    "generate-orval:watch": "orval --watch"
+  },
+  "dependencies": {
+    "@kaiachain/viem-ext": "^2.0.8",
+    "@privy-io/react-auth": "^2.21.4",
+    "@tanstack/react-query": "^5.85.5",
+    "@tanstack/react-query-devtools": "^5.85.5",
+    "@vitejs/plugin-react": "^4.7.0",
+    "buffer": "^6.0.3",
+    "eruda": "^3.4.3",
+    "isbot": "^5.1.27",
+    "openapi-typescript-codegen": "^0.29.0",
+    "permissionless": "^0.2.54",
+    "process": "^0.11.10",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-hook-form": "^7.62.0",
+    "react-router-dom": "^7.8.2",
+    "viem": "^2.34.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.1.4",
+    "@types/node": "^20",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "orval": "^7.11.2",
+    "tailwindcss": "^4.1.4",
+    "typescript": "^5.8.3",
+    "vite": "^6.3.3",
+    "vite-tsconfig-paths": "^5.1.4"
+  }
+}
